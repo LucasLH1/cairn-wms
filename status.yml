@@ -1,0 +1,146 @@
+# Avancement de Cairn WMS
+#
+# Source unique : le contenu de docs/. Un module n'est porté ici que s'il figure
+# dans la carte des modules de docs/README.md. Rien n'est extrapolé.
+#
+# États possibles, dans l'ordre du cycle de vie :
+#
+#   à faire            le module est identifié, rien n'est écrit
+#   spécifié           la spécification métier est rédigée et lisible dans docs/
+#   en développement   la réalisation est engagée
+#   livré              la réalisation est en production sur main
+#
+# Aucun module n'est aujourd'hui « en développement » ni « livré » : le dépôt ne
+# contient aucun code applicatif, et aucune pile technique n'est choisie.
+#
+# À tenir à jour à chaque session, en même temps que journal/ et les issues.
+
+projet: Cairn WMS
+mis_a_jour_le: 2026-09-15
+
+couches:
+
+  - id: 0
+    nom: Socle transverse
+    jalon: Couche 0 — Socle transverse
+    modules:
+      - id: "0.1"
+        nom: Organisation et multi-clients
+        etat: spécifié
+        doc: docs/socle/0.1-organisation.md
+        prefixe_regles: RG-ORG
+      - id: "0.2"
+        nom: Référentiel produit
+        etat: spécifié
+        doc: docs/socle/0.2-referentiel-produit.md
+        prefixe_regles: RG-REF
+      - id: "0.3"
+        nom: Emplacements et plan d'entrepôt
+        etat: spécifié
+        doc: docs/socle/0.3-emplacements-plan-entrepot.md
+        prefixe_regles: RG-EMP
+      - id: "0.4"
+        nom: Modèle de stock
+        etat: spécifié
+        doc: docs/socle/0.4-modele-de-stock.md
+        prefixe_regles: RG-STK
+      - id: "0.5"
+        nom: Tiers
+        etat: spécifié
+        doc: docs/socle/0.5-tiers.md
+        prefixe_regles: RG-TRS
+      - id: "0.6"
+        nom: Moteur de workflow configurable
+        etat: spécifié
+        doc: docs/socle/0.6-moteur-de-workflow.md
+        prefixe_regles: RG-WKF
+      - id: "0.7"
+        nom: Traçabilité et unités d'œuvre
+        etat: spécifié
+        doc: docs/socle/0.7-tracabilite-unites-oeuvre.md
+        prefixe_regles: RG-TRA
+
+  - id: 1
+    nom: Flux entrants
+    jalon: Couche 1 — Flux entrants
+    modules:
+      - id: "1.1"
+        nom: Réception
+        etat: spécifié
+        doc: docs/flux-entrants/1.1-reception.md
+        prefixe_regles: RG-REC
+      - id: "1.2"
+        nom: Dossiers SAV
+        etat: spécifié
+        doc: docs/flux-entrants/1.2-dossiers-sav.md
+        prefixe_regles: RG-SAV
+      - id: "1.3"
+        nom: Retours client
+        etat: spécifié
+        doc: docs/flux-entrants/1.3-retours-client.md
+        prefixe_regles: RG-RET
+      - id: "1.4"
+        nom: Mise en stock et rangement
+        etat: spécifié
+        doc: docs/flux-entrants/1.4-mise-en-stock.md
+        prefixe_regles: RG-RAN
+
+  - id: 2
+    nom: Cœur stock
+    jalon: Couche 2 — Cœur stock
+    modules:
+      - id: "2.1"
+        nom: Mouvements et transferts
+        etat: à faire
+        doc: null
+      - id: "2.2"
+        nom: Inventaires
+        etat: à faire
+        doc: null
+      - id: "2.3"
+        nom: Statuts, blocages et mises à disposition
+        etat: à faire
+        doc: null
+      - id: "2.4"
+        nom: Supports consignés
+        etat: à faire
+        doc: null
+
+  - id: 3
+    nom: Flux sortants
+    jalon: Couche 3 — Flux sortants
+    modules:
+      - id: "3.1"
+        nom: Commandes et lignes
+        etat: à faire
+        doc: null
+      - id: "3.2"
+        nom: Préparation
+        etat: à faire
+        doc: null
+      - id: "3.3"
+        nom: Expédition et transporteurs
+        etat: à faire
+        doc: null
+
+  - id: 4
+    nom: Métiers spécifiques
+    jalon: Couche 4 — Métiers spécifiques
+    modules:
+      - id: "4.1"
+        nom: Atelier et réparation
+        etat: à faire
+        doc: null
+      - id: "4.2"
+        nom: Litiges
+        etat: à faire
+        doc: null
+
+  - id: 5
+    nom: Pilotage
+    jalon: Couche 5 — Pilotage
+    modules:
+      - id: "5.1"
+        nom: KPI, tableaux de bord et exports
+        etat: à faire
+        doc: null
