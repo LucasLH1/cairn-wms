@@ -13,6 +13,10 @@
 # Aucun module n'est aujourd'hui « en développement » ni « livré » : le dépôt ne
 # contient aucun code applicatif, et aucune pile technique n'est choisie.
 #
+# Le champ « issue » renvoie à l'issue GitHub qui porte le travail restant sur
+# le module : « Réaliser ... » pour un module déjà spécifié, « Spécifier ... »
+# pour un module qui ne l'est pas encore.
+#
 # À tenir à jour à chaque session, en même temps que journal/ et les issues.
 
 projet: Cairn WMS
@@ -27,36 +31,43 @@ couches:
       - id: "0.1"
         nom: Organisation et multi-clients
         etat: spécifié
+        issue: 1
         doc: docs/socle/0.1-organisation.md
         prefixe_regles: RG-ORG
       - id: "0.2"
         nom: Référentiel produit
         etat: spécifié
+        issue: 2
         doc: docs/socle/0.2-referentiel-produit.md
         prefixe_regles: RG-REF
       - id: "0.3"
         nom: Emplacements et plan d'entrepôt
         etat: spécifié
+        issue: 3
         doc: docs/socle/0.3-emplacements-plan-entrepot.md
         prefixe_regles: RG-EMP
       - id: "0.4"
         nom: Modèle de stock
         etat: spécifié
+        issue: 4
         doc: docs/socle/0.4-modele-de-stock.md
         prefixe_regles: RG-STK
       - id: "0.5"
         nom: Tiers
         etat: spécifié
+        issue: 5
         doc: docs/socle/0.5-tiers.md
         prefixe_regles: RG-TRS
       - id: "0.6"
         nom: Moteur de workflow configurable
         etat: spécifié
+        issue: 6
         doc: docs/socle/0.6-moteur-de-workflow.md
         prefixe_regles: RG-WKF
       - id: "0.7"
         nom: Traçabilité et unités d'œuvre
         etat: spécifié
+        issue: 7
         doc: docs/socle/0.7-tracabilite-unites-oeuvre.md
         prefixe_regles: RG-TRA
 
@@ -67,21 +78,25 @@ couches:
       - id: "1.1"
         nom: Réception
         etat: spécifié
+        issue: 8
         doc: docs/flux-entrants/1.1-reception.md
         prefixe_regles: RG-REC
       - id: "1.2"
         nom: Dossiers SAV
         etat: spécifié
+        issue: 9
         doc: docs/flux-entrants/1.2-dossiers-sav.md
         prefixe_regles: RG-SAV
       - id: "1.3"
         nom: Retours client
         etat: spécifié
+        issue: 10
         doc: docs/flux-entrants/1.3-retours-client.md
         prefixe_regles: RG-RET
       - id: "1.4"
         nom: Mise en stock et rangement
         etat: spécifié
+        issue: 11
         doc: docs/flux-entrants/1.4-mise-en-stock.md
         prefixe_regles: RG-RAN
 
@@ -92,18 +107,22 @@ couches:
       - id: "2.1"
         nom: Mouvements et transferts
         etat: à faire
+        issue: 12
         doc: null
       - id: "2.2"
         nom: Inventaires
         etat: à faire
+        issue: 13
         doc: null
       - id: "2.3"
         nom: Statuts, blocages et mises à disposition
         etat: à faire
+        issue: 14
         doc: null
       - id: "2.4"
         nom: Supports consignés
         etat: à faire
+        issue: 15
         doc: null
 
   - id: 3
@@ -113,14 +132,17 @@ couches:
       - id: "3.1"
         nom: Commandes et lignes
         etat: à faire
+        issue: 16
         doc: null
       - id: "3.2"
         nom: Préparation
         etat: à faire
+        issue: 17
         doc: null
       - id: "3.3"
         nom: Expédition et transporteurs
         etat: à faire
+        issue: 18
         doc: null
 
   - id: 4
@@ -130,10 +152,12 @@ couches:
       - id: "4.1"
         nom: Atelier et réparation
         etat: à faire
+        issue: 19
         doc: null
       - id: "4.2"
         nom: Litiges
         etat: à faire
+        issue: 20
         doc: null
 
   - id: 5
@@ -143,4 +167,5 @@ couches:
       - id: "5.1"
         nom: KPI, tableaux de bord et exports
         etat: à faire
+        issue: 21
         doc: null
