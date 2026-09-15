@@ -30,13 +30,9 @@ Un terme absent du glossaire ne doit apparaître nulle part : on l'ajoute au glo
 
 **Ce qui n'est pas écrit dans `docs/decisions/` n'est pas décidé.**
 
-Aucun langage, aucun framework, aucune base de données, aucune architecture, aucun outillage n'est
-arrêté tant qu'une fiche actée ne le dit pas.
-
-Deux fiches seulement sont actées à ce jour — `0001` (hébergement sur Coolify) et `0002` (le
-dashboard n'a qu'un environnement, la production). Elles tranchent **où et comment une image est
-mise en service, rien d'autre**. La pile applicative de Cairn WMS reste entièrement ouverte, et
-cette règle lui reste opposable sans réserve.
+Aucun langage, aucun framework, aucune base de données, aucune architecture, aucun hébergement,
+aucun outillage n'est arrêté tant qu'une fiche actée ne le dit pas. Et à ce jour, `docs/decisions/`
+ne contient aucune décision.
 
 En conséquence, dans ce dépôt :
 
