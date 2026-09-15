@@ -1,0 +1,41 @@
+# --- Environnement ---
+.env
+.env.*
+!.env.example
+*.local
+secrets/
+*.pem
+*.key
+*.p12
+*.pfx
+
+# --- Systèmes de fichiers ---
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# --- Éditeurs et IDE ---
+.vscode/
+!.vscode/extensions.json
+.idea/
+*.iml
+*.swp
+*.swo
+*~
+.\#*
+\#*\#
+.project
+.settings/
+*.sublime-workspace
+
+# --- Sorties et temporaires ---
+*.log
+tmp/
+temp/
+.cache/
