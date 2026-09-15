@@ -48,9 +48,31 @@ issues: [8, 14]
 | `objectif` | L'intention de la session **en une ligne**. La section « Objectif » la développe. |
 | `modules` | Les identifiants des modules touchés, tels qu'ils figurent dans `status.yml` : `["2.1", "2.2"]`. Liste vide `[]` si la session n'a touché aucun module. |
 | `issues` | Les numéros d'issue GitHub concernés : `[8, 14]`. Liste vide `[]` si aucune. |
+| `annulee_par` | **Seulement si l'entrée a été annulée** : le SHA court du commit de revert, entre guillemets — `"8a10a9c"`. Absent partout ailleurs. |
 
 Les identifiants de module sont **entre guillemets** — sans quoi `2.1` est lu comme un nombre, et
-`0.10` deviendrait `0.1`.
+`0.10` deviendrait `0.1`. Le SHA l'est pour la même raison : un SHA tout en chiffres serait lu
+comme un nombre.
+
+## Une entrée emportée par un revert se restaure
+
+Une entrée de journal est souvent écrite dans le même commit que le travail qu'elle relate. Si ce
+commit est annulé par un `git revert`, l'entrée part avec lui — sans que personne l'ait décidé.
+
+**Elle se restaure, elle ne disparaît pas.** Dans un commit à part, le texte est remis **tel qu'il
+a été écrit**, avec deux ajouts et deux seulement :
+
+- `annulee_par: "<sha court du revert>"` dans l'en-tête YAML ;
+- sous le titre, une ligne qui nomme le commit de revert et renvoie à l'entrée qui raconte le
+  retrait.
+
+**Le corps ne se retouche pas**, même s'il a vieilli : il dit ce qui était vrai et ce qui avait été
+décidé ce jour-là. Les liens qu'il contient vers des fichiers depuis supprimés **restent tels
+quels** — ils sont la trace de ce qui a existé, pas une erreur à corriger. C'est la seule entorse
+tolérée à la règle des liens valides, et elle est délibérée.
+
+**Pourquoi** : le journal est d'abord une chronologie. Un trou y coûte bien plus cher qu'une entrée
+périmée clairement signalée comme telle — un trou, on ne sait pas qu'il existe.
 
 ## Format d'une entrée
 
