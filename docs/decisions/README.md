@@ -3,9 +3,16 @@
 Ce dossier conserve les **décisions engageantes** du projet : celles qu'on ne peut pas revenir
 défaire à bon compte, et dont quelqu'un — dans six mois, ou six ans — voudra connaître la raison.
 
-À ce jour, **aucune décision n'est prise**. Ce dossier ne contient que ce README et le modèle de
-fiche. Tant qu'il est vide, aucun choix technique n'est arrêté : ni langage, ni base de données,
-ni architecture, ni hébergement, ni outillage.
+Décisions actées à ce jour :
+
+| N° | Titre | Portée |
+|---|---|---|
+| [0001](0001-hebergement-sur-coolify.md) | Hébergement sur Coolify | Où une image construite est mise en service. |
+| [0002](0002-dashboard-un-seul-environnement.md) | Dashboard : un seul environnement, production | Le chemin de mise en service du dashboard de pilotage. |
+
+Les deux portent sur la **mise en service**, et sur elle seule. **La pile applicative de Cairn WMS
+reste entièrement ouverte** : ni langage, ni framework, ni base de données, ni architecture n'est
+arrêté.
 
 ## La règle
 
