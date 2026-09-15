@@ -13,18 +13,59 @@ perdue pour celui qui reprendra.
 
 ## Nommage
 
-Un fichier par session : `AAAA-MM-JJ.md`.
+`AAAA-MM-JJ-HHMM-sujet.md`
 
-Deux sessions le même jour : suffixer par un ordinal — `2026-09-15-2.md`. On ne fusionne pas deux
-sessions dans un même fichier, et on ne réécrit pas l'entrée d'un jour passé : si on s'aperçoit
-après coup qu'on s'était trompé, on le dit dans l'entrée du jour où on s'en aperçoit.
+- `AAAA-MM-JJ` — la date de la session.
+- `HHMM` — son heure de **début**, sur 24 heures. Elle distingue deux sessions du même jour sans
+  ordinal, et classe les fichiers dans l'ordre chronologique.
+- `sujet` — deux à quatre mots en minuscules et tirets, qui disent de quoi il retourne. Assez
+  précis pour qu'on retrouve l'entrée sans l'ouvrir : `structuration-du-depot`,
+  `specification-inventaires`, pas `travaux` ni `suite`.
+
+Exemple : `2026-09-15-2155-structuration-du-depot.md`.
+
+On ne fusionne pas deux sessions dans un même fichier, et on ne réécrit pas l'entrée d'un jour
+passé : si on s'aperçoit après coup qu'on s'était trompé, on le dit dans l'entrée du jour où on
+s'en aperçoit.
+
+## En-tête
+
+Chaque entrée s'ouvre par un bloc YAML, avant tout titre. C'est la partie lisible par une machine :
+elle permet de retrouver toutes les sessions ayant touché un module ou une issue sans lire le corps.
+
+```yaml
+---
+date: 2026-09-15 21:55
+objectif: Structurer le dépôt autour de la spécification existante.
+modules: ["0.1", "1.2"]
+issues: [8, 14]
+---
+```
+
+| Champ | Contenu |
+|---|---|
+| `date` | Date et heure de début, au format `AAAA-MM-JJ HH:MM`. Cohérente avec le nom du fichier. |
+| `objectif` | L'intention de la session **en une ligne**. La section « Objectif » la développe. |
+| `modules` | Les identifiants des modules touchés, tels qu'ils figurent dans `status.yml` : `["2.1", "2.2"]`. Liste vide `[]` si la session n'a touché aucun module. |
+| `issues` | Les numéros d'issue GitHub concernés : `[8, 14]`. Liste vide `[]` si aucune. |
+
+Les identifiants de module sont **entre guillemets** — sans quoi `2.1` est lu comme un nombre, et
+`0.10` deviendrait `0.1`.
 
 ## Format d'une entrée
 
-Six sections, dans cet ordre. Aucune n'est facultative ; une section sans contenu porte `Néant`.
+Six sections, dans cet ordre, après l'en-tête. Aucune n'est facultative ; une section sans contenu
+porte `Néant`.
 
 ```markdown
-# Session du AAAA-MM-JJ
+---
+date: AAAA-MM-JJ HH:MM
+objectif: …
+modules: []
+issues: []
+---
+
+# Session du AAAA-MM-JJ — sujet
 
 ## Objectif
 
@@ -55,8 +96,8 @@ Le diff dit quoi ; cette section dit pourquoi.
 
 ## Issues liées
 
-Les issues GitHub ouvertes, commentées, mises à jour ou fermées pendant la session, par leur
-numéro : `#12 — fermée`, `#14 — ouverte`, `#7 — commentée, en attente d'arbitrage`.
+Les issues de l'en-tête, avec ce qui leur est arrivé : `#12 — fermée`, `#14 — ouverte`,
+`#7 — commentée, en attente d'arbitrage`.
 
 ## Points ouverts
 
