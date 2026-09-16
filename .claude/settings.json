@@ -1,0 +1,52 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "test -x \"$HOME/.local/bin/cairn-hooks\" && \"$HOME/.local/bin/cairn-hooks\" || true",
+            "async": true
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "test -x \"$HOME/.local/bin/cairn-hooks\" && \"$HOME/.local/bin/cairn-hooks\" || true",
+            "async": true
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "test -x \"$HOME/.local/bin/cairn-hooks\" && \"$HOME/.local/bin/cairn-hooks\" || true",
+            "async": true
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|NotebookEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "test -x \"$HOME/.local/bin/cairn-hooks\" && \"$HOME/.local/bin/cairn-hooks\" || true",
+            "async": true
+          }
+        ]
+      }
+    ]
+  }
+}
