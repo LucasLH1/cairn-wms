@@ -19,6 +19,7 @@ ne contient aucun code applicatif, et aucun choix de technologie ne doit y être
 | `journal/` | Une entrée par session de travail : ce qui a été fait, décidé, touché. |
 | `status.yml` | L'état d'avancement de chaque module, couche par couche. |
 | `CLAUDE.md` | Les règles de travail dans ce dépôt. |
+| `.claude/settings.json` | Hooks Claude Code du fil d'activité. Sans effet sur un poste où le script qu'ils appellent est absent. |
 
 ## Avancement
 

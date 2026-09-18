@@ -34,6 +34,12 @@ Aucun langage, aucun framework, aucune base de données, aucune architecture, au
 aucun outillage n'est arrêté tant qu'une fiche actée ne le dit pas. Et à ce jour, `docs/decisions/`
 ne contient aucune décision.
 
+Cette règle vise **la pile du produit** : ce avec quoi Cairn WMS est construit, exécuté, éprouvé et
+livré — intégration continue et déploiement compris. L'outillage du **processus de travail** —
+configuration d'agent, hooks, réglages d'éditeur — n'en relève pas et ne demande pas de fiche,
+**tant qu'il ne présuppose rien de la pile du produit**. `.claude/settings.json` en est l'exemple.
+Au moindre doute sur ce qui tombe de quel côté : on pose la question.
+
 En conséquence, dans ce dépôt :
 
 - ne pas créer de code applicatif, de fichier de configuration de pile, de manifeste de dépendances,
@@ -51,9 +57,9 @@ Face à un choix engageant non tranché : écrire une fiche depuis `docs/decisio
 Une session n'est pas finie tant que ces trois-là ne sont pas à jour. Elles se font à la fin, et
 elles ne se délèguent pas au « prochain coup ».
 
-1. **Une entrée dans `journal/`** — un fichier `AAAA-MM-JJ.md`, au format décrit dans
-   `journal/README.md` : objectif, actions, décisions, fichiers touchés, issues liées, points
-   ouverts.
+1. **Une entrée dans `journal/`** — un fichier `AAAA-MM-JJ-HHMM-sujet.md`, ouvert par un en-tête
+   YAML, au format décrit dans `journal/README.md` : objectif, actions, décisions, fichiers
+   touchés, issues liées, points ouverts.
 2. **`status.yml` mis à jour** — l'état de chaque module touché (`à faire`, `spécifié`,
    `en développement`, `livré`), et le champ `mis_a_jour_le`. Un état ne se fait avancer que par ce
    qui existe réellement dans le dépôt, jamais par ce qui est prévu.
@@ -65,6 +71,9 @@ elles ne se délèguent pas au « prochain coup ».
 
 - `dev` est la branche de travail et la branche par défaut. Tout commit y va, ou sur une branche
   issue d'elle.
+- `dev` est protégée contre la réécriture : ni push forcé, ni suppression, pour personne. **Un
+  commit poussé ne se modifie plus** — pas d'`--amend`, pas de rebase sur ce qui est déjà en
+  ligne. Une erreur se corrige par un nouveau commit, ou s'annule par `git revert`.
 - `main` est la production. **Aucun push direct**, jamais, sous aucun prétexte — y compris pour un
   correctif d'une ligne. La branche est protégée : la fusion passe par une pull request.
 - La promotion de `dev` vers `main` est une décision humaine. Ne pas ouvrir, approuver ni fusionner
