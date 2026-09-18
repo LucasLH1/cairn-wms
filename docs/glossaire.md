@@ -52,7 +52,7 @@ Règles d'usage :
 | Emplacement | `Location` | Endroit identifié pouvant porter du stock. Appartient à une zone. |
 | Emplacement virtuel | `VirtualLocation` | Emplacement sans existence physique représentant un stock hors des murs ou en cours de déplacement. |
 | Masque d'adressage | `LocationAddressPattern` | Structure de composition des adresses d'emplacement d'une zone, en segments nommés. |
-| Rang de parcours | `TraversalRank` | Position d'un emplacement dans l'ordre de circulation d'une zone. Détermine l'ordre des prélèvements. |
+| Séquence de parcours | `TraversalRank` | Position d'un emplacement dans l'ordre de circulation d'une zone. Détermine l'ordre des prélèvements et des rangements. |
 | Emplacement de prélèvement dédié | `FixedPickLocation` | Emplacement attitré à une référence, réapprovisionné depuis la réserve. |
 | Règle de réapprovisionnement | `ReplenishmentRule` | Seuil et quantité de recomplètement d'un emplacement de prélèvement dédié. |
 | Générateur de plan | `LayoutGenerator` | Outil de création en masse d'emplacements à partir d'une description paramétrique d'une zone. |
@@ -69,7 +69,7 @@ Règles d'usage :
 | Support | `HandlingUnit` | Contenant identifié — palette, bac, roll, carton — portant du stock et déplaçable d'un seul geste avec son contenu. |
 | Support consigné | `ReturnableHandlingUnit` | Support appartenant à un tiers, dont la restitution doit être suivie. |
 | Réservation | `StockReservation` | Lien entre une unité de stock et une demande qui la revendique. |
-| Règle d'affectation | `AllocationRule` | Stratégie de choix du stock à prélever : premier entré premier sorti, premier périmé premier sorti, ou autre. |
+| Règle de prélèvement | `PickingRule` | Stratégie de choix du stock à prélever : premier entré premier sorti, premier périmé premier sorti, ou autre. |
 | Photo quotidienne du stock | `DailyStockSnapshot` | État figé du stock détenu à une date donnée, par donneur d'ordre et par site. |
 | Blocage | `StockHold` | Interdiction motivée et datée de mouvementer ou de prélever du stock. |
 
@@ -126,7 +126,7 @@ Règles d'usage :
 | Dossier | `Case` | Unité de traitement d'une affaire de service après-vente : un donneur d'ordre, un client final, un motif, un ou plusieurs articles annoncés. |
 | Article annoncé | `CaseItem` | Ce que le donneur d'ordre déclare devoir arriver, désigné au numéro de série ou à la référence. |
 | Motif de dossier | `CaseReason` | Raison du retour : panne, défaut à la livraison, rétractation, rappel constructeur, erreur d'expédition, ou motif propre au donneur d'ordre. |
-| Prise en charge | `CoverageDecision` | Qui paie : sous garantie, hors garantie, indéterminée. Annoncée par le donneur d'ordre, recoupée par le WMS. |
+| Régime de garantie | `WarrantyCoverage` | Qui paie : sous garantie, hors garantie, indéterminé. Annoncé par le donneur d'ordre, recoupé par le WMS. |
 | Dérive | `CaseDeviation` | Écart entre ce qu'un dossier annonce et ce qui est reçu. Ouvre toujours un litige. |
 | Expédition groupée | `ConsolidatedShipping` | Indicateur d'un dossier dont les articles terminés attendent les autres avant de repartir ensemble. |
 | Lien d'échange | `SwapLink` | Rattachement, au sein d'un dossier, entre un article reçu et l'exemplaire de stock qui le remplace. |
@@ -145,7 +145,7 @@ Règles d'usage :
 | Français | Anglais | Définition |
 |---|---|---|
 | Mission de rangement | `PutawayTask` | Unité de travail déplaçant un support ou une ligne de stock du quai vers une destination proposée. |
-| Stratégie d'affectation | `PutawayStrategy` | Règle de choix d'un emplacement de rangement, issue d'un catalogue fermé et ordonnée par le paramétrage. |
+| Stratégie de rangement | `PutawayStrategy` | Règle de choix d'un emplacement de rangement, issue d'un catalogue fermé et ordonnée par le paramétrage. |
 | Régime de rangement | `PutawayMode` | Caractère dirigé ou libre du rangement dans une zone. |
 | Écart de rangement | `PutawayVariance` | Dépôt à un emplacement autre que celui proposé, en zone libre. |
 | Dérogation | `PutawayOverride` | Dépôt à un emplacement autre que celui imposé, en zone dirigée, sous permission et avec motif. |
@@ -190,3 +190,5 @@ Ces mots sont ambigus ou déjà pris. Ils ne doivent apparaître nulle part.
 | Entrepôt | Site, ou zone logistique | Le mot désigne tantôt l'un, tantôt l'autre. |
 | Avis d'expédition, ASN, commande fournisseur | Attendu | Trois mots pour ce que le WMS attend, quelle que soit son origine. |
 | Bon de réception | Réception | Le document n'est pas l'objet métier. |
+| Affectation | Règle de prélèvement, ou stratégie de rangement | Le mot désignait deux mécanismes opposés : le choix du stock à sortir et le choix de l'emplacement où ranger. |
+| Prise en charge (au sens de la garantie) | Régime de garantie | « Prise en charge » est réservé à l'événement transporteur qui vaut preuve de dépôt. |
