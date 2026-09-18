@@ -63,10 +63,10 @@ n'est toléré : un objet porte un nom et un seul.
 
 | # | Module | Document |
 |---|---|---|
-| 1.1 | Réception | `flux-entrants/1.1-reception.md` *(rédigé)* |
-| 1.2 | Dossiers SAV | `flux-entrants/1.2-dossiers-sav.md` *(rédigé)* |
-| 1.3 | Retours client | `flux-entrants/1.3-retours-client.md` *(rédigé)* |
-| 1.4 | Mise en stock et rangement | `flux-entrants/1.4-mise-en-stock.md` *(rédigé)* |
+| 1.1 | Réception | `flux-entrants/1.1-reception.md` |
+| 1.2 | Dossiers SAV | `flux-entrants/1.2-dossiers-sav.md` |
+| 1.3 | Retours client | `flux-entrants/1.3-retours-client.md` |
+| 1.4 | Mise en stock et rangement | `flux-entrants/1.4-mise-en-stock.md` |
 
 ### Couche 2 — Cœur stock *(à venir)*
 
