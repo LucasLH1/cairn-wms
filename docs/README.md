@@ -48,6 +48,7 @@ Préfixes en vigueur :
 | `RG-RET` | 1.3 Retours client |
 | `RG-RAN` | 1.4 Mise en stock et rangement |
 | `RG-MVT` | 2.1 Mouvements et transferts |
+| `RG-INV` | 2.2 Inventaires |
 
 **Cas limites.** Chaque module liste explicitement ce qui doit se produire quand la situation dérape.
 Un cas limite non documenté est un bug en puissance : si un comportement n'est pas décrit, il doit
@@ -88,7 +89,7 @@ n'est toléré : un objet porte un nom et un seul.
 | # | Module | Document |
 |---|---|---|
 | 2.1 | Mouvements et transferts | `coeur-stock/2.1-mouvements-transferts.md` |
-| 2.2 | Inventaires | *(à venir)* |
+| 2.2 | Inventaires | `coeur-stock/2.2-inventaires.md` |
 | 2.3 | Statuts, blocages et mises à disposition | *(à venir)* |
 | 2.4 | Supports consignés | *(à venir)* |
 
