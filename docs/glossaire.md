@@ -144,7 +144,6 @@ Règles d'usage :
 
 | Français | Anglais | Définition |
 |---|---|---|
-| Mission de rangement | `PutawayTask` | Unité de travail déplaçant un support ou une ligne de stock du quai vers une destination proposée. |
 | Stratégie de rangement | `PutawayStrategy` | Règle de choix d'un emplacement de rangement, issue d'un catalogue fermé et ordonnée par le paramétrage. |
 | Régime de rangement | `PutawayMode` | Caractère dirigé ou libre du rangement dans une zone. |
 | Écart de rangement | `PutawayVariance` | Dépôt à un emplacement autre que celui proposé, en zone libre. |
@@ -153,6 +152,19 @@ Règles d'usage :
 | Éclatement | `PutawaySplit` | Division d'une mission en deux dépôts pour servir au passage un emplacement de prélèvement. |
 | Emplacement de débordement | `OverflowLocation` | Emplacement sans contrainte de capacité recevant le stock qu'aucune stratégie ne peut placer. |
 | Résorption | `OverflowClearing` | Travail de replacement du stock en débordement vers des emplacements conformes. |
+
+## Mouvements et transferts
+
+| Français | Anglais | Définition |
+|---|---|---|
+| Mission | `WorkOrder` | Unité de travail interne à exécuter : origine, contenu, destination, priorité, état. Une mission de rangement est une mission de type rangement. |
+| Type de mission | `WorkOrderType` | Nature du travail : rangement, réapprovisionnement, transfert interne, départ de transfert, résorption, comptage. |
+| Transfert | `StockTransfer` | Déplacement de marchandise entre deux sites, chapeautant l'expédition au départ et la réception à l'arrivée. |
+| Ligne de transfert | `StockTransferLine` | Une référence transférée, avec ses quantités demandée, partie et arrivée. |
+| Demande de réapprovisionnement | `ReplenishmentRequest` | Besoin de recomplètement d'un emplacement de prélèvement dédié, né d'un seuil, d'une anticipation ou d'une demande manuelle. |
+| Quantité attendue | `IncomingQuantity` | Stock en transit vers un site, visible mais ni prélevable ni réservable. |
+| Litige interne | `InternalDispute` | Écart entre deux sites du prestataire, sans tiers, imputé par défaut au site expéditeur. |
+| Déplacement en masse | `BulkMove` | Sélection de stock générant un lot de missions de transfert interne. |
 
 ## Flux sortants *(réservé — couche 3)*
 
