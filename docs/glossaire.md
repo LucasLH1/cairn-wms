@@ -99,7 +99,6 @@ Règles d'usage :
 | Action automatique | `FlowAction` | Traitement déclenché par une étape sans intervention humaine. |
 | Forçage | `FlowOverride` | Transition décidée par un superviseur hors du routage prévu, motivée et tracée. |
 | Cycle de vie | `Lifecycle` | Suite de statuts non configurable d'un document métier. À ne pas confondre avec un parcours. |
-| Dossier | `Case` *(réservé)* | Unité de traitement d'un flux SAV, portant un ou plusieurs articles. Défini en couche 1. |
 
 ## Flux entrants
 
@@ -155,6 +154,15 @@ Règles d'usage :
 | Emplacement de débordement | `OverflowLocation` | Emplacement sans contrainte de capacité recevant le stock qu'aucune stratégie ne peut placer. |
 | Résorption | `OverflowClearing` | Travail de replacement du stock en débordement vers des emplacements conformes. |
 
+## Flux sortants *(réservé — couche 3)*
+
+| Français | Anglais | Définition |
+|---|---|---|
+| Commande | `Order` | Demande de sortie de marchandise pour un destinataire. Origine possible d'un dossier de retour. Définie en 3.1. |
+| Ligne de commande | `OrderLine` | Une référence demandée, sa quantité et l'état qualité exigé. Définie en 3.1. |
+| Expédition | `Shipment` | Départ effectif de marchandise vers un tiers, porteur du numéro cité par les colis qui reviennent. Définie en 3.3. |
+| Colis | `Parcel` | Unité de transport constituée au colisage. À ne pas confondre avec le support. Défini en 3.2. |
+
 ## Traçabilité et facturation
 
 | Français | Anglais | Définition |
@@ -178,7 +186,7 @@ Ces mots sont ambigus ou déjà pris. Ils ne doivent apparaître nulle part.
 | Statut (seul, à propos du stock) | État qualité, ou statut de disponibilité | La confusion entre les deux axes est l'erreur de conception que le modèle évite. |
 | Workflow (en français) | Parcours, ou cycle de vie | Le français doit distinguer ce qui est configurable de ce qui ne l'est pas. |
 | Palette (comme objet de gestion) | Support | Une palette est un type de support parmi d'autres. |
-| Colis (dans le socle) | Support | Le colis est un concept d'expédition, défini en couche 3. |
+| Colis (dans le socle et les flux entrants) | Support | Le colis est un concept d'expédition, défini en 3.2. Dans le socle et en couche 1, ce qui porte du stock est un support. |
 | Entrepôt | Site, ou zone logistique | Le mot désigne tantôt l'un, tantôt l'autre. |
 | Avis d'expédition, ASN, commande fournisseur | Attendu | Trois mots pour ce que le WMS attend, quelle que soit son origine. |
 | Bon de réception | Réception | Le document n'est pas l'objet métier. |
