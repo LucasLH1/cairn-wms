@@ -12,6 +12,7 @@ ni technologie, ni schéma de base de données, ni architecture applicative. Ces
 | `glossaire.md` | Le vocabulaire métier, français et anglais. Référence unique, sans synonyme. |
 | `socle/` | Couche 0 — les objets que tous les modules manipulent. |
 | `flux-entrants/` | Couche 1 — réception, dossiers SAV, retours client, rangement. |
+| `coeur-stock/` | Couche 2 — mouvements, inventaires, blocages, supports consignés. |
 | `decisions/` | Les fiches de décision engageante. Ce qui n'y est pas écrit n'est pas décidé. |
 
 La spécification dit **ce que le produit doit faire**. Les fiches de `decisions/` disent **comment on
@@ -46,6 +47,7 @@ Préfixes en vigueur :
 | `RG-SAV` | 1.2 Dossiers SAV |
 | `RG-RET` | 1.3 Retours client |
 | `RG-RAN` | 1.4 Mise en stock et rangement |
+| `RG-MVT` | 2.1 Mouvements et transferts |
 
 **Cas limites.** Chaque module liste explicitement ce qui doit se produire quand la situation dérape.
 Un cas limite non documenté est un bug en puissance : si un comportement n'est pas décrit, il doit
@@ -81,10 +83,14 @@ n'est toléré : un objet porte un nom et un seul.
 | 1.3 | Retours client | `flux-entrants/1.3-retours-client.md` |
 | 1.4 | Mise en stock et rangement | `flux-entrants/1.4-mise-en-stock.md` |
 
-### Couche 2 — Cœur stock *(à venir)*
+### Couche 2 — Cœur stock *(en cours)*
 
-2.1 Mouvements et transferts · 2.2 Inventaires · 2.3 Statuts, blocages et mises à disposition ·
-2.4 Supports consignés
+| # | Module | Document |
+|---|---|---|
+| 2.1 | Mouvements et transferts | `coeur-stock/2.1-mouvements-transferts.md` |
+| 2.2 | Inventaires | *(à venir)* |
+| 2.3 | Statuts, blocages et mises à disposition | *(à venir)* |
+| 2.4 | Supports consignés | *(à venir)* |
 
 ### Couche 3 — Flux sortants *(à venir)*
 
