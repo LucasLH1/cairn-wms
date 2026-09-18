@@ -1,8 +1,21 @@
 # Cairn WMS — Spécification métier
 
-Ce dépôt documentaire décrit **le métier** du WMS Cairn. Il ne contient aucune décision technique :
-ni technologie, ni schéma de base de données, ni architecture applicative. Ces sujets sont traités
-ailleurs et ne doivent pas être introduits ici.
+La spécification décrit **le métier** du WMS Cairn. Elle ne contient aucune décision technique :
+ni technologie, ni schéma de base de données, ni architecture applicative. Ces choix vivent dans
+`decisions/`, sous forme de fiches, et ne doivent jamais être introduits dans la spécification.
+
+## Organisation du dossier
+
+| Chemin | Contenu |
+|---|---|
+| `README.md` | Ce document : conventions, carte des modules, principes directeurs, périmètre. |
+| `glossaire.md` | Le vocabulaire métier, français et anglais. Référence unique, sans synonyme. |
+| `socle/` | Couche 0 — les objets que tous les modules manipulent. |
+| `flux-entrants/` | Couche 1 — réception, dossiers SAV, retours client, rangement. |
+| `decisions/` | Les fiches de décision engageante. Ce qui n'y est pas écrit n'est pas décidé. |
+
+La spécification dit **ce que le produit doit faire**. Les fiches de `decisions/` disent **comment on
+s'y prend, et pourquoi**. Les deux ne se mélangent jamais dans un même document.
 
 ## À qui s'adresse ce document
 
