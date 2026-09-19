@@ -8,10 +8,9 @@ Règles d'usage :
 - Un concept = un terme. Aucun synonyme n'est admis, ni en français ni en anglais.
 - Un terme absent de ce glossaire ne doit pas apparaître dans un document ni dans le code. S'il
   manque, on l'ajoute ici d'abord.
-- Tous les modules étant rédigés, aucun terme n'est plus marqué *(réservé)*. La convention reste
-  valable si de nouveaux concepts devaient être posés avant leur module.
-- Les termes marqués *(réservé)* désignent des concepts de couches non encore rédigées. Ils sont
-  posés ici pour éviter qu'un autre nom ne s'installe entre-temps.
+- Un terme marqué *(réservé)* désigne un concept dont le module n'est pas encore rédigé : il est posé
+  ici pour éviter qu'un autre nom ne s'installe entre-temps. Tous les modules étant rédigés, aucun
+  terme n'en porte aujourd'hui.
 
 ---
 
