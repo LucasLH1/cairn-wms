@@ -8,6 +8,8 @@ Règles d'usage :
 - Un concept = un terme. Aucun synonyme n'est admis, ni en français ni en anglais.
 - Un terme absent de ce glossaire ne doit pas apparaître dans un document ni dans le code. S'il
   manque, on l'ajoute ici d'abord.
+- Tous les modules étant rédigés, aucun terme n'est plus marqué *(réservé)*. La convention reste
+  valable si de nouveaux concepts devaient être posés avant leur module.
 - Les termes marqués *(réservé)* désignent des concepts de couches non encore rédigées. Ils sont
   posés ici pour éviter qu'un autre nom ne s'installe entre-temps.
 
@@ -236,6 +238,18 @@ Règles d'usage :
 | Interception | `ShipmentInterception` | Signalement des expéditions non parties contenant du stock rappelé. Présente, n'annule jamais seule. |
 | Expédition résiduelle | `ResidualShipment` | Expédition constituée des colis restés à quai lors d'un départ incomplet. |
 | Colis | `Parcel` | Unité de transport constituée au colisage, portant un identifiant scannable et son contenu détaillé. À ne pas confondre avec le support. |
+
+## Pilotage
+
+| Français | Anglais | Définition |
+|---|---|---|
+| Indicateur | `Metric` | Mesure du catalogue fermé du produit, portant sa définition, sa formule et ses mailles. Jamais un montant. |
+| Régime de fraîcheur | `MetricFreshness` | Exploitation, recalculé en continu, ou reporting, figé par période close. |
+| Période close | `ClosedPeriod` | Période figée par un geste explicite, dont les valeurs ne changent plus rétroactivement. |
+| Lacune | `DataGap` | Donnée manquante sur une période, énoncée avec l'indicateur qu'elle affecte. Jamais comblée par extrapolation. |
+| Tableau de bord | `Dashboard` | Composition d'indicateurs du catalogue, restreinte aux droits de son lecteur. |
+| Seuil d'alerte | `MetricThreshold` | Valeur d'un indicateur dont le franchissement produit une alerte, jamais une action. |
+| Jeu d'export | `ExportSet` | Export nommé et versionné, au contenu déclaré, rejouable à l'identique sur une période close. |
 
 ## Traçabilité et facturation
 
