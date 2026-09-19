@@ -210,8 +210,15 @@ Règles d'usage :
 | Règle de regroupement | `ConsolidationRule` | Critères et durée d'attente selon lesquels plusieurs commandes d'un même destinataire partagent une expédition. |
 | Fenêtre d'attente | `ConsolidationWindow` | Délai pendant lequel une commande éligible patiente avant expédition, dans l'espoir d'un regroupement. |
 | Référence externe | `ExternalReference` | Identifiant de la commande chez le donneur d'ordre. Garantit qu'un flux rejoué ne duplique rien. |
+| Vague de préparation | `PickWave` | Ensemble de commandes d'un même site lancées ensemble en préparation. Porte son mode et son avancement. |
+| Mode de préparation | `PickingMode` | Manière de prélever une vague : mono-commande, ou groupée avec tri final. Décidé par le WMS, enregistré sur la vague. |
+| Zone de tri | `SortingZone` | Zone où le prélèvement groupé est éclaté par commande avant colisage. |
+| Rupture au prélèvement | `ShortPick` | Constat qu'un emplacement contient moins que ce que le WMS y voyait. Déclenche une réémission et un comptage, n'ajuste jamais le stock. |
+| Déconditionnement | `PackagingBreak` | Ouverture d'un niveau de conditionnement pour servir une quantité inférieure. Sans effet sur la quantité en stock. |
+| Contrôle de colisage | `PackingCheck` | Vérification par scan du contenu d'une commande avant fermeture du colis. |
+| Proposition de colisage | `PackingProposal` | Répartition en colis calculée par le WMS, que l'opérateur peut modifier. L'écart est enregistré. |
 | Expédition | `Shipment` | Départ effectif de marchandise vers un tiers, porteur du numéro cité par les colis qui reviennent. Définie en 3.3. *(réservé)* |
-| Colis | `Parcel` | Unité de transport constituée au colisage. À ne pas confondre avec le support. Défini en 3.2. *(réservé)* |
+| Colis | `Parcel` | Unité de transport constituée au colisage, portant un identifiant scannable et son contenu détaillé. À ne pas confondre avec le support. |
 
 ## Traçabilité et facturation
 
@@ -237,7 +244,7 @@ Ces mots sont ambigus ou déjà pris. Ils ne doivent apparaître nulle part.
 | Workflow (en français) | Parcours, ou cycle de vie | Le français doit distinguer ce qui est configurable de ce qui ne l'est pas. |
 | Palette (comme objet de gestion) | Support | Une palette est un type de support parmi d'autres. |
 | Colis (dans le socle et les flux entrants) | Support | Le colis est un concept d'expédition, défini en 3.2. Dans le socle et en couche 1, ce qui porte du stock est un support. |
-| Entrepôt | Site, ou zone logistique | Le mot désigne tantôt l'un, tantôt l'autre. |
+| Entrepôt *(pour désigner un lieu)* | Site, ou zone logistique | Le mot désigne tantôt l'un, tantôt l'autre. Il reste admis dans la prose, au sens général du métier ; jamais pour nommer un objet, un champ, un écran ou un périmètre précis. |
 | Avis d'expédition, ASN, commande fournisseur | Attendu | Trois mots pour ce que le WMS attend, quelle que soit son origine. |
 | Bon de réception | Réception | Le document n'est pas l'objet métier. |
 | Affectation | Règle de prélèvement, ou stratégie de rangement | Le mot désignait deux mécanismes opposés : le choix du stock à sortir et le choix de l'emplacement où ranger. |
