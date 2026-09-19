@@ -72,6 +72,7 @@ Règles d'usage :
 | Règle de prélèvement | `PickingRule` | Stratégie de choix du stock à prélever : premier entré premier sorti, premier périmé premier sorti, ou autre. |
 | Photo quotidienne du stock | `DailyStockSnapshot` | État figé du stock détenu à une date donnée, par donneur d'ordre et par site. |
 | Blocage | `StockHold` | Interdiction motivée et datée de mouvementer ou de prélever du stock. |
+| Valeur déclarée | `DeclaredValue` | Montant unitaire déclaré par le donneur d'ordre sur une référence, surchargeable par le flux d'entrée. Sert aux seuils, aux arbitrages et à l'indemnisation ; jamais à une valorisation comptable. |
 
 ## Tiers
 
@@ -165,6 +166,21 @@ Règles d'usage :
 | Quantité attendue | `IncomingQuantity` | Stock en transit vers un site, visible mais ni prélevable ni réservable. |
 | Litige interne | `InternalDispute` | Écart entre deux sites du prestataire, sans tiers, imputé par défaut au site expéditeur. |
 | Déplacement en masse | `BulkMove` | Sélection de stock générant un lot de missions de transfert interne. |
+
+## Inventaires
+
+| Français | Anglais | Définition |
+|---|---|---|
+| Campagne d'inventaire | `StockCount` | Un inventaire : un type, un périmètre, une date, un cycle de vie. |
+| Type d'inventaire | `StockCountType` | Tournant, complet, ponctuel, de contrôle. |
+| Relevé | `CountRecord` | Ce qu'un opérateur a déclaré trouver à un emplacement. Immuable une fois validé. |
+| Recomptage | `Recount` | Second comptage aveugle d'un emplacement, déclenché par tout écart. |
+| Gel d'inventaire | `CountFreeze` | Interdiction temporaire de mouvementer un emplacement pendant son comptage. |
+| Écart d'inventaire | `CountVariance` | Différence entre le stock théorique et le stock compté, retenue seulement si confirmée au recomptage. |
+| Écart de localisation | `LocationVariance` | Exemplaire sérialisé trouvé à un autre emplacement que celui où le WMS le situe. Ni manquant, ni surplus. |
+| Seuil de validation | `VarianceThreshold` | Quantité ou valeur au-delà de laquelle un écart exige une validation humaine avant ajustement. |
+| Taux de fiabilité du stock | `StockAccuracy` | Part des emplacements comptés sans écart. Se calcule sur les emplacements, jamais sur les quantités. |
+| Taux de couverture | `CountCoverage` | Part des emplacements comptés au moins une fois sur une période. |
 
 ## Flux sortants *(réservé — couche 3)*
 
