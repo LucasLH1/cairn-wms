@@ -154,6 +154,12 @@ Règles d'usage :
 | Commande principale | `PrimaryOrder` | Commande désignée par le bon scanné, origine du dossier de retour. |
 | Commande rattachée | `LinkedOrder` | Autre commande du même client final dont provient un article reçu dans le même colis. |
 | Recevabilité | `ReturnEligibility` | Conformité d'un retour au délai déclaré par le donneur d'ordre. Signalée, jamais bloquante. |
+| Commande de dossier | `CaseOrder` | Commande produite exclusivement par une étape du parcours d'un dossier, ne pouvant désigner que les exemplaires de ce dossier. Seule exception à `RG-STK-041`. |
+| Poste de travail | `Workstation` | Emplacement identifié et scannable d'un atelier, où se localise un article pris en charge. |
+| Symptôme | `Symptom` | Ce que le technicien constate sur un article, choisi dans une liste fermée à l'usage. Ne se confond pas avec le constat (`Finding`) de 2.3. |
+| Cause | `FailureCause` | Origine retenue du symptôme, choisie dans une liste fermée à l'usage. |
+| Rang du dossier | `CaseRank` | Nombre de dossiers antérieurs ouverts sur un même objet sérialisé. Disponible comme condition d'entrée et de routage. |
+| Dépose | `PartRemoval` | Retrait d'une pièce d'un article sans remplacement, enregistré et rattaché au dossier. |
 | Incident de livraison | `DeliveryIncident` | Anomalie remontée par un transporteur sur un colis aller. Informe et alerte, ne déclenche rien. |
 
 ## Rangement
@@ -256,4 +262,5 @@ Ces mots sont ambigus ou déjà pris. Ils ne doivent apparaître nulle part.
 | Bon de réception | Réception | Le document n'est pas l'objet métier. |
 | Affectation | Règle de prélèvement, ou stratégie de rangement | Le mot désignait deux mécanismes opposés : le choix du stock à sortir et le choix de l'emplacement où ranger. |
 | Requalification (au sens de la qualité) | Changement d'état qualité | « Requalification » désigne la sortie d'une unité de son dossier, et rien d'autre. |
+| Constat (au sens du diagnostic) | Symptôme | « Constat » désigne la déclaration d'un fait sur du stock hors parcours (2.3), jamais ce qu'un technicien observe à l'établi. |
 | Prise en charge (au sens de la garantie) | Régime de garantie | « Prise en charge » est réservé à l'événement transporteur qui vaut preuve de dépôt. |
