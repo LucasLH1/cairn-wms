@@ -53,6 +53,7 @@ Préfixes en vigueur :
 | `RG-SUP` | 2.4 Supports consignés |
 | `RG-CDE` | 3.1 Commandes et lignes de commande |
 | `RG-PRE` | 3.2 Préparation |
+| `RG-EXP` | 3.3 Expédition et transporteurs |
 
 **Cas limites.** Chaque module liste explicitement ce qui doit se produire quand la situation dérape.
 Un cas limite non documenté est un bug en puissance : si un comportement n'est pas décrit, il doit
@@ -97,13 +98,13 @@ n'est toléré : un objet porte un nom et un seul.
 | 2.3 | Statuts, blocages et mise à disposition | `coeur-stock/2.3-statuts-blocages-mise-a-disposition.md` |
 | 2.4 | Supports consignés | `coeur-stock/2.4-supports-consignes.md` |
 
-### Couche 3 — Flux sortants *(en cours)*
+### Couche 3 — Flux sortants *(rédigée)*
 
 | # | Module | Document |
 |---|---|---|
 | 3.1 | Commandes et lignes de commande | `flux-sortants/3.1-commandes.md` |
 | 3.2 | Préparation | `flux-sortants/3.2-preparation.md` |
-| 3.3 | Expédition et transporteurs | *(à venir)* |
+| 3.3 | Expédition et transporteurs | `flux-sortants/3.3-expedition-transporteurs.md` |
 
 ### Couche 4 — Métiers spécifiques *(à venir)*
 
