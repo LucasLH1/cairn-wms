@@ -56,6 +56,7 @@ Préfixes en vigueur :
 | `RG-EXP` | 3.3 Expédition et transporteurs |
 | `RG-ATE` | 4.1 Atelier et réparation |
 | `RG-LIT` | 4.2 Litiges |
+| `RG-KPI` | 5.1 KPI, tableaux de bord et exports |
 
 **Cas limites.** Chaque module liste explicitement ce qui doit se produire quand la situation dérape.
 Un cas limite non documenté est un bug en puissance : si un comportement n'est pas décrit, il doit
@@ -115,9 +116,11 @@ n'est toléré : un objet porte un nom et un seul.
 | 4.1 | Atelier et réparation | `metiers-specifiques/4.1-atelier-reparation.md` |
 | 4.2 | Litiges | `metiers-specifiques/4.2-litiges.md` |
 
-### Couche 5 — Pilotage *(à venir)*
+### Couche 5 — Pilotage *(rédigée)*
 
-5.1 KPI, tableaux de bord et exports
+| # | Module | Document |
+|---|---|---|
+| 5.1 | KPI, tableaux de bord et exports | `pilotage/5.1-kpi-tableaux-de-bord-exports.md` |
 
 ## Principes directeurs du produit
 
