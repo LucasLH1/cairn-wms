@@ -133,7 +133,7 @@ Règles d'usage :
 | Point de contrôle | `InspectionPoint` | Un critère nommé d'une grille, avec son caractère bloquant et son déclenchement de litige. |
 | Résultat de contrôle | `InspectionResult` | Verdict immuable produit par l'application d'une grille. |
 | Rapprochement | `ReceiptMatching` | Rattachement, validé par un humain, d'une réception à la volée à un attendu ouvert. |
-| Litige | `Dispute` *(réservé)* | Anomalie qualifiée, imputée et suivie jusqu'à résolution. Défini en 4.2. |
+| Litige | `Dispute` | Anomalie qualifiée, ouverte contre une partie et instruite jusqu'à une issue. Ne porte jamais de montant. |
 
 ## Service après-vente
 
@@ -185,7 +185,11 @@ Règles d'usage :
 | Ligne de transfert | `StockTransferLine` | Une référence transférée, avec ses quantités demandée, partie et arrivée. |
 | Demande de réapprovisionnement | `ReplenishmentRequest` | Besoin de recomplètement d'un emplacement de prélèvement dédié, né d'un seuil, d'une anticipation ou d'une demande manuelle. |
 | Quantité attendue | `IncomingQuantity` | Stock en transit vers un site, visible mais ni prélevable ni réservable. |
-| Litige interne | `InternalDispute` | Écart entre deux sites du prestataire, sans tiers, imputé par défaut au site expéditeur. |
+| Litige interne | `InternalDispute` | Écart entre deux sites du prestataire, sans tiers, ouvert contre le site expéditeur. Jamais exposé à un donneur d'ordre. |
+| Partie mise en cause | `RespondentParty` | Partie contre laquelle un litige est ouvert. Connue dès l'ouverture ; ne désigne pas un fautif. |
+| Imputation | `Liability` | Partie qui supporte l'écart, prononcée au terme de l'instruction. Vide à l'ouverture. |
+| Issue de litige | `DisputeOutcome` | Résultat de la clôture, choisi dans un catalogue fermé. Porte des quantités, jamais un montant. |
+| Fil d'instruction | `DisputeThread` | Suite en ajout seul des événements, pièces et décisions d'un litige. |
 | Mise en quarantaine | `QuarantineMove` | Mission de regroupement d'une unité bloquée vers la zone de quarantaine du site, générée par une campagne de blocage. |
 | Déplacement en masse | `BulkMove` | Sélection de stock générant un lot de missions de transfert interne. |
 
