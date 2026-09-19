@@ -72,6 +72,12 @@ Règles d'usage :
 | Règle de prélèvement | `PickingRule` | Stratégie de choix du stock à prélever : premier entré premier sorti, premier périmé premier sorti, ou autre. |
 | Photo quotidienne du stock | `DailyStockSnapshot` | État figé du stock détenu à une date donnée, par donneur d'ordre et par site. |
 | Blocage | `StockHold` | Interdiction motivée et datée de mouvementer ou de prélever du stock. |
+| Campagne de blocage | `HoldCampaign` | Blocage massif dont le périmètre est désigné par critères, doté d'une prévisualisation, de missions d'isolement et d'une levée d'ensemble. |
+| Mise à disposition | `StockRelease` | Retour automatique d'une unité de stock à la disponibilité, dès que sa dernière cause d'indisponibilité tombe. Constat, jamais décision. |
+| Requalification | `StockReclassification` | Sortie d'une unité de stock du dossier auquel elle est rattachée, qui la remet dans le stock ordinaire. Ne désigne jamais un changement d'état qualité. |
+| Date d'échéance | `ExpiryDate` | Date à laquelle une unité de stock cesse d'être utilisable : péremption, fin de garantie, limite de détention. |
+| Préavis d'échéance | `ExpiryNotice` | Délai, en jours, avant lequel le WMS annonce qu'une échéance va tomber. Informe, n'agit pas. |
+| Durée de vie résiduelle | `RemainingShelfLife` | Délai minimal exigé entre aujourd'hui et l'échéance pour qu'une unité reste prélevable. |
 | Valeur déclarée | `DeclaredValue` | Montant unitaire déclaré par le donneur d'ordre sur une référence, surchargeable par le flux d'entrée. Sert aux seuils, aux arbitrages et à l'indemnisation ; jamais à une valorisation comptable. |
 
 ## Tiers
@@ -98,6 +104,8 @@ Règles d'usage :
 | Issue | `StepOutcome` | Résultat nommé d'une étape, qui détermine la suite du parcours. |
 | Routage | `StepRouting` | Table associant une issue, et éventuellement des conditions, à l'étape suivante. |
 | Action automatique | `FlowAction` | Traitement déclenché par une étape sans intervention humaine. |
+| Parcours de constat | `FindingFlow` | Parcours livré en standard, déclenchable par le scan d'une unité depuis tout écran du terrain, par lequel passe tout changement d'état qualité hors flux. |
+| Constat | `Finding` | Déclaration par un opérateur d'un fait affectant une unité de stock hors de tout parcours en cours : casse, écrasement, anomalie. |
 | Forçage | `FlowOverride` | Transition décidée par un superviseur hors du routage prévu, motivée et tracée. |
 | Cycle de vie | `Lifecycle` | Suite de statuts non configurable d'un document métier. À ne pas confondre avec un parcours. |
 
@@ -159,12 +167,13 @@ Règles d'usage :
 | Français | Anglais | Définition |
 |---|---|---|
 | Mission | `WorkOrder` | Unité de travail interne à exécuter : origine, contenu, destination, priorité, état. Une mission de rangement est une mission de type rangement. |
-| Type de mission | `WorkOrderType` | Nature du travail : rangement, réapprovisionnement, transfert interne, départ de transfert, résorption, comptage. |
+| Type de mission | `WorkOrderType` | Nature du travail : rangement, réapprovisionnement, transfert interne, départ de transfert, résorption, comptage, mise en quarantaine. |
 | Transfert | `StockTransfer` | Déplacement de marchandise entre deux sites, chapeautant l'expédition au départ et la réception à l'arrivée. |
 | Ligne de transfert | `StockTransferLine` | Une référence transférée, avec ses quantités demandée, partie et arrivée. |
 | Demande de réapprovisionnement | `ReplenishmentRequest` | Besoin de recomplètement d'un emplacement de prélèvement dédié, né d'un seuil, d'une anticipation ou d'une demande manuelle. |
 | Quantité attendue | `IncomingQuantity` | Stock en transit vers un site, visible mais ni prélevable ni réservable. |
 | Litige interne | `InternalDispute` | Écart entre deux sites du prestataire, sans tiers, imputé par défaut au site expéditeur. |
+| Mise en quarantaine | `QuarantineMove` | Mission de regroupement d'une unité bloquée vers la zone de quarantaine du site, générée par une campagne de blocage. |
 | Déplacement en masse | `BulkMove` | Sélection de stock générant un lot de missions de transfert interne. |
 
 ## Inventaires
@@ -219,4 +228,5 @@ Ces mots sont ambigus ou déjà pris. Ils ne doivent apparaître nulle part.
 | Avis d'expédition, ASN, commande fournisseur | Attendu | Trois mots pour ce que le WMS attend, quelle que soit son origine. |
 | Bon de réception | Réception | Le document n'est pas l'objet métier. |
 | Affectation | Règle de prélèvement, ou stratégie de rangement | Le mot désignait deux mécanismes opposés : le choix du stock à sortir et le choix de l'emplacement où ranger. |
+| Requalification (au sens de la qualité) | Changement d'état qualité | « Requalification » désigne la sortie d'une unité de son dossier, et rien d'autre. |
 | Prise en charge (au sens de la garantie) | Régime de garantie | « Prise en charge » est réservé à l'événement transporteur qui vaut preuve de dépôt. |
