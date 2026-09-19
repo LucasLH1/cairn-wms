@@ -68,6 +68,13 @@ Règles d'usage :
 | Motif de mouvement | `MovementReason` | Justification obligatoire d'un mouvement qui n'est pas la conséquence d'un flux standard. |
 | Support | `HandlingUnit` | Contenant identifié — palette, bac, roll, carton — portant du stock et déplaçable d'un seul geste avec son contenu. |
 | Support consigné | `ReturnableHandlingUnit` | Support appartenant à un tiers, dont la restitution doit être suivie. |
+| Régime de consigne | `DepositRegime` | Manière dont un type de support consigné est suivi : au solde, ou à l'unité. Déclaré par le type, figé dès le premier mouvement. |
+| Compte de consigne | `DepositAccount` | Solde des supports dus entre le prestataire et un tiers, pour un type de support. Seul solde qui fait foi, ventilé par donneur d'ordre en lecture. |
+| Mouvement de consigne | `DepositMovement` | Enregistrement immuable d'un fait modifiant un compte de consigne. Distinct du mouvement de stock. |
+| Régularisation de consigne | `DepositAdjustment` | Mouvement de consigne motivé corrigeant un solde, sous permission. Ne réécrit jamais le solde. |
+| Parc de vides | `EmptyPool` | Stock des supports vides, localisé et inventorié, sans propriétaire au sens du donneur d'ordre et sans référence au catalogue. |
+| Échange à quai | `DockExchange` | Régime dans lequel une réception s'accompagne de la restitution d'un nombre équivalent de supports vides. |
+| Sortie du parc | `PoolExit` | Départ définitif d'un support hors du suivi du WMS, sans extinction de la dette envers son propriétaire. |
 | Réservation | `StockReservation` | Lien entre une unité de stock et une demande qui la revendique. |
 | Règle de prélèvement | `PickingRule` | Stratégie de choix du stock à prélever : premier entré premier sorti, premier périmé premier sorti, ou autre. |
 | Photo quotidienne du stock | `DailyStockSnapshot` | État figé du stock détenu à une date donnée, par donneur d'ordre et par site. |
