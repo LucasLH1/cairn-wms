@@ -217,7 +217,14 @@ Règles d'usage :
 | Déconditionnement | `PackagingBreak` | Ouverture d'un niveau de conditionnement pour servir une quantité inférieure. Sans effet sur la quantité en stock. |
 | Contrôle de colisage | `PackingCheck` | Vérification par scan du contenu d'une commande avant fermeture du colis. |
 | Proposition de colisage | `PackingProposal` | Répartition en colis calculée par le WMS, que l'opérateur peut modifier. L'écart est enregistré. |
-| Expédition | `Shipment` | Départ effectif de marchandise vers un tiers, porteur du numéro cité par les colis qui reviennent. Définie en 3.3. *(réservé)* |
+| Expédition | `Shipment` | Départ effectif de marchandise vers un tiers, constaté par le scan de chargement. Porte le numéro cité par les colis qui reviennent. |
+| Étiquette transporteur | `ShippingLabel` | Étiquette du sens aller, produite à la fermeture d'un colis et portant son numéro de suivi. |
+| Numéro de suivi | `TrackingNumber` | Identifiant du colis chez le transporteur, obtenu à la fermeture et jamais modifié. |
+| Scan de chargement | `LoadingScan` | Geste du prestataire qui constate le départ d'un colis. Seul fait rendant une commande expédiée. |
+| Événement de suivi | `CarrierTrackingEvent` | Fait remonté par un transporteur sur un colis. Informe et alerte ; ne change jamais un état interne. |
+| Contrainte de service | `ServiceConstraint` | Limite déclarée par un service transporteur : poids, dimensions, ADR, valeur assurée, heure limite de remise. |
+| Interception | `ShipmentInterception` | Signalement des expéditions non parties contenant du stock rappelé. Présente, n'annule jamais seule. |
+| Expédition résiduelle | `ResidualShipment` | Expédition constituée des colis restés à quai lors d'un départ incomplet. |
 | Colis | `Parcel` | Unité de transport constituée au colisage, portant un identifiant scannable et son contenu détaillé. À ne pas confondre avec le support. |
 
 ## Traçabilité et facturation
