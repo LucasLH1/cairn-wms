@@ -55,6 +55,7 @@ Préfixes en vigueur :
 | `RG-PRE` | 3.2 Préparation |
 | `RG-EXP` | 3.3 Expédition et transporteurs |
 | `RG-ATE` | 4.1 Atelier et réparation |
+| `RG-LIT` | 4.2 Litiges |
 
 **Cas limites.** Chaque module liste explicitement ce qui doit se produire quand la situation dérape.
 Un cas limite non documenté est un bug en puissance : si un comportement n'est pas décrit, il doit
@@ -107,12 +108,12 @@ n'est toléré : un objet porte un nom et un seul.
 | 3.2 | Préparation | `flux-sortants/3.2-preparation.md` |
 | 3.3 | Expédition et transporteurs | `flux-sortants/3.3-expedition-transporteurs.md` |
 
-### Couche 4 — Métiers spécifiques *(en cours)*
+### Couche 4 — Métiers spécifiques *(rédigée)*
 
 | # | Module | Document |
 |---|---|---|
 | 4.1 | Atelier et réparation | `metiers-specifiques/4.1-atelier-reparation.md` |
-| 4.2 | Litiges | *(à venir)* |
+| 4.2 | Litiges | `metiers-specifiques/4.2-litiges.md` |
 
 ### Couche 5 — Pilotage *(à venir)*
 
