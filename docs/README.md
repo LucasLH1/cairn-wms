@@ -49,6 +49,7 @@ Préfixes en vigueur :
 | `RG-RAN` | 1.4 Mise en stock et rangement |
 | `RG-MVT` | 2.1 Mouvements et transferts |
 | `RG-INV` | 2.2 Inventaires |
+| `RG-DIS` | 2.3 Statuts, blocages et mise à disposition |
 
 **Cas limites.** Chaque module liste explicitement ce qui doit se produire quand la situation dérape.
 Un cas limite non documenté est un bug en puissance : si un comportement n'est pas décrit, il doit
@@ -90,7 +91,7 @@ n'est toléré : un objet porte un nom et un seul.
 |---|---|---|
 | 2.1 | Mouvements et transferts | `coeur-stock/2.1-mouvements-transferts.md` |
 | 2.2 | Inventaires | `coeur-stock/2.2-inventaires.md` |
-| 2.3 | Statuts, blocages et mises à disposition | *(à venir)* |
+| 2.3 | Statuts, blocages et mise à disposition | `coeur-stock/2.3-statuts-blocages-mise-a-disposition.md` |
 | 2.4 | Supports consignés | *(à venir)* |
 
 ### Couche 3 — Flux sortants *(à venir)*
