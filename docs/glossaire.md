@@ -198,14 +198,20 @@ Règles d'usage :
 | Taux de fiabilité du stock | `StockAccuracy` | Part des emplacements comptés sans écart. Se calcule sur les emplacements, jamais sur les quantités. |
 | Taux de couverture | `CountCoverage` | Part des emplacements comptés au moins une fois sur une période. |
 
-## Flux sortants *(réservé — couche 3)*
+## Flux sortants
 
 | Français | Anglais | Définition |
 |---|---|---|
-| Commande | `Order` | Demande de sortie de marchandise pour un destinataire. Origine possible d'un dossier de retour. Définie en 3.1. |
-| Ligne de commande | `OrderLine` | Une référence demandée, sa quantité et l'état qualité exigé. Définie en 3.1. |
-| Expédition | `Shipment` | Départ effectif de marchandise vers un tiers, porteur du numéro cité par les colis qui reviennent. Définie en 3.3. |
-| Colis | `Parcel` | Unité de transport constituée au colisage. À ne pas confondre avec le support. Défini en 3.2. |
+| Commande | `Order` | Demande de sortie de marchandise pour un destinataire, portant un régime de rupture et une priorité. Origine possible d'un dossier de retour. |
+| Ligne de commande | `OrderLine` | Une référence demandée, sa quantité, l'état qualité exigé et son solde servi ou restant dû. |
+| Exemplaire désigné | `DesignatedUnit` | Numéro de série exigé par une ligne de commande, qui interdit au WMS tout choix et toute substitution. |
+| Régime de rupture | `BackorderPolicy` | Comportement d'une commande dont une ligne manque : partielle autorisée, ou complète exigée. |
+| Reliquat | `Backorder` | Solde restant dû d'une commande partiellement servie. Ne constitue jamais une nouvelle commande. |
+| Règle de regroupement | `ConsolidationRule` | Critères et durée d'attente selon lesquels plusieurs commandes d'un même destinataire partagent une expédition. |
+| Fenêtre d'attente | `ConsolidationWindow` | Délai pendant lequel une commande éligible patiente avant expédition, dans l'espoir d'un regroupement. |
+| Référence externe | `ExternalReference` | Identifiant de la commande chez le donneur d'ordre. Garantit qu'un flux rejoué ne duplique rien. |
+| Expédition | `Shipment` | Départ effectif de marchandise vers un tiers, porteur du numéro cité par les colis qui reviennent. Définie en 3.3. *(réservé)* |
+| Colis | `Parcel` | Unité de transport constituée au colisage. À ne pas confondre avec le support. Défini en 3.2. *(réservé)* |
 
 ## Traçabilité et facturation
 
