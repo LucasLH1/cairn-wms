@@ -51,6 +51,7 @@ Préfixes en vigueur :
 | `RG-INV` | 2.2 Inventaires |
 | `RG-DIS` | 2.3 Statuts, blocages et mise à disposition |
 | `RG-SUP` | 2.4 Supports consignés |
+| `RG-CDE` | 3.1 Commandes et lignes de commande |
 
 **Cas limites.** Chaque module liste explicitement ce qui doit se produire quand la situation dérape.
 Un cas limite non documenté est un bug en puissance : si un comportement n'est pas décrit, il doit
@@ -95,9 +96,13 @@ n'est toléré : un objet porte un nom et un seul.
 | 2.3 | Statuts, blocages et mise à disposition | `coeur-stock/2.3-statuts-blocages-mise-a-disposition.md` |
 | 2.4 | Supports consignés | `coeur-stock/2.4-supports-consignes.md` |
 
-### Couche 3 — Flux sortants *(à venir)*
+### Couche 3 — Flux sortants *(en cours)*
 
-3.1 Commandes et lignes · 3.2 Préparation · 3.3 Expédition et transporteurs
+| # | Module | Document |
+|---|---|---|
+| 3.1 | Commandes et lignes de commande | `flux-sortants/3.1-commandes.md` |
+| 3.2 | Préparation | *(à venir)* |
+| 3.3 | Expédition et transporteurs | *(à venir)* |
 
 ### Couche 4 — Métiers spécifiques *(à venir)*
 
