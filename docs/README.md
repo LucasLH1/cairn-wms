@@ -52,6 +52,7 @@ Préfixes en vigueur :
 | `RG-DIS` | 2.3 Statuts, blocages et mise à disposition |
 | `RG-SUP` | 2.4 Supports consignés |
 | `RG-CDE` | 3.1 Commandes et lignes de commande |
+| `RG-PRE` | 3.2 Préparation |
 
 **Cas limites.** Chaque module liste explicitement ce qui doit se produire quand la situation dérape.
 Un cas limite non documenté est un bug en puissance : si un comportement n'est pas décrit, il doit
@@ -101,7 +102,7 @@ n'est toléré : un objet porte un nom et un seul.
 | # | Module | Document |
 |---|---|---|
 | 3.1 | Commandes et lignes de commande | `flux-sortants/3.1-commandes.md` |
-| 3.2 | Préparation | *(à venir)* |
+| 3.2 | Préparation | `flux-sortants/3.2-preparation.md` |
 | 3.3 | Expédition et transporteurs | *(à venir)* |
 
 ### Couche 4 — Métiers spécifiques *(à venir)*
