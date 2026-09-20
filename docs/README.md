@@ -10,9 +10,12 @@ ni technologie, ni schéma de base de données, ni architecture applicative. Ces
 |---|---|
 | `README.md` | Ce document : conventions, carte des modules, principes directeurs, périmètre. |
 | `glossaire.md` | Le vocabulaire métier, français et anglais. Référence unique, sans synonyme. |
-| `socle/` | Couche 0 — les objets que tous les modules manipulent. |
+| `socle/` | Couche 0 — les objets que tous les modules manipulent, et ce qui les traverse tous. |
 | `flux-entrants/` | Couche 1 — réception, dossiers SAV, retours client, rangement. |
 | `coeur-stock/` | Couche 2 — mouvements, inventaires, blocages, supports consignés. |
+| `flux-sortants/` | Couche 3 — commandes, préparation, expédition. |
+| `metiers-specifiques/` | Couche 4 — atelier et réparation, litiges. |
+| `pilotage/` | Couche 5 — KPI, tableaux de bord et exports. |
 | `decisions/` | Les fiches de décision engageante. Ce qui n'y est pas écrit n'est pas décidé. |
 
 La spécification dit **ce que le produit doit faire**. Les fiches de `decisions/` disent **comment on
@@ -43,6 +46,7 @@ Préfixes en vigueur :
 | `RG-TRS` | 0.5 Tiers |
 | `RG-WKF` | 0.6 Moteur de workflow |
 | `RG-TRA` | 0.7 Traçabilité et unités d'œuvre |
+| `RG-SUR` | 0.8 Surfaces, travail partagé et échanges |
 | `RG-REC` | 1.1 Réception |
 | `RG-SAV` | 1.2 Dossiers SAV |
 | `RG-RET` | 1.3 Retours client |
@@ -82,6 +86,13 @@ n'est toléré : un objet porte un nom et un seul.
 | 0.5 | Tiers | `socle/0.5-tiers.md` |
 | 0.6 | Moteur de workflow configurable | `socle/0.6-moteur-de-workflow.md` |
 | 0.7 | Traçabilité et unités d'œuvre | `socle/0.7-tracabilite-unites-oeuvre.md` |
+| 0.8 | Surfaces, travail partagé et échanges | `socle/0.8-surfaces-et-travail-partage.md` |
+
+Le module 0.8 décrit ce qui traverse tous les autres : les surfaces de travail, l'encadrement et les
+périmètres, la file de décisions, le partage de la main, la recherche, les alertes, les impressions,
+les imports et les échanges, la simulation des règles paramétrables. Sa section « Révisions à
+porter » recense les modules que ses décisions modifient ; tant qu'une révision n'est pas portée,
+c'est 0.8 qui fait foi.
 
 ### Couche 1 — Flux entrants *(rédigée)*
 
@@ -122,6 +133,14 @@ n'est toléré : un objet porte un nom et un seul.
 |---|---|---|
 | 5.1 | KPI, tableaux de bord et exports | `pilotage/5.1-kpi-tableaux-de-bord-exports.md` |
 
+### Modules annoncés, non rédigés
+
+| Module | Statut |
+|---|---|
+| Portail donneur d'ordre | Au périmètre, en consultation seule. Non spécifié. |
+| Tarification et valorisation du relevé | Au périmètre. Non spécifié. |
+| Interfaçage direct entre systèmes | Au périmètre, sur le principe d'une interface unique (`RG-SUR-113`). Non spécifié. |
+
 ## Principes directeurs du produit
 
 Ces principes traversent tous les modules. En cas de doute sur une règle non écrite, ils tranchent.
@@ -139,14 +158,28 @@ Ces principes traversent tous les modules. En cas de doute sur une règle non é
    qu'il aurait pu scanner, c'est une erreur de conception.
 6. **Le produit protège l'opérateur.** Une manipulation dangereuse pour le stock ou pour un client
    final doit être impossible, pas déconseillée.
+7. **Un fait constaté s'enregistre toujours.** La marchandise est arrivée, la palette est montée,
+   l'article est réparé : refuser d'enregistrer le fait parce qu'une condition manque ne le fait pas
+   disparaître, cela le rend invisible et pousse le terrain à contourner le produit. C'est **ce qui
+   vient après** qui est bloqué, jamais l'enregistrement.
 
 ## Statut du périmètre
 
-Hors périmètre à ce stade, et à ne pas anticiper dans le code :
+### Au périmètre, non encore spécifié
+
+- Le **portail donneur d'ordre**, en consultation seule : stock, flux en cours, relevés d'activité,
+  dossiers le concernant. Aucune saisie, aucun déclenchement.
+- La **tarification** : le WMS porte les grilles tarifaires et valorise son relevé d'activité.
+- L'**interfaçage direct** entre le produit et le système d'un donneur d'ordre, par une interface
+  unique adaptée par profil.
+
+### Hors périmètre, et à ne pas anticiper dans le code
 
 - La douane. Un statut douanier neutre est porté par le modèle, sans aucune règle associée.
-- Les échanges EDI normalisés.
-- Le mode hors ligne des terminaux opérateurs.
-- Le portail donneur d'ordre en libre-service.
+- Les échanges EDI normalisés. Les échanges de fichiers et l'interfaçage direct couvrent le besoin
+  courant ; un donneur d'ordre exigeant de l'EDI strict relèvera d'un module dédié.
+- Le mode hors ligne des terminaux opérateurs. En revanche, une perte de communication ne détruit
+  jamais de travail (`RG-SUR-007`).
 - La gestion du froid et de la chaîne de température.
-- L'édition de factures à valeur légale. Le WMS **compte** les unités d'œuvre, il ne facture pas.
+- L'édition de factures à valeur légale. Le WMS **compte** les unités d'œuvre et les valorise ; il
+  n'édite aucun document à valeur légale.
