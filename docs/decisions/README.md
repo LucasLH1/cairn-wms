@@ -3,9 +3,15 @@
 Ce dossier conserve les **décisions engageantes** du projet : celles qu'on ne peut pas revenir
 défaire à bon compte, et dont quelqu'un — dans six mois, ou six ans — voudra connaître la raison.
 
-À ce jour, **aucune décision n'est prise**. Ce dossier ne contient que ce README et le modèle de
-fiche. Tant qu'il est vide, aucun choix technique n'est arrêté : ni langage, ni base de données,
-ni architecture, ni hébergement, ni outillage.
+## Décisions en vigueur
+
+| # | Titre | Statut |
+|---|---|---|
+| 0001 | [Découpage du produit en lots livrables](0001-decoupage-en-lots-livrables.md) | actée |
+
+**Aucun choix technique n'est arrêté à ce jour** : ni langage, ni base de données, ni architecture,
+ni hébergement, ni outillage. La seule décision prise porte sur l'ordre de réalisation, pas sur les
+moyens.
 
 ## La règle
 
@@ -23,6 +29,7 @@ Une décision dont on ne peut pas sortir sans coût mérite une fiche. Concrète
 - une frontière d'architecture (ce qui est un module, ce qui est un service, ce qui parle à quoi) ;
 - un modèle de données structurant, ou une règle qui contredit la spécification métier ;
 - l'ajout d'une dépendance qu'on ne pourrait plus retirer sans réécrire ;
+- l'ordre dans lequel le produit se réalise, et ce que chaque étape doit prouver ;
 - un renoncement : ce qu'on décide explicitement de **ne pas** faire.
 
 Ce qui n'en mérite pas : le nommage d'une variable, l'ordre de deux fonctions, tout ce qu'un
