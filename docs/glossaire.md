@@ -156,7 +156,7 @@ Règles d'usage :
 | Commande rattachée | `LinkedOrder` | Autre commande du même client final dont provient un article reçu dans le même colis. |
 | Recevabilité | `ReturnEligibility` | Conformité d'un retour au délai déclaré par le donneur d'ordre. Signalée, jamais bloquante. |
 | Commande de dossier | `CaseOrder` | Commande produite exclusivement par une étape du parcours d'un dossier, ne pouvant désigner que les exemplaires de ce dossier. Seule exception à `RG-STK-041`. |
-| Poste de travail | `Workstation` | Emplacement identifié et scannable d'un atelier, où se localise un article pris en charge. |
+| Établi | `Bench` | Emplacement identifié et scannable d'un atelier, où se localise un article pris en charge. Ne désigne jamais l'ordinateur d'un opérateur, qui est un poste (`Workstation`). |
 | Symptôme | `Symptom` | Ce que le technicien constate sur un article, choisi dans une liste fermée à l'usage. Ne se confond pas avec le constat (`Finding`) de 2.3. |
 | Cause | `FailureCause` | Origine retenue du symptôme, choisie dans une liste fermée à l'usage. |
 | Rang du dossier | `CaseRank` | Nombre de dossiers antérieurs ouverts sur un même objet sérialisé. Disponible comme condition d'entrée et de routage. |
@@ -254,13 +254,13 @@ Règles d'usage :
 
 | Français | Anglais | Définition |
 |---|---|---|
-| Événement | `TraceEvent` | Enregistrement immuable d'un geste ou d'un fait : qui, quoi, quand, où, sur quel objet, depuis quel terminal. |
+| Événement | `TraceEvent` | Enregistrement immuable d'un geste ou d'un fait : qui, quoi, quand, où, sur quel objet, depuis quel poste. |
 | Tâche | `Task` | Unité de travail identifiable attribuée à un opérateur, dont la durée est mesurée. |
 | Unité d'œuvre | `ChargeableUnit` | Compteur d'une prestation vendue à un donneur d'ordre, rattaché à une période. |
 | Famille d'unités d'œuvre | `ChargeableUnitFamily` | Regroupement des unités d'œuvre par nature : manutention, stockage, SAV, prestations annexes. |
 | Relevé d'activité | `ActivityStatement` | Consolidation des unités d'œuvre d'un donneur d'ordre sur une période, destinée à alimenter la facturation réelle. Sans valeur légale. |
 
-## Surfaces et postes de consultation
+## Surfaces et postes
 
 | Français | Anglais | Définition |
 |---|---|---|
@@ -268,7 +268,7 @@ Règles d'usage :
 | Terrain | `FieldSurface` | Surface de l'exécution : une question à l'écran, une réponse par scan. |
 | Bureau | `OfficeSurface` | Surface de l'instruction et de la décision : plusieurs objets en vis-à-vis. |
 | Administration | `AdminSurface` | Surface du paramétrage du prestataire. Usage rare, conséquences lourdes. |
-| Terminal | `Terminal` | L'ordinateur depuis lequel un utilisateur travaille : fixe, ou embarqué sur un chariot. Origine tracée des événements et destination d'impression. Ne désigne jamais le poste de travail d'atelier (`Workstation`). |
+| Poste | `Workstation` | L'ordinateur depuis lequel un utilisateur travaille : fixe, ou embarqué sur un chariot. Origine tracée des événements et destination d'impression. Ne désigne jamais l'établi d'atelier (`Bench`). |
 
 ## Encadrement et périmètres
 
@@ -310,7 +310,7 @@ Règles d'usage :
 |---|---|---|
 | Document imprimable | `PrintableDocument` | Objet destiné au papier : étiquette d'identification, document de flux, document de restitution. |
 | Régime d'impression | `PrintMode` | Caractère automatique ou à la demande de l'émission d'un document. |
-| Destination d'impression | `PrintTarget` | Rattachement d'une imprimante à un terminal ou à une zone, qui reçoit les documents émis automatiquement. |
+| Destination d'impression | `PrintTarget` | Rattachement d'une imprimante à un poste ou à une zone, qui reçoit les documents émis automatiquement. |
 | Réimpression | `Reprint` | Nouvelle émission d'un document déjà imprimé, portant sur le papier sa mention et sa date. |
 | Objet non étiqueté | `UnlabeledUnit` | Objet créé dont l'étiquette d'identification n'a pas été émise. Existe, porte son identité, ne peut pas quitter sa zone. |
 
@@ -368,7 +368,8 @@ Ces mots sont ambigus ou déjà pris. Ils ne doivent apparaître nulle part.
 | Requalification (au sens de la qualité) | Changement d'état qualité | « Requalification » désigne la sortie d'une unité de son dossier, et rien d'autre. |
 | Constat (au sens du diagnostic) | Symptôme | « Constat » désigne la déclaration d'un fait sur du stock hors parcours (2.3), jamais ce qu'un technicien observe à l'établi. |
 | Prise en charge (au sens de la garantie) | Régime de garantie | « Prise en charge » est réservé à l'événement transporteur qui vaut preuve de dépôt. |
-| Poste *(pour désigner un ordinateur)* | Terminal | « Poste de travail » / `Workstation` désigne un emplacement d'atelier. L'ordinateur depuis lequel on travaille est un terminal. |
+| Poste de travail *(pour désigner un lieu d'atelier)* | Établi | Le poste est l'ordinateur depuis lequel on travaille ; l'emplacement d'atelier où se pose un article est un établi. |
+| Terminal | Poste | Un seul mot pour la machine, quel que soit son support. |
 | Verrou, verrouillage | Main | Le mot technique masque le fait métier : la main se prend, se demande, se cède et se reprend. |
 | Notification | Alerte | Un seul mot pour un fait signalé, quel que soit son canal. |
 | Mapping | Correspondance de colonne, ou table de correspondance | Deux mécanismes distincts que l'anglicisme confond. |
