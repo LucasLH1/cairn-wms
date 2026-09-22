@@ -105,7 +105,7 @@ Règles d'usage :
 | Français | Anglais | Définition |
 |---|---|---|
 | Parcours | `ProcessFlow` | Trajectoire configurable d'un article physique à travers une suite d'étapes. |
-| Version de parcours | `FlowVersion` | État figé et publié d'un parcours. Un dossier suit la version en vigueur à son entrée. |
+| Version de parcours | `FlowVersion` | État figé et publié d'un parcours. Un dossier suit la version en vigueur à son entrée. Cas particulier de la version de règle (`RuleVersion`). |
 | Condition d'entrée | `FlowEntryCondition` | Critère décidant quels articles empruntent un parcours donné. |
 | Étape | `FlowStep` | Un palier d'un parcours, instancié à partir d'un type d'étape du catalogue. |
 | Type d'étape | `FlowStepType` | Comportement prédéfini livré avec le produit, que le paramétrage assemble mais n'invente pas. |
@@ -114,7 +114,7 @@ Règles d'usage :
 | Action automatique | `FlowAction` | Traitement déclenché par une étape sans intervention humaine. |
 | Parcours de constat | `FindingFlow` | Parcours livré en standard, déclenchable par le scan d'une unité depuis tout écran du terrain, par lequel passe tout changement d'état qualité hors flux. |
 | Constat | `Finding` | Déclaration par un opérateur d'un fait affectant une unité de stock hors de tout parcours en cours : casse, écrasement, anomalie. |
-| Forçage | `FlowOverride` | Transition décidée par un superviseur hors du routage prévu, motivée et tracée. |
+| Forçage | `FlowOverride` | Transition décidée par un superviseur hors du routage prévu, motivée et tracée. Ne désigne jamais l'exécution d'une étape par un encadrant au titre des droits hérités de son rôle. |
 | Cycle de vie | `Lifecycle` | Suite de statuts non configurable d'un document métier. À ne pas confondre avec un parcours. |
 
 ## Flux entrants
@@ -319,7 +319,7 @@ Règles d'usage :
 | Français | Anglais | Définition |
 |---|---|---|
 | Profil d'import | `ImportProfile` | Description, propre à un donneur d'ordre et à un type de données, de la forme d'un fichier et de la manière de le lire. |
-| Version de profil | `ImportProfileVersion` | État figé d'un profil. Un import reste lisible avec la version en vigueur à son exécution. |
+| Version de profil | `ImportProfileVersion` | État figé d'un profil. Un import reste lisible avec la version en vigueur à son exécution. Cas particulier de la version de règle (`RuleVersion`). |
 | Correspondance de colonne | `ColumnMapping` | Association d'un champ métier à une colonne du fichier, par nom d'en-tête ou par position. |
 | Table de correspondance | `ValueMapping` | Traduction déclarée des valeurs d'un donneur d'ordre en valeurs du produit. |
 | Vérification d'import | `ImportPreview` | Lecture d'un fichier restituant les lignes valides et les rejets, sans rien créer. |
@@ -334,9 +334,8 @@ Règles d'usage :
 
 | Français | Anglais | Définition |
 |---|---|---|
-| Règle paramétrable | `ConfigurableRule` | Toute règle dont le paramétrage décide du comportement : parcours, stratégie de rangement, règle de prélèvement, critère de routage, seuil d'écart. |
-| Version travaillée | `DraftVersion` | État modifiable et simulable d'une règle paramétrable, sans effet sur la production. |
-| Version active | `ActiveVersion` | État en service d'une règle paramétrable. Sa mise en service est un acte explicite, daté et motivé. |
+| Règle paramétrable | `ConfigurableRule` | Toute règle dont le paramétrage décide du comportement : parcours, stratégie de rangement, règle de prélèvement, critère de routage, seuil d'écart, profil d'import. |
+| Version de règle | `RuleVersion` | État daté d'une règle paramétrable, dans l'un des trois états définis en 0.6 : **brouillon**, **publiée**, **retirée**. Un brouillon se modifie et se simule sans effet sur la production ; la publication est un acte explicite, daté et motivé, précédé des contrôles de cohérence. La version de parcours (`FlowVersion`) et la version de profil (`ImportProfileVersion`) en sont des cas particuliers. |
 | Simulation | `RuleSimulation` | Exécution d'une règle sur un cas décrit ou rejoué, restituant la décision et les critères qui l'ont produite, sans aucun effet. |
 | Explication de décision | `DecisionTrace` | Règle, version et critères retenus, attachés à l'événement produit, qui rendent une décision justifiable après coup. |
 
@@ -370,7 +369,8 @@ Ces mots sont ambigus ou déjà pris. Ils ne doivent apparaître nulle part.
 | Prise en charge (au sens de la garantie) | Régime de garantie | « Prise en charge » est réservé à l'événement transporteur qui vaut preuve de dépôt. |
 | Poste de travail *(pour désigner un lieu d'atelier)* | Établi | Le poste est l'ordinateur depuis lequel on travaille ; l'emplacement d'atelier où se pose un article est un établi. |
 | Terminal | Poste | Un seul mot pour la machine, quel que soit son support. |
+| Version travaillée, version active | Brouillon, ou version publiée | Deux mots de plus pour les états que 0.6 nomme déjà brouillon, publiée et retirée. |
 | Verrou, verrouillage | Main | Le mot technique masque le fait métier : la main se prend, se demande, se cède et se reprend. |
-| Notification | Alerte | Un seul mot pour un fait signalé, quel que soit son canal. |
+| Notification | Alerte | Un seul mot pour un fait signalé, quel que soit son canal. Une réserve subsiste : le type d'étape *Notification* de 0.6 émet un message vers un tiers, ce qu'une alerte ne fait jamais (`RG-SUR-078`). Son renommage est en attente d'arbitrage ; d'ici là il conserve son nom. |
 | Mapping | Correspondance de colonne, ou table de correspondance | Deux mécanismes distincts que l'anglicisme confond. |
 | Tâche (au sens d'un travail à faire) | Mission | « Tâche » / `Task` désigne la période mesurée d'exécution, jamais le travail à faire. |
