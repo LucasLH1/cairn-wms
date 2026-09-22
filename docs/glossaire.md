@@ -371,6 +371,6 @@ Ces mots sont ambigus ou déjà pris. Ils ne doivent apparaître nulle part.
 | Terminal | Poste | Un seul mot pour la machine, quel que soit son support. |
 | Version travaillée, version active | Brouillon, ou version publiée | Deux mots de plus pour les états que 0.6 nomme déjà brouillon, publiée et retirée. |
 | Verrou, verrouillage | Main | Le mot technique masque le fait métier : la main se prend, se demande, se cède et se reprend. |
-| Notification | Alerte | Un seul mot pour un fait signalé, quel que soit son canal. Une réserve subsiste : le type d'étape *Notification* de 0.6 émet un message vers un tiers, ce qu'une alerte ne fait jamais (`RG-SUR-078`). Son renommage est en attente d'arbitrage ; d'ici là il conserve son nom. |
+| Notification | Alerte, ou émission de message | Un seul mot pour un fait signalé à un utilisateur interne, quel que soit son canal. Ce qui part vers un tiers n'est jamais une alerte (`RG-SUR-078`) : c'est le type d'étape *Émission de message* de 0.6. |
 | Mapping | Correspondance de colonne, ou table de correspondance | Deux mécanismes distincts que l'anglicisme confond. |
 | Tâche (au sens d'un travail à faire) | Mission | « Tâche » / `Task` désigne la période mesurée d'exécution, jamais le travail à faire. |
