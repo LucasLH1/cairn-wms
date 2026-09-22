@@ -254,11 +254,98 @@ Règles d'usage :
 
 | Français | Anglais | Définition |
 |---|---|---|
-| Événement | `TraceEvent` | Enregistrement immuable d'un geste ou d'un fait : qui, quoi, quand, où, sur quel objet, depuis quel poste. |
+| Événement | `TraceEvent` | Enregistrement immuable d'un geste ou d'un fait : qui, quoi, quand, où, sur quel objet, depuis quel terminal. |
 | Tâche | `Task` | Unité de travail identifiable attribuée à un opérateur, dont la durée est mesurée. |
 | Unité d'œuvre | `ChargeableUnit` | Compteur d'une prestation vendue à un donneur d'ordre, rattaché à une période. |
 | Famille d'unités d'œuvre | `ChargeableUnitFamily` | Regroupement des unités d'œuvre par nature : manutention, stockage, SAV, prestations annexes. |
 | Relevé d'activité | `ActivityStatement` | Consolidation des unités d'œuvre d'un donneur d'ordre sur une période, destinée à alimenter la facturation réelle. Sans valeur légale. |
+
+## Surfaces et postes de consultation
+
+| Français | Anglais | Définition |
+|---|---|---|
+| Surface | `WorkSurface` | Ensemble des écrans destinés à une même manière de travailler : terrain, bureau, administration. Ni un appareil, ni un rôle : un même utilisateur les traverse selon ses permissions. |
+| Terrain | `FieldSurface` | Surface de l'exécution : une question à l'écran, une réponse par scan. |
+| Bureau | `OfficeSurface` | Surface de l'instruction et de la décision : plusieurs objets en vis-à-vis. |
+| Administration | `AdminSurface` | Surface du paramétrage du prestataire. Usage rare, conséquences lourdes. |
+| Terminal | `Terminal` | L'ordinateur depuis lequel un utilisateur travaille : fixe, ou embarqué sur un chariot. Origine tracée des événements et destination d'impression. Ne désigne jamais le poste de travail d'atelier (`Workstation`). |
+
+## Encadrement et périmètres
+
+| Français | Anglais | Définition |
+|---|---|---|
+| Équipe | `Team` | Objet durable rattaché à un site, portant un nom, un encadrant et des membres. N'appartient pas à son encadrant. |
+| Encadrant | `TeamLead` | Utilisateur désigné à la tête d'une équipe. Sa place se change sans toucher aux membres. |
+| Lien hiérarchique | `ReportingLine` | Rattachement d'un utilisateur à celui dont il relève. Libre en profondeur, sans cycle, franchissant les sites. |
+| Nature de rôle | `RoleNature` | Caractère opérationnel ou administratif d'un rôle, déclaré à sa composition. Décide si encadrer donne le droit d'exécuter. |
+| Périmètre de visibilité | `VisibilityScope` | Ce qu'un utilisateur a le droit de voir : son site, augmenté de ce que sa position hiérarchique lui donne. |
+| Périmètre d'exécution | `ExecutionScope` | Liste des sites où un utilisateur a le droit d'agir. Nécessairement incluse dans sa visibilité. |
+
+## Travail partagé
+
+| Français | Anglais | Définition |
+|---|---|---|
+| Unité de travail | `WorkItem` | Ce qu'une personne modifie à un instant donné, indépendamment du reste : un article dans son parcours, une ligne de commande, une intervention, un élément de décision. Jamais le contenant qui la porte. |
+| Main | `EditLock` | Droit exclusif de modifier une unité de travail. Une seule personne la détient ; les autres consultent. |
+| Demande de main | `EditLockRequest` | Sollicitation adressée au détenteur de la main, qui reste libre de ne pas céder. |
+| Reprise de main | `EditLockSeizure` | Prise de la main par un superviseur sans l'accord du détenteur, motivée et tracée. |
+| File de décisions | `DecisionQueue` | Inventaire de tout ce qui bloque un flux ou attend un arbitrage humain, tous objets confondus. Écran d'entrée du bureau. |
+| Élément de décision | `DecisionItem` | Une entrée de la file. Décrit un état, non une tâche : existe tant que sa condition est vraie. |
+| Arbitrage | `Arbitration` | Décision humaine qui clôt un élément de décision, portant son sens et son motif. |
+| Cause de sortie | `DecisionResolution` | Manière dont un élément quitte la file : par arbitrage, par le flux, ou caduc. |
+
+## Alertes
+
+| Français | Anglais | Définition |
+|---|---|---|
+| Alerte | `Alert` | Signalement d'un fait qui n'attend aucune décision. Ce qui attend un arbitrage est un élément de décision. |
+| Fait déclencheur | `AlertTrigger` | Situation du catalogue fermé du produit dont la survenue produit une alerte. |
+| Abonnement | `AlertSubscription` | Déclaration par laquelle un utilisateur reçoit un fait déclencheur donné. |
+| Alerte imposée | `MandatoryAlert` | Fait déclencheur dont le prestataire impose l'abonnement, et dont nul ne se désabonne. |
+| Canal | `AlertChannel` | Voie d'acheminement d'une alerte : l'application, toujours active, et le courriel, qui s'y ajoute. |
+
+## Impressions
+
+| Français | Anglais | Définition |
+|---|---|---|
+| Document imprimable | `PrintableDocument` | Objet destiné au papier : étiquette d'identification, document de flux, document de restitution. |
+| Régime d'impression | `PrintMode` | Caractère automatique ou à la demande de l'émission d'un document. |
+| Destination d'impression | `PrintTarget` | Rattachement d'une imprimante à un terminal ou à une zone, qui reçoit les documents émis automatiquement. |
+| Réimpression | `Reprint` | Nouvelle émission d'un document déjà imprimé, portant sur le papier sa mention et sa date. |
+| Objet non étiqueté | `UnlabeledUnit` | Objet créé dont l'étiquette d'identification n'a pas été émise. Existe, porte son identité, ne peut pas quitter sa zone. |
+
+## Imports et échanges
+
+| Français | Anglais | Définition |
+|---|---|---|
+| Profil d'import | `ImportProfile` | Description, propre à un donneur d'ordre et à un type de données, de la forme d'un fichier et de la manière de le lire. |
+| Version de profil | `ImportProfileVersion` | État figé d'un profil. Un import reste lisible avec la version en vigueur à son exécution. |
+| Correspondance de colonne | `ColumnMapping` | Association d'un champ métier à une colonne du fichier, par nom d'en-tête ou par position. |
+| Table de correspondance | `ValueMapping` | Traduction déclarée des valeurs d'un donneur d'ordre en valeurs du produit. |
+| Vérification d'import | `ImportPreview` | Lecture d'un fichier restituant les lignes valides et les rejets, sans rien créer. |
+| Import | `ImportRun` | Objet durable d'une exécution : fichier d'origine, profil et version, lignes acceptées, lignes rejetées. |
+| Ligne rejetée | `RejectedRow` | Ligne d'un fichier non intégrée, conservée avec son motif. |
+| Échange | `DataExchange` | Flux de données entre le produit et le système d'un donneur d'ordre, dans un sens ou dans l'autre, sans intervention humaine. |
+| Canal d'échange | `ExchangeChannel` | Voie d'acheminement d'un échange : dépôt de fichiers, courriel, ou interface directe. |
+| Expéditeur attendu | `ExpectedSender` | Origine déclarée dont un échange par courriel accepte les messages. |
+| Envoi | `OutboundMessage` | Message émis vers un donneur d'ordre, daté, conservant ce qui a été transmis, rejouable sans double. |
+
+## Règles paramétrables
+
+| Français | Anglais | Définition |
+|---|---|---|
+| Règle paramétrable | `ConfigurableRule` | Toute règle dont le paramétrage décide du comportement : parcours, stratégie de rangement, règle de prélèvement, critère de routage, seuil d'écart. |
+| Version travaillée | `DraftVersion` | État modifiable et simulable d'une règle paramétrable, sans effet sur la production. |
+| Version active | `ActiveVersion` | État en service d'une règle paramétrable. Sa mise en service est un acte explicite, daté et motivé. |
+| Simulation | `RuleSimulation` | Exécution d'une règle sur un cas décrit ou rejoué, restituant la décision et les critères qui l'ont produite, sans aucun effet. |
+| Explication de décision | `DecisionTrace` | Règle, version et critères retenus, attachés à l'événement produit, qui rendent une décision justifiable après coup. |
+
+## Mesure de l'activité
+
+| Français | Anglais | Définition |
+|---|---|---|
+| Comparaison d'activité | `ActivityComparison` | Restitution à un encadrant des écarts entre les opérateurs dont il répond, à périmètre égal, en unités traitées par temps de tâche. Sans note ni classement. |
+| Volume minimal de comparaison | `ComparisonThreshold` | Nombre de tâches en deçà duquel aucun écart n'est présenté. |
 
 ---
 
@@ -281,3 +368,8 @@ Ces mots sont ambigus ou déjà pris. Ils ne doivent apparaître nulle part.
 | Requalification (au sens de la qualité) | Changement d'état qualité | « Requalification » désigne la sortie d'une unité de son dossier, et rien d'autre. |
 | Constat (au sens du diagnostic) | Symptôme | « Constat » désigne la déclaration d'un fait sur du stock hors parcours (2.3), jamais ce qu'un technicien observe à l'établi. |
 | Prise en charge (au sens de la garantie) | Régime de garantie | « Prise en charge » est réservé à l'événement transporteur qui vaut preuve de dépôt. |
+| Poste *(pour désigner un ordinateur)* | Terminal | « Poste de travail » / `Workstation` désigne un emplacement d'atelier. L'ordinateur depuis lequel on travaille est un terminal. |
+| Verrou, verrouillage | Main | Le mot technique masque le fait métier : la main se prend, se demande, se cède et se reprend. |
+| Notification | Alerte | Un seul mot pour un fait signalé, quel que soit son canal. |
+| Mapping | Correspondance de colonne, ou table de correspondance | Deux mécanismes distincts que l'anglicisme confond. |
+| Tâche (au sens d'un travail à faire) | Mission | « Tâche » / `Task` désigne la période mesurée d'exécution, jamais le travail à faire. |
