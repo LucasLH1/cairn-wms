@@ -61,11 +61,11 @@ Lucas.
 
 | Lot | Contenu | Ce qu'il prouve |
 |---|---|---|
-| 1 | **L'entrepôt minimal.** Un donneur d'ordre, un site, gestion quantitative. Attendu saisi à la main, réception au quai, **supports simples** créés et étiquetés dès le quai, rangement, commande, prélèvement, **comptage ponctuel**, expédition. Un écart de réception est enregistré sans ouvrir de litige (`RG-REC-071`). Parcours par défaut non paramétrable (`RG-WKF-005`). Une stratégie de rangement, régime libre, débordement. Journal d'événements et tâches dès ce lot. Fonctions de 0.8 dans leur forme simple : file de décisions, main, recherche et lecture de code-barres, alertes dans l'application, impression des étiquettes de support et des documents de flux. | La marchandise entre, se range, se prélève, sort, et le stock se corrige. |
-| 2 | **L'identité et la multiplicité.** Numéro de série, lot, multi-donneurs d'ordre réel, rôles, équipes, hiérarchie et périmètres, **second site et transferts inter-sites**, **supports consignés**, **blocages et quarantaine**, **inventaires tournants et complets**, **réception aveugle et contrôle qualité**, **réception à la volée et rapprochement**, **création rapide d'une référence au quai**, **stratégies de rangement multiples, régime dirigé et dérogation**, **prélèvement dédié, réapprovisionnement, éclatement et cross-dock**. | Le produit distingue les exemplaires, les donneurs d'ordre et les sites. |
-| 3 | **Le SAV.** Dossiers, retours client, parcours configurables, atelier et réparation, **litiges**. | Ce qui différencie le produit fonctionne. |
+| 1 | **L'entrepôt minimal.** Un donneur d'ordre, un site, gestion quantitative. Attendu saisi à la main, réception au quai, **supports simples** créés et étiquetés dès le quai, rangement, commande, prélèvement, **comptage ponctuel**, expédition par **un transporteur sans interface automatisée**. Un écart de réception est enregistré sans ouvrir de litige (`RG-REC-071`). Parcours par défaut non paramétrable (`RG-WKF-005`). Une stratégie de rangement, régime libre, débordement. Journal d'événements et tâches dès ce lot. Fonctions de 0.8 dans leur forme simple : file de décisions, main, recherche et lecture de code-barres, alertes dans l'application, impression des étiquettes de support et des documents de flux. | La marchandise entre, se range, se prélève, sort, et le stock se corrige. |
+| 2 | **L'identité et la multiplicité.** Numéro de série, lot, multi-donneurs d'ordre réel, rôles, équipes, hiérarchie et périmètres, **second site et transferts inter-sites**, **supports consignés**, **blocages et quarantaine**, **inventaires tournants et complets**, **réception aveugle et contrôle qualité**, **réception à la volée et rapprochement**, **création rapide d'une référence au quai**, **stratégies de rangement multiples, régime dirigé et dérogation**, **prélèvement dédié, réapprovisionnement, éclatement et cross-dock**, **exemplaire désigné**, **mode groupé et zone de tri**, **réservation à l'acceptation ou au prélèvement**, **premier périmé premier sorti**, **regroupement de commandes**, **choix du site et du service transporteur par règles**, **contrôle par sondage**, **vague sur heure limite, volume ou poids**, **départ incomplet et annulation d'expédition**. | Le produit distingue les exemplaires, les donneurs d'ordre et les sites. |
+| 3 | **Le SAV.** Dossiers, retours client, parcours configurables, atelier et réparation, **litiges**, **étiquette et bon de retour**. | Ce qui différencie le produit fonctionne. |
 | 4 | **La mesure.** Unités d'œuvre, photo quotidienne, relevés d'activité, indicateurs, comparaison d'activité. | Le prestataire peut facturer et piloter. |
-| 5 | **L'ouverture.** Profils d'import, échanges automatisés, portail donneur d'ordre, interfaçage direct, tarification, **espace technique**. | Le produit se branche sur le système d'un donneur d'ordre, et s'installe et s'exploite sans l'éditeur. |
+| 5 | **L'ouverture.** Profils d'import, échanges automatisés, portail donneur d'ordre, interfaçage direct, tarification, **espace technique**, **commande injectée par flux**, **transporteurs avec interface automatisée** — étiquette, suivi, indisponibilité. | Le produit se branche sur le système d'un donneur d'ordre, et s'installe et s'exploite sans l'éditeur. |
 
 Les raisons de chaque placement :
 
@@ -98,9 +98,16 @@ Les raisons de chaque placement :
   réserve ; sans emplacement de prélèvement dédié, éclatement et réapprovisionnement n'ont pas
   d'objet, et le cross-dock s'ajoute à une chaîne déjà éprouvée.
 
-Le détail du périmètre de chaque flux est tenu par les scénarios de démonstration, sous
-`docs/lots/`. Tant que les scénarios du lot 1 ne sont pas tous écrits, ce tableau peut encore être
-précisé : la fiche s'acte une fois, quand ils le sont.
+- **Transporteurs avec interface au lot 5** : un transporteur sans interface est pleinement
+  exploitable (`RG-EXP-027`) ; obtenir étiquettes et suivi automatiquement relève des branchements
+  extérieurs, comme l'injection de commandes par flux.
+- **Les autres raffinements de la préparation et de l'expédition au lot 2** : mode groupé,
+  réservations alternatives, premier périmé premier sorti, regroupement, choix par règles, sondage,
+  vagues sur heure limite, reprises d'expédition. Chacun suppose plusieurs donneurs d'ordre, plusieurs
+  sites ou plusieurs transporteurs, ou une chaîne déjà éprouvée.
+
+Les trois scénarios du lot 1 sont écrits, sous `docs/lots/lot-1/`. Ils tiennent le détail du
+périmètre de chaque flux, et font foi sur ce point.
 
 ## Conséquences
 
@@ -113,9 +120,11 @@ précisé : la fiche s'acte une fois, quand ils le sont.
 - **Ce qu'il faut mettre en place** :
   - À l'acte de cette fiche, 0001 passe au statut « remplacée par 0003 ».
   - `status.yml` : la section `lots:` reprend le tableau ci-dessus.
-  - Les scénarios de démonstration du lot 1, sous `docs/lots/lot-1/`, qui valent critère de clôture
-    du lot : réception et rangement (écrit) ; commande, prélèvement, comptage et expédition (à
-    écrire).
+  - Les scénarios de démonstration du lot 1, sous `docs/lots/lot-1/` : réception et rangement ;
+    commande, préparation et comptage ; contrôle, colisage et expédition.
+  - Chaque scénario est automatisé en test de bout en bout avant que son lot soit déclaré clos. La
+    démonstration à l'écran se limite aux moments listés dans `docs/lots/lot-1/README.md`.
+  - Les scénarios d'un lot suivant s'écrivent juste avant sa réalisation, pas avant.
 
 - **Ce qu'on accepte de payer** : un lot 1 plus lourd que dans 0001. Les deux dettes que 0001 posait
   restent entières : le lot 1 n'est pas une version jetable, et le journal comme les tâches naissent
