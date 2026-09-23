@@ -10,17 +10,23 @@
 #   en développement   la réalisation est engagée
 #   livré              la réalisation est en production sur main
 #
-# Aucun module n'est aujourd'hui « en développement » ni « livré » : le dépôt ne
-# contient aucun code applicatif, et aucune pile technique n'est choisie.
+# Tous les modules de la carte sont aujourd'hui « spécifié ». Aucun n'est
+# « en développement » ni « livré » : le dépôt ne contient aucun code applicatif,
+# et aucune pile technique n'est choisie. La seule décision actée, 0001, porte
+# sur l'ordre de réalisation en lots (section « lots » ci-dessous).
 #
 # Le champ « issue » renvoie à l'issue GitHub qui porte le travail restant sur
-# le module : « Réaliser ... » pour un module déjà spécifié, « Spécifier ... »
-# pour un module qui ne l'est pas encore.
+# le module : « Réaliser ... » pour un module spécifié. Pour le module 0.9, qui
+# ne décrit aucun écran, c'est l'issue « Choisir la pile technique », dont la
+# grille d'évaluation est ce module.
+#
+# Les jalons GitHub restent par couche. Leur passage à un découpage par lot se
+# fera quand le scénario du lot 1 sera écrit.
 #
 # À tenir à jour à chaque session, en même temps que journal/ et les issues.
 
 projet: Cairn WMS
-mis_a_jour_le: 2026-09-15
+mis_a_jour_le: 2026-09-23
 
 couches:
 
@@ -70,6 +76,18 @@ couches:
         issue: 7
         doc: docs/socle/0.7-tracabilite-unites-oeuvre.md
         prefixe_regles: RG-TRA
+      - id: "0.8"
+        nom: Surfaces, travail partagé et échanges
+        etat: spécifié
+        issue: 25
+        doc: docs/socle/0.8-surfaces-et-travail-partage.md
+        prefixe_regles: RG-SUR
+      - id: "0.9"
+        nom: Exigences de fonctionnement
+        etat: spécifié
+        issue: 24
+        doc: docs/socle/0.9-exigences-de-fonctionnement.md
+        prefixe_regles: RG-EXI
 
   - id: 1
     nom: Flux entrants
@@ -106,44 +124,51 @@ couches:
     modules:
       - id: "2.1"
         nom: Mouvements et transferts
-        etat: à faire
-        issue: 12
-        doc: null
+        etat: spécifié
+        issue: 26
+        doc: docs/coeur-stock/2.1-mouvements-transferts.md
+        prefixe_regles: RG-MVT
       - id: "2.2"
         nom: Inventaires
-        etat: à faire
-        issue: 13
-        doc: null
+        etat: spécifié
+        issue: 27
+        doc: docs/coeur-stock/2.2-inventaires.md
+        prefixe_regles: RG-INV
       - id: "2.3"
-        nom: Statuts, blocages et mises à disposition
-        etat: à faire
-        issue: 14
-        doc: null
+        nom: Statuts, blocages et mise à disposition
+        etat: spécifié
+        issue: 28
+        doc: docs/coeur-stock/2.3-statuts-blocages-mise-a-disposition.md
+        prefixe_regles: RG-DIS
       - id: "2.4"
         nom: Supports consignés
-        etat: à faire
-        issue: 15
-        doc: null
+        etat: spécifié
+        issue: 29
+        doc: docs/coeur-stock/2.4-supports-consignes.md
+        prefixe_regles: RG-SUP
 
   - id: 3
     nom: Flux sortants
     jalon: Couche 3 — Flux sortants
     modules:
       - id: "3.1"
-        nom: Commandes et lignes
-        etat: à faire
-        issue: 16
-        doc: null
+        nom: Commandes et lignes de commande
+        etat: spécifié
+        issue: 30
+        doc: docs/flux-sortants/3.1-commandes.md
+        prefixe_regles: RG-CDE
       - id: "3.2"
         nom: Préparation
-        etat: à faire
-        issue: 17
-        doc: null
+        etat: spécifié
+        issue: 31
+        doc: docs/flux-sortants/3.2-preparation.md
+        prefixe_regles: RG-PRE
       - id: "3.3"
         nom: Expédition et transporteurs
-        etat: à faire
-        issue: 18
-        doc: null
+        etat: spécifié
+        issue: 32
+        doc: docs/flux-sortants/3.3-expedition-transporteurs.md
+        prefixe_regles: RG-EXP
 
   - id: 4
     nom: Métiers spécifiques
@@ -151,14 +176,16 @@ couches:
     modules:
       - id: "4.1"
         nom: Atelier et réparation
-        etat: à faire
-        issue: 19
-        doc: null
+        etat: spécifié
+        issue: 33
+        doc: docs/metiers-specifiques/4.1-atelier-reparation.md
+        prefixe_regles: RG-ATE
       - id: "4.2"
         nom: Litiges
-        etat: à faire
-        issue: 20
-        doc: null
+        etat: spécifié
+        issue: 34
+        doc: docs/metiers-specifiques/4.2-litiges.md
+        prefixe_regles: RG-LIT
 
   - id: 5
     nom: Pilotage
@@ -166,6 +193,56 @@ couches:
     modules:
       - id: "5.1"
         nom: KPI, tableaux de bord et exports
-        etat: à faire
-        issue: 21
-        doc: null
+        etat: spécifié
+        issue: 35
+        doc: docs/pilotage/5.1-kpi-tableaux-de-bord-exports.md
+        prefixe_regles: RG-KPI
+
+# Découpage en lots livrables, acté par docs/decisions/0001-decoupage-en-lots-livrables.md.
+# Un lot est clos quand un scénario complet se déroule de bout en bout sur le
+# jeu de données de test, écran par écran. Un module est traversé par plusieurs
+# lots et revient à chacun d'eux. Les fonctions transverses de 0.8 ne forment
+# pas un lot : elles naissent au lot 1 dans leur forme simple et s'enrichissent
+# à chaque lot.
+
+lots:
+
+  - id: 1
+    nom: L'entrepôt minimal
+    etat: à faire
+    contenu: >-
+      Un donneur d'ordre, un site, gestion quantitative seule. Recevoir, ranger,
+      prélever, expédier. Socle dans sa version pauvre : ni série, ni lot, ni
+      parcours configurable.
+    prouve: La marchandise entre et sort.
+
+  - id: 2
+    nom: L'identité et la multiplicité
+    etat: à faire
+    contenu: >-
+      Numéro de série, lot, supports, multi-donneurs d'ordre réel, rôles,
+      équipes, hiérarchie, périmètres.
+    prouve: Le produit distingue les exemplaires et les clients.
+
+  - id: 3
+    nom: Le SAV
+    etat: à faire
+    contenu: >-
+      Dossiers, retours client, parcours configurables, atelier et réparation.
+    prouve: Ce qui différencie le produit fonctionne.
+
+  - id: 4
+    nom: La mesure
+    etat: à faire
+    contenu: >-
+      Unités d'œuvre, photo quotidienne, relevés d'activité, indicateurs,
+      comparaison d'activité.
+    prouve: Le prestataire peut facturer et piloter.
+
+  - id: 5
+    nom: L'ouverture
+    etat: à faire
+    contenu: >-
+      Profils d'import, échanges automatisés, portail donneur d'ordre,
+      interfaçage direct, tarification.
+    prouve: Le produit se branche sur le système d'un client.

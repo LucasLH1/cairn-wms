@@ -31,8 +31,9 @@ Un terme absent du glossaire ne doit apparaître nulle part : on l'ajoute au glo
 **Ce qui n'est pas écrit dans `docs/decisions/` n'est pas décidé.**
 
 Aucun langage, aucun framework, aucune base de données, aucune architecture, aucun hébergement,
-aucun outillage n'est arrêté tant qu'une fiche actée ne le dit pas. Et à ce jour, `docs/decisions/`
-ne contient aucune décision.
+aucun outillage n'est arrêté tant qu'une fiche actée ne le dit pas. À ce jour, `docs/decisions/`
+contient une seule décision actée, `0001`, qui porte sur l'ordre de réalisation du produit en
+lots — pas sur les moyens. **Aucune pile technique n'est arrêtée.**
 
 Cette règle vise **la pile du produit** : ce avec quoi Cairn WMS est construit, exécuté, éprouvé et
 livré — intégration continue et déploiement compris. L'outillage du **processus de travail** —
