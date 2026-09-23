@@ -16,6 +16,7 @@ ni technologie, ni schéma de base de données, ni architecture applicative. Ces
 | `flux-sortants/` | Couche 3 — commandes, préparation, expédition. |
 | `metiers-specifiques/` | Couche 4 — atelier et réparation, litiges. |
 | `pilotage/` | Couche 5 — KPI, tableaux de bord et exports. |
+| `lots/` | Les scénarios de démonstration, un dossier par lot. Un lot est clos quand ses scénarios se déroulent de bout en bout (fiche 0003). |
 | `decisions/` | Les fiches de décision engageante. Ce qui n'y est pas écrit n'est pas décidé. |
 
 La spécification dit **ce que le produit doit faire**. Les fiches de `decisions/` disent **comment on
