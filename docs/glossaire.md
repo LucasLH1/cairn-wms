@@ -370,7 +370,7 @@ Ces mots sont ambigus ou déjà pris. Ils ne doivent apparaître nulle part.
 | Poste de travail *(pour désigner un lieu d'atelier)* | Établi | Le poste est l'ordinateur depuis lequel on travaille ; l'emplacement d'atelier où se pose un article est un établi. |
 | Terminal | Poste | Un seul mot pour la machine, quel que soit son support. |
 | Version travaillée, version active | Brouillon, ou version publiée | Deux mots de plus pour les états que 0.6 nomme déjà brouillon, publiée et retirée. |
-| Verrou, verrouillage | Main | Le mot technique masque le fait métier : la main se prend, se demande, se cède et se reprend. |
+| Verrou, verrouillage *(au sens du droit de modifier)* | Main | Le mot technique masque le fait métier : la main se prend, se demande, se cède et se reprend. |
 | Notification | Alerte, ou émission de message | Un seul mot pour un fait signalé à un utilisateur interne, quel que soit son canal. Ce qui part vers un tiers n'est jamais une alerte (`RG-SUR-078`) : c'est le type d'étape *Émission de message* de 0.6. |
 | Mapping | Correspondance de colonne, ou table de correspondance | Deux mécanismes distincts que l'anglicisme confond. |
 | Tâche (au sens d'un travail à faire) | Mission | « Tâche » / `Task` désigne la période mesurée d'exécution, jamais le travail à faire. |
