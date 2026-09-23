@@ -170,6 +170,18 @@ Ces principes traversent tous les modules. En cas de doute sur une règle non é
    disparaître, cela le rend invisible et pousse le terrain à contourner le produit. C'est **ce qui
    vient après** qui est bloqué, jamais l'enregistrement.
 
+## Orientation à long terme
+
+Cairn commence par la logistique, et c'est le seul domaine spécifié. L'objectif à terme est plus
+large : une solution peu coûteuse, de qualité et adaptée aux petits budgets, qui centralise
+progressivement les besoins d'une entreprise au-delà de l'entrepôt — documents du personnel,
+management, paie.
+
+Rien de ces domaines n'est spécifié, et rien ne doit être construit pour eux par anticipation.
+Cette orientation n'a aujourd'hui que deux conséquences, écrites en 0.9 : le socle transverse ne
+présuppose pas la logistique (`RG-EXI-070`, `RG-EXI-071`), et le produit reste sobre à installer et
+à exploiter (`RG-EXI-069`).
+
 ## Statut du périmètre
 
 ### Au périmètre, non encore spécifié
