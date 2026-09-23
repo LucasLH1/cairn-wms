@@ -8,10 +8,12 @@ défaire à bon compte, et dont quelqu'un — dans six mois, ou six ans — voud
 | # | Titre | Statut |
 |---|---|---|
 | 0001 | [Découpage du produit en lots livrables](0001-decoupage-en-lots-livrables.md) | actée |
+| 0002 | [Pile d'ensemble](0002-pile-d-ensemble.md) | proposée |
 
 **Aucun choix technique n'est arrêté à ce jour** : ni langage, ni base de données, ni architecture,
-ni hébergement, ni outillage. La seule décision prise porte sur l'ordre de réalisation, pas sur les
-moyens.
+ni hébergement, ni outillage. La seule décision actée porte sur l'ordre de réalisation, pas sur les
+moyens. La fiche 0002 propose une pile d'ensemble ; tant qu'elle est `proposée`, elle n'engage rien
+et ne se met pas en œuvre.
 
 ## La règle
 
