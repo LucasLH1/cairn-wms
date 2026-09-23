@@ -1,8 +1,16 @@
 # 0002 — Pile d'ensemble
 
-**Statut** : proposée · **Date** : 2026-09-23 · **Remplace** : — · **Remplacée par** : —
+**Statut** : actée · **Date** : 2026-09-23 · **Remplace** : — · **Remplacée par** : —
 
-> **Révisée le 2026-09-23**, avant tout acte, après l'ajout à 0.9 de `RG-EXI-064` à `071` (espace
+> **Actée le 2026-09-23** par Lucas, après deux révisions le même jour.
+>
+> **Deuxième révision**, avant l'acte : alignement sur `RG-EXI-072` à `079`, qui fixent le serveur
+> de référence, le temps de réponse, la perte et la reprise, le fuseau, l'impression, le matériel
+> et la langue. Évaluation étendue aux 79 exigences ; les hypothèses correspondantes deviennent des
+> valeurs de la spécification ; la reprise en moins de deux heures ajoute un coût (section « Ce
+> qu'elle coûte »). Recommandation inchangée.
+>
+> **Première révision**, avant tout acte, après l'ajout à 0.9 de `RG-EXI-064` à `071` (espace
 > technique et état de santé, sobriété, frontière du socle) et de l'orientation à long terme du
 > README. Évaluation étendue aux 71 exigences ; hypothèses de volumétrie, de sauvegarde et de licence
 > corrigées sur instruction de Lucas ; question du langage unique tranchée par lui. La
@@ -18,7 +26,7 @@ pile complète et cohérente**, jugée comme un tout, et non des briques prises 
 
 ### Ce qui contraint le choix
 
-**La grille d'évaluation est le module `socle/0.9-exigences-de-fonctionnement.md`** : soixante et onze
+**La grille d'évaluation est le module `socle/0.9-exigences-de-fonctionnement.md`** : soixante-dix-neuf
 exigences `RG-EXI`, chacune rattachée à la règle métier dont elle découle, et une section 5 de ce qui
 n'est *pas* exigé. Chaque pile candidate est évaluée exigence par exigence en section « Options ».
 Les groupes qui départagent vraiment sont, dans l'ordre de leur poids :
@@ -80,8 +88,9 @@ Autres contraintes :
 ### Ce qu'on ignore au moment de décider
 
 Les points ouverts de 0.9 §7 n'ont pas de réponse. La section « Décision » pose pour chacun une
-hypothèse explicite et dit si la recommandation changerait avec une autre réponse. Trois
-hypothèses — volumétrie, sauvegarde, licence — sont fixées par Lucas lors de la révision.
+hypothèse explicite et dit si la recommandation changerait avec une autre réponse. Depuis
+`RG-EXI-072` à `079`, sept de ces points ont reçu leur valeur dans 0.9 ; il reste la volumétrie, la
+licence et le nom de l'exploitant.
 
 L'orientation à long terme du README — centraliser plus tard d'autres besoins d'une entreprise,
 personnel, management, paie — n'est **pas** un critère de choix au-delà de `RG-EXI-069` à `071` :
@@ -292,7 +301,7 @@ comparaison ; les dates sont celles de publication.
 
 ### Évaluation contre les exigences de 0.9
 
-Chaque pile est évaluée contre les soixante et onze exigences `RG-EXI`. « Satisfaite » signifie que la
+Chaque pile est évaluée contre les soixante-dix-neuf exigences `RG-EXI`. « Satisfaite » signifie que la
 pile fournit ce qu'il faut, ou que l'exigence relève de la conception et que la pile ne s'y oppose
 pas ; « partiellement » qu'il manque une brique ou qu'un patron supplémentaire est à construire.
 Aucune exigence n'est marquée « non » : les quatre piles peuvent toutes réaliser le produit ; elles
@@ -373,8 +382,16 @@ se départagent par le nombre de choses à construire soi-même et par la grille
 | `RG-EXI-069` Sobriété : serveur d'entrée de gamme, exploitation sans spécialiste | Satisfaite | Trois processus (application, espace technique, PostgreSQL) sur un petit serveur ; empreinte modérée, à mesurer au lot 1. |
 | `RG-EXI-070` Socle indépendant de la logistique | Partiellement | Paquets distincts d'un même dépôt et références de projet TypeScript ; le sens des dépendances est vérifié par un outil et non par le compilateur. Aggravé à ce jour : TypeScript 7 n'a pas d'API, eslint-plugin-boundaries plafonne à TypeScript 6.0, dependency-cruiser retombe sur un analyseur dégradé. |
 | `RG-EXI-071` Aucun autre domaine anticipé | Satisfaite | Conception : discipline de périmètre, portée par les fiches et non par la pile. |
+| `RG-EXI-072` Serveur de référence : deux processeurs, 4 Go, 40 Go | Satisfaite | Trois processus (application, espace technique, PostgreSQL) ; tient sur le papier, à mesurer au lot 1 comme l'exige la règle. |
+| `RG-EXI-073` 300 ms par geste hors réseau, 2 s vers les écrans | Satisfaite | Un geste = une requête et une transaction ; diffusion WebSocket immédiate après validation. |
+| `RG-EXI-074` Éditeur : perte de quelques minutes, reprise en moins de deux heures | Satisfaite | Commun aux quatre : archivage continu (pgBackRest ou WAL-G), sauvegarde de base régulière pour borner la relecture des journaux, restauration testée. Voir le coût ci-dessous. |
+| `RG-EXI-075` Auto-hébergement : sauvegarde quotidienne, restauration en moins de deux heures | Satisfaite | L'espace technique lance la restauration, relance l'application et vérifie son état de santé ; durée à mesurer au lot 5. |
+| `RG-EXI-076` Un seul fuseau par instance, déclaré par site | Satisfaite | Horodatages en `timestamptz`, fuseau porté par le site ; aucune conversion entre sites à gérer. |
+| `RG-EXI-077` Impression réussie = travail accepté sans erreur | Satisfaite | État du travail IPP, état de l'imprimante ZPL après envoi ; aucune vérification du papier. |
+| `RG-EXI-078` Lecteurs clavier, imprimantes réseau courantes, format du transporteur | Satisfaite | Lecteurs en émulation clavier : rien côté serveur. Étiquettes transporteur reçues en ZPL : transmises telles quelles ; reçues en PDF : converties en image pour l'imprimante d'étiquettes, par l'agent d'impression. |
+| `RG-EXI-079` Langue par utilisateur | Satisfaite | Préférence portée par l'utilisateur, appliquée par vue-i18n. |
 
-**Bilan** : 68 satisfaites, 3 partiellement, 0 non.
+**Bilan** : 76 satisfaites, 3 partiellement, 0 non.
 
 ### Pile B — Elixir et Phoenix
 
@@ -451,8 +468,16 @@ se départagent par le nombre de choses à construire soi-même et par la grille
 | `RG-EXI-069` Sobriété : serveur d'entrée de gamme, exploitation sans spécialiste | Satisfaite | La plus économe en mémoire des quatre ; seul bémol, Windows hors conteneur en second rang. |
 | `RG-EXI-070` Socle indépendant de la logistique | Satisfaite | Bibliothèque Boundary, contrôlée par le compilateur Mix ; ou applications d'un projet parapluie, dont l'appel vers une sœur non déclarée est un avertissement, erreur avec `--warnings-as-errors`. Boundary est en 0.x, à mainteneur unique. |
 | `RG-EXI-071` Aucun autre domaine anticipé | Satisfaite | Idem. |
+| `RG-EXI-072` Serveur de référence : deux processeurs, 4 Go, 40 Go | Satisfaite | La marge la plus confortable des quatre. |
+| `RG-EXI-073` 300 ms par geste hors réseau, 2 s vers les écrans | Satisfaite | Idem ; l'aller-retour serveur par interaction LiveView est du réseau, exclu de la mesure. |
+| `RG-EXI-074` Éditeur : perte de quelques minutes, reprise en moins de deux heures | Satisfaite | Idem. |
+| `RG-EXI-075` Auto-hébergement : sauvegarde quotidienne, restauration en moins de deux heures | Satisfaite | Idem. |
+| `RG-EXI-076` Un seul fuseau par instance, déclaré par site | Satisfaite | Idem. |
+| `RG-EXI-077` Impression réussie = travail accepté sans erreur | Satisfaite | Idem. |
+| `RG-EXI-078` Lecteurs clavier, imprimantes réseau courantes, format du transporteur | Satisfaite | Idem. |
+| `RG-EXI-079` Langue par utilisateur | Satisfaite | Idem, par Gettext. |
 
-**Bilan** : 68 satisfaites, 3 partiellement, 0 non.
+**Bilan** : 76 satisfaites, 3 partiellement, 0 non.
 
 ### Pile C — .NET et PostgreSQL, écrans Vue
 
@@ -529,8 +554,16 @@ se départagent par le nombre de choses à construire soi-même et par la grille
 | `RG-EXI-069` Sobriété : serveur d'entrée de gamme, exploitation sans spécialiste | Satisfaite | Trois processus aussi ; empreinte mémoire d'un processus .NET supérieure à celle de B, à mesurer au lot 1. Le service Windows natif épargne Docker à qui n'en a pas l'usage — Docker Desktop est payant au-delà de 250 salariés ou 10 M$. |
 | `RG-EXI-070` Socle indépendant de la logistique | Satisfaite | Projets .NET distincts : un projet n'utilise un type d'un autre que s'il le référence, donc le socle ne peut pas voir la logistique — le compilateur refuse. Les références étant transitives par défaut, `DisableTransitiveProjectReferences` est à activer pour que chaque frontière soit étanche. Tests d'architecture (ArchUnitNET) pour les règles internes à un projet. |
 | `RG-EXI-071` Aucun autre domaine anticipé | Satisfaite | Idem. |
+| `RG-EXI-072` Serveur de référence : deux processeurs, 4 Go, 40 Go | Satisfaite | Tient sur le papier ; c'est la marge la plus étroite de C, à mesurer au lot 1 comme l'exige la règle. Un échec de la mesure rouvrirait la fiche. |
+| `RG-EXI-073` 300 ms par geste hors réseau, 2 s vers les écrans | Satisfaite | Idem ; SignalR diffuse après validation de la transaction. |
+| `RG-EXI-074` Éditeur : perte de quelques minutes, reprise en moins de deux heures | Satisfaite | Idem. |
+| `RG-EXI-075` Auto-hébergement : sauvegarde quotidienne, restauration en moins de deux heures | Satisfaite | Idem ; même programme .NET, en conteneur ou en service Windows. |
+| `RG-EXI-076` Un seul fuseau par instance, déclaré par site | Satisfaite | Idem ; `DateTimeOffset` et fuseaux IANA natifs sous Linux comme sous Windows. |
+| `RG-EXI-077` Impression réussie = travail accepté sans erreur | Satisfaite | Idem. |
+| `RG-EXI-078` Lecteurs clavier, imprimantes réseau courantes, format du transporteur | Satisfaite | Idem ; conversion PDF faite dans l'agent .NET. |
+| `RG-EXI-079` Langue par utilisateur | Satisfaite | Idem, par vue-i18n et par les ressources .NET. |
 
-**Bilan** : 70 satisfaites, 1 partiellement, 0 non.
+**Bilan** : 78 satisfaites, 1 partiellement, 0 non.
 
 ### Pile D — Laravel et Vue
 
@@ -607,8 +640,16 @@ se départagent par le nombre de choses à construire soi-même et par la grille
 | `RG-EXI-069` Sobriété : serveur d'entrée de gamme, exploitation sans spécialiste | Partiellement | Quatre à cinq processus par instance, espace technique compris : plus de mémoire et plus de choses à suivre pour un exploitant non spécialiste. |
 | `RG-EXI-070` Socle indépendant de la logistique | Partiellement | Paquets Composer ou espaces de noms ; l'autochargeur rend tout visible, seul un outil d'analyse (Deptrac, désormais maintenu sous `deptrac/deptrac`) signale une dépendance interdite. |
 | `RG-EXI-071` Aucun autre domaine anticipé | Satisfaite | Idem. |
+| `RG-EXI-072` Serveur de référence : deux processeurs, 4 Go, 40 Go | Partiellement | Quatre à cinq processus PHP et PostgreSQL sur quatre gigaoctets : faisable, marge faible. |
+| `RG-EXI-073` 300 ms par geste hors réseau, 2 s vers les écrans | Satisfaite | Idem, avec Octane pour éviter le démarrage du cadre à chaque requête. |
+| `RG-EXI-074` Éditeur : perte de quelques minutes, reprise en moins de deux heures | Satisfaite | Idem. |
+| `RG-EXI-075` Auto-hébergement : sauvegarde quotidienne, restauration en moins de deux heures | Partiellement | Idem, mais quatre à cinq processus à arrêter et relancer dans l'ordre. |
+| `RG-EXI-076` Un seul fuseau par instance, déclaré par site | Satisfaite | Idem. |
+| `RG-EXI-077` Impression réussie = travail accepté sans erreur | Satisfaite | Idem. |
+| `RG-EXI-078` Lecteurs clavier, imprimantes réseau courantes, format du transporteur | Satisfaite | Idem. |
+| `RG-EXI-079` Langue par utilisateur | Satisfaite | Idem. |
 
-**Bilan** : 61 satisfaites, 10 partiellement, 0 non.
+**Bilan** : 67 satisfaites, 12 partiellement, 0 non.
 
 ### Grille hors 0.9 — les erreurs se voient-elles sans relecture ?
 
@@ -663,7 +704,9 @@ entrant, impression IPP) n'y ont pas de bibliothèque maintenue. La pile D est �
 typage dynamique et par le nombre de processus à exploiter par un tiers, que l'espace technique
 porte à quatre ou cinq par instance — à rebours de la sobriété de `069`.
 
-Décision **proposée**, non validée. Elle n'engage rien tant que Lucas ne l'a pas actée.
+Décision **actée** le 2026-09-23 par Lucas, qui a confirmé le critère décisif : un langage unique
+sert surtout une équipe humaine qui relit ; ici l'IA écrit tout et personne ne relit, donc le
+typage à l'exécution prime.
 
 ### Ce que la pile C satisfait mal
 
@@ -673,7 +716,7 @@ Décision **proposée**, non validée. Elle n'engage rien tant que Lucas ne l'a 
   prestataire sans un agent sur site. La pile C le rend simple, elle ne le rend pas inutile.
 - `RG-EXI-069` — aucune exigence n'est manquée, mais c'est la marge la plus étroite : un processus
   .NET occupe plus de mémoire qu'une machine BEAM, et l'image d'exécution est plus lourde qu'en Node.
-  Le serveur de référence, point ouvert de 0.9 §7, doit être fixé puis mesuré au lot 1.
+  Le serveur de référence est fixé par `RG-EXI-072` ; la règle impose de le mesurer au lot 1.
 - `RG-EXI-054` — deux catalogues de libellés (écrans en Vue, messages du serveur en .NET) à tenir
   alignés sur le glossaire ; un contrôle automatique devra le vérifier.
 
@@ -716,25 +759,48 @@ pile C les paie ainsi :
   ci-dessous, par pgBackRest ou WAL-G) et le **partitionnement du journal** (hypothèse de volumétrie) : communs aux quatre
   piles, mais EF Core ne gère pas les partitions — leurs migrations s'écrivent en SQL, ou sont
   confiées à pg_partman, qui demande un superutilisateur à l'installation.
+- **Une reprise en moins de deux heures** (`RG-EXI-074`, `075`), au lieu de la demi-journée
+  supposée à la première révision. Commun aux quatre piles, et c'est un coût d'exploitation plus
+  que de pile :
+  - chez l'éditeur, l'archivage continu ne suffit plus seul : la durée de restauration est bornée
+    par la taille de la base et par la quantité de journaux à relire depuis la dernière sauvegarde
+    de base. Il faut des sauvegardes de base fréquentes, un stockage de sauvegarde proche des
+    serveurs, et, pour les plus grosses instances, une réplique en attente prête à prendre le
+    relais — un second serveur par instance concernée ;
+  - la restauration doit être **exercée**, pas supposée : l'espace technique rejoue régulièrement
+    une restauration sur une instance jetable et en mesure la durée, sans quoi le délai de deux
+    heures n'est qu'une promesse. Un échec ou un dépassement est une dégradation signalée d'elle-même
+    (`RG-EXI-068`) ;
+  - en auto-hébergement, la restauration par l'espace technique doit tenir en deux heures sur le
+    serveur de référence : sauvegarde logique quotidienne acceptable à la volumétrie d'un petit
+    prestataire, à mesurer au lot 5 ; au-delà, l'espace technique propose l'archivage continu ;
+  - la détection compte dans les deux heures : l'état de santé doit signaler la panne à qui exploite
+    l'instance dans les premières minutes.
 - **Des dépendances à licence permissive seulement** (hypothèse de licence) : QuestPDF sort de la
   liste des candidats pour les documents PDF.
 
-### Hypothèses sur les points ouverts de 0.9 §7
+### Valeurs de référence et hypothèses restantes
 
-L'hébergement n'est plus un point ouvert : les deux modes sont actés (`RG-EXI-059`). Pour chacun
-des points restants, l'hypothèse retenue et l'effet d'une autre réponse sur la recommandation.
+Sept points ouverts de 0.9 §7 ont reçu leur valeur, désormais exigée (`RG-EXI-072` à `079`) et
+évaluée dans les tableaux ci-dessus :
+
+| Point | Valeur de la spécification | Effet sur la pile |
+|---|---|---|
+| Serveur de référence | Deux processeurs, quatre gigaoctets, quarante gigaoctets ; instance de petit prestataire et espace technique compris ; mesuré au lot 1 (`072`) | Marge la plus étroite de C ; B la plus large, D la plus faible. **Recommandation inchangée**, sous réserve de la mesure. |
+| Temps de réponse | Geste en moins de 300 ms hors réseau ; changement sur les écrans en moins de deux secondes (`073`) | Ne départage pas. |
+| Perte et reprise, chez l'éditeur | Quelques minutes de perte ; reprise en moins de deux heures (`074`) | Commun aux quatre ; coût d'exploitation détaillé dans « Ce qu'elle coûte ». |
+| Perte et reprise, en auto-hébergement | Sauvegarde quotidienne au minimum ; restauration par l'espace technique en moins de deux heures (`075`) | Commun ; D paie un redémarrage à plusieurs processus. |
+| Fuseau | Un seul par instance, déclaré par site, horodatages non ambigus (`076`) | Ne départage pas. |
+| Aboutissement d'une impression | Travail accepté sans erreur ; papier non vérifié (`077`) | Ne départage pas ; identique à l'hypothèse de la première version. |
+| Matériel | Lecteurs clavier, imprimantes réseau courantes, étiquette dans le format du transporteur (`078`) | Ne départage pas ; l'agent d'impression convertit les étiquettes PDF. |
+| Langue | Bascule par utilisateur (`079`) | Ne départage pas. |
+
+Trois points restent ouverts dans 0.9 §7. L'hypothèse retenue, et l'effet d'une autre réponse :
 
 | Point ouvert | Hypothèse retenue | Si la réponse est autre |
 |---|---|---|
 | **Volumétrie cible** | Borne haute par instance : au plus dix sites, une centaine d'utilisateurs simultanés, cinquante mille lignes de flux par jour, un million d'objets sérialisés. À plusieurs événements par ligne, le journal atteint **plusieurs centaines de millions d'événements en cinq ans** : son partitionnement par période est prévu dès la fiche base de données, pas ajouté après coup. Un petit prestataire, qui doit tenir sur un serveur d'entrée de gamme (`069`), est très en deçà de cette borne. | Dix fois plus : réplique de lecture en plus du partitionnement, toujours en PostgreSQL. **Recommandation inchangée.** |
-| **Temps de réponse** | Un geste du terrain répond en moins de 300 ms côté serveur ; un changement atteint les écrans ouverts en moins de deux secondes. | Des exigences plus strictes ne départagent pas les quatre piles ; seule la pile B, qui fait un aller-retour serveur par frappe, y serait sensible. **Inchangée.** |
 | **Licence et distribution** | La commercialisation n'est pas un objectif à ce stade. Seule hypothèse : **la réalisation ne ferme aucune option** — code livré lisible ou non, activation de licence ou non, périmètre identique ou non selon le mode. Deux conséquences : toutes les dépendances sont sous licence permissive (MIT, Apache, BSD, PostgreSQL), sans condition liée à la taille de qui déploie ; l'activation, si elle vient un jour, se branche dans l'espace technique sans toucher l'application. | **Les piles ne gardent pas toutes les options ouvertes au même degré.** Toutes permettent un code lisible et une activation. Un code *non* lisible : C livre des assemblages IL, décompilables, mais la compilation native et l'obfuscation existent ; B livre du bytecode BEAM, dont les informations de débogage se retirent ; A et D livrent du JavaScript et du PHP, et ne peuvent fermer le code que par obfuscation. **Inchangée** : C est celle qui ferme le moins d'options. |
-| **Sauvegarde et reprise** | **En hébergement par l'éditeur**, perte admissible de quelques minutes : archivage continu des journaux de transactions PostgreSQL et restauration à un instant donné, pour toute la flotte. **En auto-hébergement**, sauvegarde quotidienne comme minimum documenté, lancée, vérifiée et restaurée depuis l'espace technique, avec l'archivage continu en option. Dans les deux cas, le volume des fichiers conservés est sauvegardé avec la base. Durée de reprise : une demi-journée, hypothèse à confirmer. | Perte admissible nulle : réplication synchrone, hors de portée d'un serveur d'entrée de gamme. C'est un choix de base de données, commun aux quatre piles. **Inchangée.** Conséquence commune : les sauvegardes de Coolify (`pg_dump` planifié) ne suffisent pas au mode éditeur. |
-| **Fuseau horaire** | Tous les sites d'une instance dans un même fuseau ; néanmoins tous les horodatages sont stockés en UTC (`timestamptz`) et chaque site porte son fuseau dès le lot 1. | Sites multi-fuseaux : la photo quotidienne et les échéances se planifient par site avec son fuseau, ce que les quatre ordonnanceurs savent faire. **Inchangée.** |
-| **Aboutissement d'une impression** | Une impression est réussie quand l'imprimante a accepté le travail et n'a pas signalé d'erreur (état de travail IPP ; état `~HS` ZPL après envoi). La sortie physique du papier n'est pas vérifiable sans capteur. En hébergement par l'éditeur, un agent sur site porte cette détection. | Exiger la sortie physique dépend du matériel (imprimantes qui remontent leur état), pas de la pile. **Inchangée** ; la présence d'un agent sur site est de toute façon acquise. |
-| **Matériel** | Lecteurs de code-barres en émulation clavier (USB ou Bluetooth HID) ; imprimantes d'étiquettes ZPL en TCP 9100 ; imprimantes de documents IPP ; étiquettes transporteur reçues en PDF ou ZPL. | Un autre langage d'étiquette (EPL, TSPL) ajoute des gabarits ; un lecteur non HID demanderait un pilote côté poste. Ni l'un ni l'autre ne change de pile. **Inchangée.** |
-| **Granularité de la langue** | Par utilisateur. | Par instance : plus simple encore. **Sans effet.** |
-| **Serveur de référence** (`069`) | Deux processeurs virtuels, quatre gigaoctets de mémoire, quarante gigaoctets de stockage SSD : application, espace technique et PostgreSQL sur la même machine, à la volumétrie d'un petit prestataire. | Deux gigaoctets : B tiendrait le plus facilement, C et A seraient à mesurer, D serait en difficulté. **Inchangée à quatre gigaoctets ; à rouvrir si la cible descend à deux et que la mesure du lot 1 échoue.** |
 | **Nom de l'exploitant** | Hors pile. Dans le code, l'exploitant d'une instance reste `Provider` tant que le glossaire ne dit pas autre chose (`RG-EXI-071` interdit de l'anticiper). | **Sans effet** sur la pile ; un renommage futur est un changement de glossaire et de code. |
 
 ## Conséquences
@@ -748,8 +814,10 @@ des points restants, l'hypothèse retenue et l'effet d'une autre réponse sur la
   injection, journalisation, temps réel) sans fiche.
 
 - **Ce qu'il faut mettre en place** — les fiches de détail, dans l'ordre de leurs dépendances. Aucune
-  ne s'écrit avant l'acte de 0002. Elles prendront leur numéro à la rédaction ; `0003` est déjà
-  prise par la précision du découpage en lots.
+  ne s'écrit avant l'acte de 0002. Elles prennent leur numéro à la rédaction ; `0003` est déjà
+  prise par la précision du découpage en lots. À l'acte, elles sont portées par les issues `#36` à
+  `#46`, et le jeu de données et le scénario du lot 1 par `#47` ; la découpe interne est la fiche
+  `0004`.
 
   | Fiche | Objet | Dépend de |
   |---|---|---|
@@ -778,10 +846,10 @@ des points restants, l'hypothèse retenue et l'effet d'une autre réponse sur la
 
 - **Ce qui la remettrait en cause** :
   - une mesure du lot 1 montrant que l'application, l'espace technique et PostgreSQL ne tiennent pas
-    ensemble sur le serveur de référence (`069`) ;
+    ensemble sur le serveur de référence (`RG-EXI-072`) ;
   - la découverte, au lot 1, que la génération du client depuis le schéma OpenAPI laisse passer des
     dérives entre API et écrans — ce serait le signe que le partage direct des types (pile A) vaut
     plus que prévu ;
-  - une volumétrie ou un temps de réponse hors des hypothèses ci-dessus, qui ne changerait pas la
+  - une volumétrie hors de l'hypothèse ci-dessus, qui ne changerait pas la
     pile mais rouvrirait la fiche base de données ;
   - un prestataire dont le parc refuse à la fois les conteneurs et Windows : cas non couvert.

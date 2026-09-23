@@ -8,13 +8,15 @@ défaire à bon compte, et dont quelqu'un — dans six mois, ou six ans — voud
 | # | Titre | Statut |
 |---|---|---|
 | 0001 | [Découpage du produit en lots livrables](0001-decoupage-en-lots-livrables.md) | actée |
-| 0002 | [Pile d'ensemble](0002-pile-d-ensemble.md) | proposée |
+| 0002 | [Pile d'ensemble](0002-pile-d-ensemble.md) | actée |
 | 0003 | [Précision du découpage en lots](0003-precision-du-decoupage-en-lots.md) | proposée |
+| 0004 | [Découpe interne et frontière du socle](0004-decoupe-interne-et-frontiere-du-socle.md) | proposée |
 
-**Aucun choix technique n'est arrêté à ce jour** : ni langage, ni base de données, ni architecture,
-ni hébergement, ni outillage. La seule décision actée porte sur l'ordre de réalisation, pas sur les
-moyens. La fiche 0002 propose une pile d'ensemble ; tant qu'elle est `proposée`, elle n'engage rien
-et ne se met pas en œuvre.
+**La pile d'ensemble est arrêtée par 0002** : .NET (LTS) et C#, PostgreSQL, écrans Vue 3 et
+TypeScript, contrat OpenAPI produit par le serveur. Tout ce qu'elle ne fixe pas — découpe interne,
+schéma de base, bibliothèques, livraison, outillage — reste à trancher par les fiches de détail
+qu'elle annonce. Aucun code ne s'écrit avant l'acte de la fiche de détail qui le couvre. Une fiche
+`proposée` n'engage rien et ne se met pas en œuvre.
 
 ## La règle
 
