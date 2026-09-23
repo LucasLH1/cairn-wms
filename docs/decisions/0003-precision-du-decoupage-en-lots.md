@@ -61,8 +61,8 @@ Lucas.
 
 | Lot | Contenu | Ce qu'il prouve |
 |---|---|---|
-| 1 | **L'entrepôt minimal.** Un donneur d'ordre, un site, gestion quantitative. Attendu saisi à la main, réception au quai, **supports simples** créés et étiquetés dès le quai, rangement, commande, prélèvement, **comptage ponctuel**, expédition. Un écart de réception est enregistré sans ouvrir de litige (`RG-REC-071`). Journal d'événements et tâches dès ce lot. Fonctions de 0.8 dans leur forme simple : file de décisions, main, recherche et lecture de code-barres, alertes dans l'application, impression des étiquettes de support et des documents de flux. | La marchandise entre, se range, se prélève, sort, et le stock se corrige. |
-| 2 | **L'identité et la multiplicité.** Numéro de série, lot, multi-donneurs d'ordre réel, rôles, équipes, hiérarchie et périmètres, **second site et transferts inter-sites**, **supports consignés**, **blocages et quarantaine**, **inventaires tournants et complets**. | Le produit distingue les exemplaires, les clients et les sites. |
+| 1 | **L'entrepôt minimal.** Un donneur d'ordre, un site, gestion quantitative. Attendu saisi à la main, réception au quai, **supports simples** créés et étiquetés dès le quai, rangement, commande, prélèvement, **comptage ponctuel**, expédition. Un écart de réception est enregistré sans ouvrir de litige (`RG-REC-071`). Parcours par défaut non paramétrable (`RG-WKF-005`). Une stratégie de rangement, régime libre, débordement. Journal d'événements et tâches dès ce lot. Fonctions de 0.8 dans leur forme simple : file de décisions, main, recherche et lecture de code-barres, alertes dans l'application, impression des étiquettes de support et des documents de flux. | La marchandise entre, se range, se prélève, sort, et le stock se corrige. |
+| 2 | **L'identité et la multiplicité.** Numéro de série, lot, multi-donneurs d'ordre réel, rôles, équipes, hiérarchie et périmètres, **second site et transferts inter-sites**, **supports consignés**, **blocages et quarantaine**, **inventaires tournants et complets**, **réception aveugle et contrôle qualité**, **réception à la volée et rapprochement**, **création rapide d'une référence au quai**, **stratégies de rangement multiples, régime dirigé et dérogation**, **prélèvement dédié, réapprovisionnement, éclatement et cross-dock**. | Le produit distingue les exemplaires, les donneurs d'ordre et les sites. |
 | 3 | **Le SAV.** Dossiers, retours client, parcours configurables, atelier et réparation, **litiges**. | Ce qui différencie le produit fonctionne. |
 | 4 | **La mesure.** Unités d'œuvre, photo quotidienne, relevés d'activité, indicateurs, comparaison d'activité. | Le prestataire peut facturer et piloter. |
 | 5 | **L'ouverture.** Profils d'import, échanges automatisés, portail donneur d'ordre, interfaçage direct, tarification, **espace technique**. | Le produit se branche sur le système d'un donneur d'ordre, et s'installe et s'exploite sans l'éditeur. |
@@ -83,6 +83,24 @@ Les raisons de chaque placement :
 - **Espace technique au lot 5** : tant que l'éditeur installe lui-même ses instances de
   démonstration, un déploiement reproductible suffit ; l'espace technique devient nécessaire quand
   un tiers installe et exploite seul, ce qui est l'objet du lot 5.
+- **Parcours par défaut au lot 1** : le moteur de parcours n'arrive qu'au lot 3, mais la suite d'une
+  réception est réalisée dès le lot 1 comme un parcours par défaut (`RG-WKF-005`), non paramétrable.
+  Le lot 3 le rend paramétrable au lieu de le remplacer.
+- **Réception aveugle et contrôle qualité au lot 2** : ce sont deux régimes déclarés par donneur
+  d'ordre ; ils prennent leur sens quand plusieurs donneurs d'ordre ont des exigences différentes.
+- **Réception à la volée et rapprochement au lot 2** : le rapprochement suppose des réceptions sans
+  attendu chez plusieurs donneurs d'ordre ; il n'éprouve rien au lot 1.
+- **Création rapide d'une référence au quai au lot 2** : au lot 1, le référentiel est saisi avant la
+  réception, et un code inconnu est refusé avec son motif (`RG-SUR-063`).
+- **Stratégies multiples, régime dirigé et dérogation au lot 2** : une stratégie suffit à prouver la
+  chaîne ; leur ordonnancement se paramètre par donneur d'ordre.
+- **Prélèvement dédié, réapprovisionnement, éclatement et cross-dock au lot 2** : le lot 1 prélève en
+  réserve ; sans emplacement de prélèvement dédié, éclatement et réapprovisionnement n'ont pas
+  d'objet, et le cross-dock s'ajoute à une chaîne déjà éprouvée.
+
+Le détail du périmètre de chaque flux est tenu par les scénarios de démonstration, sous
+`docs/lots/`. Tant que les scénarios du lot 1 ne sont pas tous écrits, ce tableau peut encore être
+précisé : la fiche s'acte une fois, quand ils le sont.
 
 ## Conséquences
 
@@ -95,7 +113,9 @@ Les raisons de chaque placement :
 - **Ce qu'il faut mettre en place** :
   - À l'acte de cette fiche, 0001 passe au statut « remplacée par 0003 ».
   - `status.yml` : la section `lots:` reprend le tableau ci-dessus.
-  - Le scénario de démonstration du lot 1, qui vaut critère de clôture du lot.
+  - Les scénarios de démonstration du lot 1, sous `docs/lots/lot-1/`, qui valent critère de clôture
+    du lot : réception et rangement (écrit) ; commande, prélèvement, comptage et expédition (à
+    écrire).
 
 - **Ce qu'on accepte de payer** : un lot 1 plus lourd que dans 0001. Les deux dettes que 0001 posait
   restent entières : le lot 1 n'est pas une version jetable, et le journal comme les tâches naissent
