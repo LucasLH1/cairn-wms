@@ -268,6 +268,8 @@ Règles d'usage :
 | Terrain | `FieldSurface` | Surface de l'exécution : une question à l'écran, une réponse par scan. |
 | Bureau | `OfficeSurface` | Surface de l'instruction et de la décision : plusieurs objets en vis-à-vis. |
 | Administration | `AdminSurface` | Surface du paramétrage du prestataire. Usage rare, conséquences lourdes. |
+| Espace technique | `OpsConsole` | Outil d'installation, de mise à jour, de sauvegarde, de restauration et d'état de santé d'une ou de plusieurs instances. Distinct de l'administration, qui paramètre le métier. N'accède à aucune donnée métier et fonctionne quand l'application est arrêtée. |
+| État de santé | `InstanceHealth` | Indicateurs techniques d'une instance — disponibilité, traitements différés, échanges et impressions en échec, sauvegardes, stockage — dénombrés, jamais détaillés par leur contenu métier. |
 | Poste | `Workstation` | L'ordinateur depuis lequel un utilisateur travaille : fixe, ou embarqué sur un chariot. Origine tracée des événements et destination d'impression. Ne désigne jamais l'établi d'atelier (`Bench`). |
 
 ## Encadrement et périmètres
@@ -369,6 +371,8 @@ Ces mots sont ambigus ou déjà pris. Ils ne doivent apparaître nulle part.
 | Prise en charge (au sens de la garantie) | Régime de garantie | « Prise en charge » est réservé à l'événement transporteur qui vaut preuve de dépôt. |
 | Poste de travail *(pour désigner un lieu d'atelier)* | Établi | Le poste est l'ordinateur depuis lequel on travaille ; l'emplacement d'atelier où se pose un article est un établi. |
 | Terminal | Poste | Un seul mot pour la machine, quel que soit son support. |
+| Console *(au sens d'outil technique)* | Espace technique | Dans les exemples du SAV, « console » désigne l'appareil qu'on répare. |
+| Monitoring, supervision, surveillance *(au sens technique)* | État de santé | « Supervision » et « surveillance » désignent des écrans métier (surveillance du quai, des séjours) ; « surveillance » désigne aussi en 0.7 ce que le produit refuse de faire aux opérateurs. |
 | Version travaillée, version active | Brouillon, ou version publiée | Deux mots de plus pour les états que 0.6 nomme déjà brouillon, publiée et retirée. |
 | Verrou, verrouillage *(au sens du droit de modifier)* | Main | Le mot technique masque le fait métier : la main se prend, se demande, se cède et se reprend. |
 | Notification | Alerte, ou émission de message | Un seul mot pour un fait signalé à un utilisateur interne, quel que soit son canal. Ce qui part vers un tiers n'est jamais une alerte (`RG-SUR-078`) : c'est le type d'étape *Émission de message* de 0.6. |
