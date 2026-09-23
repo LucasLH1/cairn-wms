@@ -9,6 +9,7 @@ défaire à bon compte, et dont quelqu'un — dans six mois, ou six ans — voud
 |---|---|---|
 | 0001 | [Découpage du produit en lots livrables](0001-decoupage-en-lots-livrables.md) | actée |
 | 0002 | [Pile d'ensemble](0002-pile-d-ensemble.md) | proposée |
+| 0003 | [Précision du découpage en lots](0003-precision-du-decoupage-en-lots.md) | proposée |
 
 **Aucun choix technique n'est arrêté à ce jour** : ni langage, ni base de données, ni architecture,
 ni hébergement, ni outillage. La seule décision actée porte sur l'ordre de réalisation, pas sur les
