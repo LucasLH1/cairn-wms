@@ -265,7 +265,7 @@ Règles d'usage :
 | Français | Anglais | Définition |
 |---|---|---|
 | Surface | `WorkSurface` | Ensemble des écrans destinés à une même manière de travailler : terrain, bureau, administration. Ni un appareil, ni un rôle : un même utilisateur les traverse selon ses permissions. |
-| Terrain | `FieldSurface` | Surface de l'exécution : une question à l'écran, une réponse par scan. |
+| Terrain | `FieldSurface` | Surface de l'exécution des missions, où la lecture de code-barres est l'entrée principale. Même présentation que le bureau. |
 | Bureau | `OfficeSurface` | Surface de l'instruction et de la décision : plusieurs objets en vis-à-vis. |
 | Administration | `AdminSurface` | Surface du paramétrage du prestataire. Usage rare, conséquences lourdes. |
 | Espace technique | `OpsConsole` | Outil d'installation, de mise à jour, de sauvegarde, de restauration et d'état de santé d'une ou de plusieurs instances. Distinct de l'administration, qui paramètre le métier. N'accède à aucune donnée métier et fonctionne quand l'application est arrêtée. |
