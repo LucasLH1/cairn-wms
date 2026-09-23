@@ -32,7 +32,8 @@ Un terme absent du glossaire ne doit apparaître nulle part : on l'ajoute au glo
 
 Aucun langage, aucun framework, aucune base de données, aucune architecture, aucun hébergement,
 aucun outillage n'est arrêté tant qu'une fiche actée ne le dit pas. À ce jour, deux décisions sont
-actées : `0001`, l'ordre de réalisation du produit en lots, et `0002`, **la pile d'ensemble** —
+actées : `0003`, l'ordre de réalisation du produit en lots (qui remplace `0001`), et `0002`,
+**la pile d'ensemble** —
 .NET et C#, PostgreSQL, écrans Vue et TypeScript. Tout le reste — découpe interne, schéma de base,
 bibliothèques, livraison, outillage — attend les fiches de détail que 0002 annonce. **Aucun code ne
 s'écrit tant que la fiche de détail qui le couvre n'est pas actée.**

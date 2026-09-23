@@ -1,6 +1,6 @@
 # 0003 — Précision du découpage en lots
 
-**Statut** : proposée · **Date** : 2026-09-23 · **Remplace** : 0001, à son acte · **Remplacée par** : —
+**Statut** : actée · **Date** : 2026-09-23 · **Remplace** : 0001 · **Remplacée par** : —
 
 ## Contexte
 
@@ -56,8 +56,8 @@ Une conséquence ne demande aucun changement mais doit être dite : l'import d'a
 ## Décision
 
 **Les cinq lots de 0001 sont conservés dans leur ordre et dans leur critère, et précisés comme
-suit** (option B). Proposée par Claude en conversation de conception, en attente de validation par
-Lucas.
+suit** (option B). Proposée par Claude en conversation de conception, validée par Lucas le
+2026-09-23, après écriture des trois scénarios du lot 1.
 
 | Lot | Contenu | Ce qu'il prouve |
 |---|---|---|

@@ -12,10 +12,9 @@
 #
 # Tous les modules de la carte sont aujourd'hui « spécifié ». Aucun n'est
 # « en développement » ni « livré » : le dépôt ne contient aucun code applicatif.
-# Deux décisions sont actées : 0001, l'ordre de réalisation en lots (section
-# « lots » ci-dessous), et 0002, la pile d'ensemble. Aucun code ne s'écrit avant
-# l'acte de la fiche de détail qui le couvre ; la réalisation du lot 1 attend en
-# outre l'acte de 0003 et son scénario.
+# Deux décisions structurantes sont actées : 0003, l'ordre de réalisation en lots
+# (section « lots » ci-dessous, remplace 0001), et 0002, la pile d'ensemble.
+# Aucun code ne s'écrit avant l'acte de la fiche de détail qui le couvre.
 #
 # Le champ « issue » renvoie à l'issue GitHub qui porte le travail restant sur
 # le module : « Réaliser ... » pour un module spécifié. Le module 0.9 ne se
@@ -200,37 +199,65 @@ couches:
         doc: docs/pilotage/5.1-kpi-tableaux-de-bord-exports.md
         prefixe_regles: RG-KPI
 
-# Découpage en lots livrables, acté par docs/decisions/0001-decoupage-en-lots-livrables.md.
-# Un lot est clos quand un scénario complet se déroule de bout en bout sur le
-# jeu de données de test, écran par écran. Un module est traversé par plusieurs
-# lots et revient à chacun d'eux. Les fonctions transverses de 0.8 ne forment
-# pas un lot : elles naissent au lot 1 dans leur forme simple et s'enrichissent
-# à chaque lot.
+# Découpage en lots livrables, acté par docs/decisions/0003-precision-du-decoupage-en-lots.md,
+# qui remplace 0001. Un lot est clos quand ses scénarios, écrits sous docs/lots/,
+# sont automatisés en tests de bout en bout qui passent, et que les moments listés
+# dans le README du lot ont été constatés à l'écran. Un module est traversé par
+# plusieurs lots et revient à chacun d'eux. Les fonctions transverses de 0.8 ne
+# forment pas un lot : elles naissent au lot 1 dans leur forme simple et
+# s'enrichissent à chaque lot. Les scénarios d'un lot s'écrivent juste avant sa
+# réalisation.
 
 lots:
 
   - id: 1
     nom: L'entrepôt minimal
     etat: à faire
+    jalon: Lot 1 — L'entrepôt minimal
     contenu: >-
-      Un donneur d'ordre, un site, gestion quantitative seule. Recevoir, ranger,
-      prélever, expédier. Socle dans sa version pauvre : ni série, ni lot, ni
-      parcours configurable.
-    prouve: La marchandise entre et sort.
+      Un donneur d'ordre, un site, gestion quantitative. Attendu saisi à la main,
+      réception au quai, supports simples créés et étiquetés dès le quai,
+      rangement, commande, prélèvement, comptage ponctuel, expédition par un
+      transporteur sans interface automatisée. Un écart de réception est
+      enregistré sans ouvrir de litige (RG-REC-071). Parcours par défaut non
+      paramétrable (RG-WKF-005). Une stratégie de rangement, régime libre,
+      débordement. Journal d'événements et tâches dès ce lot. Fonctions de 0.8
+      dans leur forme simple : file de décisions, main, recherche et lecture de
+      code-barres, alertes dans l'application, impression des étiquettes de
+      support et des documents de flux.
+    prouve: La marchandise entre, se range, se prélève, sort, et le stock se corrige.
+    criteres: docs/lots/lot-1/README.md
+    scenarios:
+      - doc: docs/lots/lot-1/reception-et-rangement.md
+        issue: 48
+      - doc: docs/lots/lot-1/commande-et-preparation.md
+        issue: 49
+      - doc: docs/lots/lot-1/controle-colisage-expedition.md
+        issue: 50
 
   - id: 2
     nom: L'identité et la multiplicité
     etat: à faire
     contenu: >-
-      Numéro de série, lot, supports, multi-donneurs d'ordre réel, rôles,
-      équipes, hiérarchie, périmètres.
-    prouve: Le produit distingue les exemplaires et les clients.
+      Numéro de série, lot, multi-donneurs d'ordre réel, rôles, équipes,
+      hiérarchie et périmètres, second site et transferts inter-sites, supports
+      consignés, blocages et quarantaine, inventaires tournants et complets,
+      réception aveugle et contrôle qualité, réception à la volée et
+      rapprochement, création rapide d'une référence au quai, stratégies de
+      rangement multiples, régime dirigé et dérogation, prélèvement dédié,
+      réapprovisionnement, éclatement et cross-dock, exemplaire désigné, mode
+      groupé et zone de tri, réservation à l'acceptation ou au prélèvement,
+      premier périmé premier sorti, regroupement de commandes, choix du site et
+      du service transporteur par règles, contrôle par sondage, vague sur heure
+      limite, volume ou poids, départ incomplet et annulation d'expédition.
+    prouve: Le produit distingue les exemplaires, les donneurs d'ordre et les sites.
 
   - id: 3
     nom: Le SAV
     etat: à faire
     contenu: >-
-      Dossiers, retours client, parcours configurables, atelier et réparation.
+      Dossiers, retours client, parcours configurables, atelier et réparation,
+      litiges, étiquette et bon de retour.
     prouve: Ce qui différencie le produit fonctionne.
 
   - id: 4
@@ -246,5 +273,9 @@ lots:
     etat: à faire
     contenu: >-
       Profils d'import, échanges automatisés, portail donneur d'ordre,
-      interfaçage direct, tarification.
-    prouve: Le produit se branche sur le système d'un client.
+      interfaçage direct, tarification, espace technique, commande injectée par
+      flux, transporteurs avec interface automatisée — étiquette, suivi,
+      indisponibilité.
+    prouve: >-
+      Le produit se branche sur le système d'un donneur d'ordre, et s'installe
+      et s'exploite sans l'éditeur.

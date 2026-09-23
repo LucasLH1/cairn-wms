@@ -7,9 +7,9 @@ défaire à bon compte, et dont quelqu'un — dans six mois, ou six ans — voud
 
 | # | Titre | Statut |
 |---|---|---|
-| 0001 | [Découpage du produit en lots livrables](0001-decoupage-en-lots-livrables.md) | actée |
+| 0001 | [Découpage du produit en lots livrables](0001-decoupage-en-lots-livrables.md) | remplacée par 0003 |
 | 0002 | [Pile d'ensemble](0002-pile-d-ensemble.md) | actée |
-| 0003 | [Précision du découpage en lots](0003-precision-du-decoupage-en-lots.md) | proposée |
+| 0003 | [Précision du découpage en lots](0003-precision-du-decoupage-en-lots.md) | actée |
 | 0004 | [Découpe interne et frontière du socle](0004-decoupe-interne-et-frontiere-du-socle.md) | proposée |
 
 **La pile d'ensemble est arrêtée par 0002** : .NET (LTS) et C#, PostgreSQL, écrans Vue 3 et

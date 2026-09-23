@@ -1,6 +1,6 @@
 # 0001 — Découpage du produit en lots livrables
 
-**Statut** : actée · **Date** : 2026-09-22 · **Remplace** : — · **Remplacée par** : —
+**Statut** : remplacée par 0003 · **Date** : 2026-09-22 · **Remplace** : — · **Remplacée par** : [0003](0003-precision-du-decoupage-en-lots.md), le 2026-09-23
 
 ## Contexte
 
