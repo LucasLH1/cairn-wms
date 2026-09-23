@@ -47,6 +47,7 @@ Préfixes en vigueur :
 | `RG-WKF` | 0.6 Moteur de workflow |
 | `RG-TRA` | 0.7 Traçabilité et unités d'œuvre |
 | `RG-SUR` | 0.8 Surfaces, travail partagé et échanges |
+| `RG-EXI` | 0.9 Exigences de fonctionnement |
 | `RG-REC` | 1.1 Réception |
 | `RG-SAV` | 1.2 Dossiers SAV |
 | `RG-RET` | 1.3 Retours client |
@@ -87,12 +88,18 @@ n'est toléré : un objet porte un nom et un seul.
 | 0.6 | Moteur de workflow configurable | `socle/0.6-moteur-de-workflow.md` |
 | 0.7 | Traçabilité et unités d'œuvre | `socle/0.7-tracabilite-unites-oeuvre.md` |
 | 0.8 | Surfaces, travail partagé et échanges | `socle/0.8-surfaces-et-travail-partage.md` |
+| 0.9 | Exigences de fonctionnement | `socle/0.9-exigences-de-fonctionnement.md` |
 
 Le module 0.8 décrit ce qui traverse tous les autres : les surfaces de travail, l'encadrement et les
 périmètres, la file de décisions, le partage de la main, la recherche, les alertes, les impressions,
 les imports et les échanges, la simulation des règles paramétrables. Sa section « Révisions à
 porter » recense les modules que ses décisions modifient ; tant qu'une révision n'est pas portée,
 c'est 0.8 qui fait foi.
+
+Le module 0.9 ne décrit aucun écran et ne cite aucune technologie. Il rassemble, avec leur origine,
+les exigences de fonctionnement que les règles métier imposent à toute réalisation : temps réel,
+intégrité des gestes, traitements différés, impression, échanges, cloisonnement. C'est la grille
+contre laquelle toute fiche de décision technique de `decisions/` est évaluée.
 
 ### Couche 1 — Flux entrants *(rédigée)*
 
@@ -178,7 +185,7 @@ Ces principes traversent tous les modules. En cas de doute sur une règle non é
 - La douane. Un statut douanier neutre est porté par le modèle, sans aucune règle associée.
 - Les échanges EDI normalisés. Les échanges de fichiers et l'interfaçage direct couvrent le besoin
   courant ; un donneur d'ordre exigeant de l'EDI strict relèvera d'un module dédié.
-- Le mode hors ligne des terminaux opérateurs. En revanche, une perte de communication ne détruit
+- Le mode hors ligne des postes opérateurs. En revanche, une perte de communication ne détruit
   jamais de travail (`RG-SUR-007`).
 - La gestion du froid et de la chaîne de température.
 - L'édition de factures à valeur légale. Le WMS **compte** les unités d'œuvre et les valorise ; il
