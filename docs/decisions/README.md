@@ -10,12 +10,12 @@ défaire à bon compte, et dont quelqu'un — dans six mois, ou six ans — voud
 | 0001 | [Découpage du produit en lots livrables](0001-decoupage-en-lots-livrables.md) | remplacée par 0003 |
 | 0002 | [Pile d'ensemble](0002-pile-d-ensemble.md) | actée |
 | 0003 | [Précision du découpage en lots](0003-precision-du-decoupage-en-lots.md) | actée |
-| 0004 | [Découpe interne et frontière du socle](0004-decoupe-interne-et-frontiere-du-socle.md) | proposée |
+| 0004 | [Découpe interne et frontière du socle](0004-decoupe-interne-et-frontiere-du-socle.md) | actée |
 
 **La pile d'ensemble est arrêtée par 0002** : .NET (LTS) et C#, PostgreSQL, écrans Vue 3 et
-TypeScript, contrat OpenAPI produit par le serveur. Tout ce qu'elle ne fixe pas — découpe interne,
-schéma de base, bibliothèques, livraison, outillage — reste à trancher par les fiches de détail
-qu'elle annonce. Aucun code ne s'écrit avant l'acte de la fiche de détail qui le couvre. Une fiche
+TypeScript, contrat OpenAPI produit par le serveur. La découpe interne est arrêtée par 0004. Tout
+ce qu'elles ne fixent pas — schéma de base, bibliothèques, livraison, outillage — reste à trancher
+par les fiches de détail que 0002 annonce. Aucun code ne s'écrit avant l'acte de la fiche de détail qui le couvre. Une fiche
 `proposée` n'engage rien et ne se met pas en œuvre.
 
 ## La règle

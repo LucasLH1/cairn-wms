@@ -1,6 +1,12 @@
 # 0004 — Découpe interne et frontière du socle
 
-**Statut** : proposée · **Date** : 2026-09-23 · **Remplace** : — · **Remplacée par** : —
+**Statut** : actée · **Date** : 2026-09-24 · **Remplace** : — · **Remplacée par** : —
+
+> Proposée le 2026-09-23, complétée et actée le 2026-09-24. Entre-temps, le glossaire a reçu
+> *Socle* (`Foundation`), *Logistique* (`Logistics`), *Agent d'impression* (`PrintAgent`) et
+> *Quai* (`Dock`), et `RG-SUR-085` fait du poste, du quai ou de la zone la destination d'une
+> impression. La fiche y est alignée ; elle précise en outre la place des tests de scénario et le
+> classement du glossaire sur lequel repose le test de vocabulaire.
 
 ## Contexte
 
@@ -120,12 +126,13 @@ connaître.**
 Le critère décisif : c'est la seule option où la frontière de `RG-EXI-070` et celle de
 `RG-EXI-066` sont **refusées par le compilateur**, et non vérifiées par un test qu'on peut oublier.
 
-Proposée, en attente de validation par Lucas.
+Validée par Lucas le 2026-09-24.
 
 ### Les parties et leurs références
 
-Les noms anglais ci-dessous sont proposés ; deux d'entre eux ne figurent pas au glossaire et doivent
-y entrer avant le premier commit de code (voir « Points à trancher »).
+Les noms des parties sont ceux du glossaire : `Foundation` pour le socle, `Logistics` pour la
+logistique, `PrintAgent` pour l'agent d'impression, `OpsConsole` et `InstanceHealth` pour l'espace
+technique et l'état de santé.
 
 | Projet | Contenu | Référence |
 |---|---|---|
@@ -136,6 +143,7 @@ y entrer avant le premier commit de code (voir « Points à trancher »).
 | `Cairn.OpsConsole` | L'espace technique (`OpsConsole` au glossaire) | `Cairn.InstanceHealth` seulement |
 | `Cairn.PrintAgent` | L'agent d'impression sur site | un contrat d'impression propre, rien d'autre |
 | `web/` | Les écrans Vue, un dossier par partie | le client généré depuis le contrat |
+| `tests/` | Les tests de chaque projet, un projet de test par projet, et les tests de scénario | voir ci-dessous |
 
 Chaque projet active `DisableTransitiveProjectReferences` : `Cairn.Server` ne voit la logistique que
 parce qu'il la référence, et `Cairn.OpsConsole` ne voit ni le socle ni la logistique — donc ni
@@ -165,7 +173,7 @@ interface du socle, implémentée dans la logistique, enregistrée par `Cairn.Se
 | Numérotation (`RG-ORG-026`) | 2 | Le segment « code donneur d'ordre », et les types d'objets numérotés |
 | Imports et échanges (`RG-SUR-089`, `103`) | 1 et 2 | Le détenteur du profil et de l'échange ; les types de données importables et leurs champs métier |
 | File de décisions (`RG-SUR-040`) | 2 | Les éléments de décision de chaque module ; la mesure du stock immobilisé pour le deuxième critère d'ordre |
-| Impressions (`RG-SUR-085`, `088`) | 2 | Les documents imprimables ; la zone comme destination possible, à côté du poste ; la règle de sortie de zone de l'objet non étiqueté |
+| Impressions (`RG-SUR-085`, `088`) | 2 | Les documents imprimables ; le quai et la zone comme destinations possibles, à côté du poste, que le socle départage selon l'ordre de `RG-SUR-085` ; la règle de sortie de zone de l'objet non étiqueté |
 | Sites (`RG-ORG-009`) | 2 | Les raisons qui empêchent la désactivation d'un site (stock non nul, flux en cours) |
 | Permissions et rôles (`RG-ORG-018`, `020`) | 2 | Les permissions de la logistique et ses rôles modèles |
 | Alertes (`RG-SUR-071`) | 2 | Les faits déclencheurs de la logistique |
@@ -198,6 +206,35 @@ Les écrans suivent la même découpe par dossiers. En TypeScript, la frontière
 signalée par un outil, aujourd'hui affaibli par TypeScript 7 (voir `0002`) ; la fiche écrans dira
 comment la tenir.
 
+### Les tests de scénario
+
+Les tests de bout en bout qui automatisent les scénarios des lots (issues `#48` à `#50`) sont un
+programme à part, rangé sous `tests/scenarios/`. Ils sont **en boîte noire** : ils ne référencent
+aucun projet de Cairn et ne touchent pas la base, ils pilotent l'instance comme le ferait un
+utilisateur — par le navigateur et par l'interface de programmation publique. C'est ce qui leur
+donne valeur de critère de clôture : un scénario qui passe prouve ce que voit l'opérateur, pas ce que
+le code croit faire. Leur langage et leur exécution continue relèvent de la fiche chaîne de qualité
+(issue `#37`).
+
+Les tests de chaque projet, eux, sont en boîte blanche et suivent la règle des références : le
+projet de test du socle ne référence pas la logistique.
+
+### Classement du glossaire
+
+Le test de vocabulaire lit `docs/glossaire.md` et classe chaque terme anglais selon sa section.
+Un terme d'une section *logistique* ne doit apparaître comme identifiant nulle part dans le socle.
+
+| Section du glossaire | Partie |
+|---|---|
+| Organisation | Socle, sauf `Principal`, `PrincipalGroup`, `Zone`, `Dock` et `Logistics`, qui sont logistiques |
+| Surfaces et postes ; Encadrement et périmètres ; Travail partagé ; Alertes ; Impressions ; Imports et échanges ; Règles paramétrables | Socle |
+| Traçabilité et facturation | Socle pour `TraceEvent` ; logistique pour le reste |
+| Toutes les autres sections — référentiel, emplacements, stock, tiers, parcours, flux, SAV, rangement, mouvements, inventaires, pilotage, mesure de l'activité | Logistique |
+
+Un terme ajouté au glossaire dans une section mixte et absent de ce tableau fait échouer le test
+tant qu'il n'est pas classé : le classement se fait ici, par une modification de la fiche, jamais
+dans le code du test.
+
 ### À l'intérieur de chaque partie
 
 Un dossier et un espace de noms par module de la spécification, portant son nom anglais
@@ -215,8 +252,6 @@ d'un découpage plus fin.
   notion logistique vers le socle en l'absence d'un second domaine.
 
 - **Ce qu'il faut mettre en place** :
-  - au glossaire, avant le premier commit de code : le nom du socle et le nom de la partie
-    logistique dans le code, et le terme d'agent d'impression, employé par `0002` sans y figurer ;
   - la fiche chaîne de qualité (issue `#37`) rend bloquants les quatre gardes ci-dessus ;
   - la fiche base de données (issue `#38`) reprend la frontière en schémas et en rôles ;
   - la fiche écrans (issue `#40`) dit comment tenir la découpe en TypeScript.
@@ -230,18 +265,12 @@ d'un découpage plus fin.
   de `RG-EXI-070` est à rouvrir ; ou l'arrivée d'un second domaine, qui déciderait enfin de ce qui est
   général.
 
-### Points à trancher
+### Points tranchés à l'acte
 
-Ces points ne se tranchent pas dans le code. Ils relèvent de Lucas ou du glossaire.
-
-- **Noms de code des deux parties.** `Foundation` pour le socle et `Logistics` pour la logistique
-  sont proposés. Ni l'un ni l'autre n'est au glossaire, qui n'a pas non plus de terme pour « socle ».
-- **Agent d'impression.** Employé par `0002`, absent du glossaire ; `PrintAgent` est proposé.
-- **Zone comme destination d'impression.** Le glossaire définit la destination d'impression comme
-  rattachée « à un poste ou à une zone ». La fiche fait de la zone une destination fournie par la
-  logistique. Si Lucas juge qu'un lieu à l'intérieur d'un site est une notion du socle, la liste de
-  `RG-EXI-070` est à compléter.
-- **Restriction par donneur d'ordre dans les périmètres.** La fiche la traite comme une extension
-  logistique du filtre de périmètre du socle. Si un second domaine devait un jour cloisonner ses
-  données de la même façon, la notion remonterait au socle avec un nom neutre, qui n'existe pas
-  aujourd'hui.
+- **Noms de code** : `Foundation`, `Logistics`, `PrintAgent`, entrés au glossaire.
+- **Destination d'impression** : poste, quai ou zone (`RG-SUR-085`). Le poste est une notion du
+  socle ; le quai et la zone sont logistiques et lui sont fournis par le point d'extension des
+  impressions. `RG-EXI-070` n'est pas modifiée.
+- **Restriction par donneur d'ordre dans les périmètres** : extension logistique du filtre de
+  périmètre du socle, comme proposé. Elle ne remontera au socle, sous un nom neutre, que si un
+  second domaine en a besoin (`RG-EXI-071`).

@@ -31,11 +31,11 @@ Un terme absent du glossaire ne doit apparaître nulle part : on l'ajoute au glo
 **Ce qui n'est pas écrit dans `docs/decisions/` n'est pas décidé.**
 
 Aucun langage, aucun framework, aucune base de données, aucune architecture, aucun hébergement,
-aucun outillage n'est arrêté tant qu'une fiche actée ne le dit pas. À ce jour, deux décisions sont
-actées : `0003`, l'ordre de réalisation du produit en lots (qui remplace `0001`), et `0002`,
-**la pile d'ensemble** —
-.NET et C#, PostgreSQL, écrans Vue et TypeScript. Tout le reste — découpe interne, schéma de base,
-bibliothèques, livraison, outillage — attend les fiches de détail que 0002 annonce. **Aucun code ne
+aucun outillage n'est arrêté tant qu'une fiche actée ne le dit pas. À ce jour, trois décisions sont
+actées : `0003`, l'ordre de réalisation du produit en lots (qui remplace `0001`) ; `0002`, **la pile
+d'ensemble** — .NET et C#, PostgreSQL, écrans Vue et TypeScript ; `0004`, la découpe interne du code.
+Tout le reste — schéma de base, bibliothèques, livraison, outillage — attend les fiches de détail
+que 0002 annonce. **Aucun code ne
 s'écrit tant que la fiche de détail qui le couvre n'est pas actée.**
 
 Cette règle vise **la pile du produit** : ce avec quoi Cairn WMS est construit, exécuté, éprouvé et
