@@ -27,7 +27,7 @@
 # À tenir à jour à chaque session, en même temps que journal/ et les issues.
 
 projet: Cairn WMS
-mis_a_jour_le: 2026-09-23
+mis_a_jour_le: 2026-09-24
 
 couches:
 
@@ -227,6 +227,7 @@ lots:
       support et des documents de flux.
     prouve: La marchandise entre, se range, se prélève, sort, et le stock se corrige.
     criteres: docs/lots/lot-1/README.md
+    maquette: docs/lots/lot-1/maquette.html
     scenarios:
       - doc: docs/lots/lot-1/reception-et-rangement.md
         issue: 48

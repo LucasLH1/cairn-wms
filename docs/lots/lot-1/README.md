@@ -44,3 +44,44 @@ Le lot 1 est clos quand les deux conditions suivantes sont remplies.
 - **Sur le serveur de référence** (`RG-EXI-072`) — l'instance du lot 1 y fonctionne, et les délais de
   `RG-EXI-073` y sont tenus : moins de trois cents millisecondes pour un geste, moins de deux
   secondes pour qu'un changement atteigne les écrans ouverts.
+
+## Maquette de référence
+
+[`maquette.html`](maquette.html) est la maquette validée des écrans du lot 1, produite avec Claude
+Design et relue contre la spécification et les trois scénarios. Elle s'ouvre dans un navigateur,
+sans serveur, et ne contient que le jeu de données fictif des scénarios.
+
+Elle rejoue quatre moments des scénarios, à choisir dans le bloc *Simulation* au bas de l'écran,
+avec l'utilisateur dont on prend la place :
+
+| Moment | Heure | Ce qu'on y voit |
+|---|---|---|
+| A | 10:30 | Réception de l'attendu, support non étiqueté, imprimante du quai Q1 en panne, rangement (scénario 1). |
+| B | 14:10 | Rupture au prélèvement, emplacement gelé, comptage à l'aveugle (scénario 2). |
+| C | 14:40 | Écart retenu au recomptage, arbitrage sous la main, commande en attente de stock (scénario 2). |
+| D | 16:20 | Colisage terminé, chargement au quai Q2, colis étranger refusé, départ (scénario 3). |
+
+Le bloc *Simulation* — choix du moment, de l'utilisateur, panne d'imprimante, codes de douchette —
+est un outil de maquette. Il ne fait pas partie du produit.
+
+**Ce qui est imposé** à la réalisation des écrans :
+
+- les couleurs, les polices et les composants — leurs jetons sont relevés dans la fiche de décision
+  des écrans (issue `#40`) ;
+- le vocabulaire des écrans ;
+- les comportements visibles : les refus motivés, les raisons pour lesquelles un stock n'est pas
+  prélevable, la main — qui la détient, la demande —, la file de décisions et ses deux onglets.
+
+**Ce qui est indicatif** : la disposition exacte des écrans.
+
+**En cas de désaccord avec la spécification, c'est la spécification qui prime**, et l'écart se
+signale. Écarts relevés à la mise en place de la maquette, le 2026-09-24 :
+
+- *Rotation du stock*, libellé d'une règle dans le paramétrage : le glossaire nomme cette notion
+  **règle de prélèvement** (`PickingRule`).
+- *Contrôle avant fermeture* : c'est l'expression du scénario 3 ; le glossaire nomme l'objet
+  **contrôle de colisage** (`PackingCheck`) et 3.2 son paramétrage **régime de contrôle**.
+- *Simulation* et *douchette*, dans le bloc de maquette : *simulation* désigne au glossaire tout
+  autre chose — l'exécution d'une règle sans effet (`RuleSimulation`) ; *douchette* n'y figure pas,
+  la spécification parle de lecteur de code-barres. Sans conséquence tant que ce bloc reste hors
+  produit.
