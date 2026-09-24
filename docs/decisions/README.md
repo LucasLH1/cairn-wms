@@ -8,19 +8,20 @@ défaire à bon compte, et dont quelqu'un — dans six mois, ou six ans — voud
 | # | Titre | Statut |
 |---|---|---|
 | 0001 | [Découpage du produit en lots livrables](0001-decoupage-en-lots-livrables.md) | remplacée par 0003 |
-| 0002 | [Pile d'ensemble](0002-pile-d-ensemble.md) | actée |
+| 0002 | [Pile d'ensemble](0002-pile-d-ensemble.md) | abandonnée |
 | 0003 | [Précision du découpage en lots](0003-precision-du-decoupage-en-lots.md) | actée |
-| 0004 | [Découpe interne et frontière du socle](0004-decoupe-interne-et-frontiere-du-socle.md) | actée |
-| 0005 | [Chaîne de qualité et intégration continue](0005-chaine-de-qualite.md) | proposée |
-| 0006 | [Base de données et journal d'événements](0006-base-de-donnees-et-journal.md) | proposée |
-| 0007 | [Interface de programmation et contrat](0007-interface-de-programmation-et-contrat.md) | proposée |
-| 0008 | [Écrans](0008-ecrans.md) | proposée |
+| 0004 | [Découpe interne et frontière du socle](0004-decoupe-interne-et-frontiere-du-socle.md) | abandonnée |
+| 0005 | [Chaîne de qualité et intégration continue](0005-chaine-de-qualite.md) | abandonnée |
+| 0006 | [Base de données et journal d'événements](0006-base-de-donnees-et-journal.md) | abandonnée |
+| 0007 | [Interface de programmation et contrat](0007-interface-de-programmation-et-contrat.md) | abandonnée |
+| 0008 | [Écrans](0008-ecrans.md) | abandonnée |
 
-**La pile d'ensemble est arrêtée par 0002** : .NET (LTS) et C#, PostgreSQL, écrans Vue 3 et
-TypeScript, contrat OpenAPI produit par le serveur. La découpe interne est arrêtée par 0004. Tout
-ce qu'elles ne fixent pas — schéma de base, bibliothèques, livraison, outillage — reste à trancher
-par les fiches de détail que 0002 annonce. Aucun code ne s'écrit avant l'acte de la fiche de détail qui le couvre. Une fiche
-`proposée` n'engage rien et ne se met pas en œuvre.
+**Aucune pile technique n'est choisie.** Les choix techniques ont été réinitialisés le 2026-09-24 à la
+demande de Lucas : les fiches 0002 et 0004 à 0008 sont abandonnées et restent ici pour l'histoire ;
+leurs numéros ne seront jamais réutilisés. Le sujet sera repris dans une nouvelle fiche. La seule
+décision actée porte sur l'ordre de réalisation (0003), pas sur les moyens. Aucune ligne de code ne
+s'écrit avant l'acte d'une nouvelle fiche de pile. Une fiche `proposée` n'engage rien et ne se met pas
+en œuvre.
 
 ## La règle
 

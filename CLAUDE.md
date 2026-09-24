@@ -1,7 +1,7 @@
 # Règles de travail — Cairn WMS
 
 Ce dépôt est **public** et, à ce stade, **documentaire**. Il décrit un WMS/ERP logistique
-multi-donneurs d'ordre. La pile d'ensemble est arrêtée ; aucun code n'est encore écrit.
+multi-donneurs d'ordre. Aucune pile technique n'est choisie ; aucun code n'est écrit.
 
 Ces règles priment sur toute habitude, tout raccourci et toute suggestion contraire.
 
@@ -31,12 +31,10 @@ Un terme absent du glossaire ne doit apparaître nulle part : on l'ajoute au glo
 **Ce qui n'est pas écrit dans `docs/decisions/` n'est pas décidé.**
 
 Aucun langage, aucun framework, aucune base de données, aucune architecture, aucun hébergement,
-aucun outillage n'est arrêté tant qu'une fiche actée ne le dit pas. À ce jour, trois décisions sont
-actées : `0003`, l'ordre de réalisation du produit en lots (qui remplace `0001`) ; `0002`, **la pile
-d'ensemble** — .NET et C#, PostgreSQL, écrans Vue et TypeScript ; `0004`, la découpe interne du code.
-Tout le reste — schéma de base, bibliothèques, livraison, outillage — attend les fiches de détail
-que 0002 annonce. **Aucun code ne
-s'écrit tant que la fiche de détail qui le couvre n'est pas actée.**
+aucun outillage n'est arrêté tant qu'une fiche actée ne le dit pas. **Aucune pile n'est choisie.** La
+seule décision actée, `0003`, porte sur l'ordre de réalisation du produit en lots (elle remplace
+`0001`), pas sur les moyens. Les choix techniques antérieurs ont été réinitialisés le 2026-09-24 ;
+leurs fiches sont abandonnées. **Aucune ligne de code avant l'acte d'une nouvelle fiche de pile.**
 
 Cette règle vise **la pile du produit** : ce avec quoi Cairn WMS est construit, exécuté, éprouvé et
 livré — intégration continue et déploiement compris. L'outillage du **processus de travail** —

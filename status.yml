@@ -12,14 +12,14 @@
 #
 # Tous les modules de la carte sont aujourd'hui « spécifié ». Aucun n'est
 # « en développement » ni « livré » : le dépôt ne contient aucun code applicatif.
-# Deux décisions structurantes sont actées : 0003, l'ordre de réalisation en lots
-# (section « lots » ci-dessous, remplace 0001), et 0002, la pile d'ensemble.
-# Aucun code ne s'écrit avant l'acte de la fiche de détail qui le couvre.
+# Aucune pile n'est choisie. La seule décision actée, 0003, porte sur l'ordre de
+# réalisation en lots (section « lots » ci-dessous, remplace 0001). Aucune ligne
+# de code avant l'acte d'une nouvelle fiche de pile.
 #
 # Le champ « issue » renvoie à l'issue GitHub qui porte le travail restant sur
 # le module : « Réaliser ... » pour un module spécifié. Le module 0.9 ne se
-# réalise pas en tant que tel : ses exigences sont tenues par les fiches de
-# détail de la pile (issues 36 à 46), et son champ « issue » est vide.
+# réalise pas en tant que tel : c'est la grille contre laquelle la pile sera
+# choisie, et son champ « issue » renvoie à l'issue du choix de la pile.
 #
 # Les jalons GitHub restent par couche. Leur passage à un découpage par lot se
 # fera quand le scénario du lot 1 sera écrit.
@@ -86,7 +86,7 @@ couches:
       - id: "0.9"
         nom: Exigences de fonctionnement
         etat: spécifié
-        issue: null
+        issue: 24
         doc: docs/socle/0.9-exigences-de-fonctionnement.md
         prefixe_regles: RG-EXI
 

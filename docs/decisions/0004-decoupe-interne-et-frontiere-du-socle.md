@@ -1,6 +1,9 @@
 # 0004 — Découpe interne et frontière du socle
 
-**Statut** : actée · **Date** : 2026-09-24 · **Remplace** : — · **Remplacée par** : —
+**Statut** : abandonnée · **Date** : 2026-09-24 · **Remplace** : — · **Remplacée par** : —
+
+> Choix techniques réinitialisés le 2026-09-24 à la demande de Lucas ; le sujet sera repris dans une
+> nouvelle fiche.
 
 > Proposée le 2026-09-23, complétée et actée le 2026-09-24. Entre-temps, le glossaire a reçu
 > *Socle* (`Foundation`), *Logistique* (`Logistics`), *Agent d'impression* (`PrintAgent`) et

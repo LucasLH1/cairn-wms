@@ -1,6 +1,9 @@
 # 0002 — Pile d'ensemble
 
-**Statut** : actée · **Date** : 2026-09-23 · **Remplace** : — · **Remplacée par** : —
+**Statut** : abandonnée · **Date** : 2026-09-23 · **Remplace** : — · **Remplacée par** : —
+
+> Choix techniques réinitialisés le 2026-09-24 à la demande de Lucas ; le sujet sera repris dans une
+> nouvelle fiche.
 
 > **Actée le 2026-09-23** par Lucas, après deux révisions le même jour.
 >

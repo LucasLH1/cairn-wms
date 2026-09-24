@@ -66,8 +66,7 @@ est un outil de maquette. Il ne fait pas partie du produit.
 
 **Ce qui est imposé** à la réalisation des écrans :
 
-- les couleurs, les polices et les composants — leurs jetons sont relevés dans la fiche de décision
-  des écrans (issue `#40`) ;
+- les couleurs, les polices et les composants ;
 - le vocabulaire des écrans, aux correspondances près relevées ci-dessous : le glossaire fait foi ;
 - les comportements visibles : les refus motivés, les raisons pour lesquelles un stock n'est pas
   prélevable, la main — qui la détient, la demande —, la file de décisions et ses deux onglets.
@@ -89,5 +88,27 @@ Le bloc *Simulation* de la maquette ne fait pas partie du produit. Son nom ne do
 avec la *simulation* du glossaire (`RuleSimulation`), l'exécution d'une règle paramétrable sans
 effet.
 
-La maquette du lot 1 est la seule maquette du produit ; la fiche de décision des écrans (`0008`) dit
-comment les écrans suivants se construisent sans maquette.
+## Décisions sur les écrans
+
+Trois décisions de Lucas, prises le 2026-09-24. Elles ne dépendent d'aucun choix technique.
+
+**Le glossaire fait foi contre la maquette.** Là où un libellé de la maquette s'écarte du glossaire,
+l'écran réalisé emploie le terme du glossaire ; les correspondances connues sont dans le tableau
+ci-dessus.
+
+**Un seul thème, sombre, celui de la maquette.** Toutes les couleurs passent par des jetons nommés,
+et aucune n'est écrite en dur dans un écran ou un composant, pour qu'un thème clair puisse s'ajouter
+plus tard sans rien réécrire. La spécification n'exige pas de thème clair aujourd'hui.
+
+**La conception des écrans suivants se fait sans maquette.**
+
+- La maquette du lot 1 est la seule maquette. Elle fixe le langage visuel une fois pour toutes ;
+  aucune autre ne sera produite, sauf demande explicite de Lucas.
+- Aucun écran n'est conçu à part avant d'être réalisé. Chaque écran nouveau se construit
+  directement à partir des règles de gestion et des parcours opérateur des modules, du glossaire
+  pour les libellés, et des écrans et composants existants, en commençant par ceux du lot 1.
+- Un composant nouveau ne se crée que lorsqu'aucun composant existant ne convient, et il suit les
+  mêmes jetons.
+- Les parcours opérateur disent ce que l'écran doit permettre, pas à quoi il ressemble. Quand ils ne
+  suffisent pas, le manque précis se signale au lieu d'être inventé ; il se tranche côté métier.
+- Lucas vérifie les écrans une fois construits, dans l'application, pas sur maquette.

@@ -1,6 +1,9 @@
 # 0007 — Interface de programmation et contrat
 
-**Statut** : proposée · **Date** : 2026-09-24 · **Remplace** : — · **Remplacée par** : —
+**Statut** : abandonnée · **Date** : 2026-09-24 · **Remplace** : — · **Remplacée par** : —
+
+> Choix techniques réinitialisés le 2026-09-24 à la demande de Lucas ; le sujet sera repris dans une
+> nouvelle fiche.
 
 ## Contexte
 

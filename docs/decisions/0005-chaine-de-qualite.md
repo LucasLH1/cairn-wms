@@ -1,6 +1,9 @@
 # 0005 — Chaîne de qualité et intégration continue
 
-**Statut** : proposée · **Date** : 2026-09-24 · **Remplace** : — · **Remplacée par** : —
+**Statut** : abandonnée · **Date** : 2026-09-24 · **Remplace** : — · **Remplacée par** : —
+
+> Choix techniques réinitialisés le 2026-09-24 à la demande de Lucas ; le sujet sera repris dans une
+> nouvelle fiche.
 
 ## Contexte
 

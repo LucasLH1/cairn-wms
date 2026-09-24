@@ -1,6 +1,9 @@
 # 0008 — Écrans
 
-**Statut** : proposée · **Date** : 2026-09-24 · **Remplace** : — · **Remplacée par** : —
+**Statut** : abandonnée · **Date** : 2026-09-24 · **Remplace** : — · **Remplacée par** : —
+
+> Choix techniques réinitialisés le 2026-09-24 à la demande de Lucas ; le sujet sera repris dans une
+> nouvelle fiche.
 
 > Complétée le 2026-09-24, avant tout acte, sur trois réponses de Lucas : le glossaire l'emporte sur
 > les libellés de la maquette ; un thème sombre unique pour l'instant, toutes les couleurs passant
