@@ -2,6 +2,11 @@
 
 **Statut** : proposée · **Date** : 2026-09-24 · **Remplace** : — · **Remplacée par** : —
 
+> Complétée le 2026-09-24, avant tout acte, sur trois réponses de Lucas : le glossaire l'emporte sur
+> les libellés de la maquette ; un thème sombre unique pour l'instant, toutes les couleurs passant
+> par des jetons ; plus aucune maquette ni conception écran par écran (section « Conception des
+> écrans suivants »).
+
 ## Contexte
 
 `0002` a retenu Vue 3 et TypeScript pour les écrans ; `0004` les a rangés sous `web/`, un dossier par
@@ -9,8 +14,8 @@ partie ; `0005` les soumet à `vue-tsc`, ESLint et Vitest, en TypeScript 6.0 ; `
 code d'appel généré. Il reste à arrêter leurs bibliothèques, leur thème et leurs composants.
 
 **La référence visuelle est la maquette validée du lot 1**, `docs/lots/lot-1/maquette.html`. Son
-README impose les couleurs, les polices, les composants, le vocabulaire des écrans et les
-comportements visibles ; la disposition exacte reste indicative ; la spécification prime en cas de
+README impose les couleurs, les polices, les composants, le vocabulaire des écrans — corrigé par le
+glossaire, qui fait foi — et les comportements visibles ; la disposition exacte reste indicative ; la spécification prime en cas de
 désaccord.
 
 Les exigences qui pèsent ici :
@@ -80,9 +85,13 @@ Proposée, en attente de validation par Lucas.
 
 ### Thème
 
-Un seul thème, sombre, celui de la maquette ; la spécification n'exige pas de thème clair. Les
-valeurs deviennent des propriétés CSS personnalisées, seules sources de couleur, de rayon et de police
-des composants. Relevé de la maquette :
+**Un thème sombre unique pour l'instant**, celui de la maquette ; la spécification n'exige pas de
+thème clair. **Toutes les couleurs passent par des jetons** : les valeurs ci-dessous deviennent des
+propriétés CSS personnalisées, seules sources de couleur, de rayon, d'ombre et de police des
+composants. Aucun composant ne porte de valeur en dur, pas même un blanc ou un noir, ni une couleur
+calculée à partir d'une autre. C'est ce qui permettra d'ajouter un thème clair plus tard sans
+réécrire un composant : il suffira de redéfinir les jetons. Un contrôle de la chaîne de qualité
+refuse toute couleur écrite hors de la feuille des jetons. Relevé de la maquette :
 
 | Jeton | Valeur | Usage |
 |---|---|---|
@@ -140,6 +149,35 @@ Relevés de la maquette, écrits comme composants Cairn :
 
 Le **bloc de simulation** de la maquette est un outil de maquette ; il n'est pas réalisé.
 
+### Libellés
+
+Le glossaire fait foi sur tous les libellés des écrans, y compris contre la maquette. Les
+correspondances relevées sont tenues dans le README du lot 1 : *Rotation du stock* devient **règle de
+prélèvement**, *Contrôle avant fermeture* devient **contrôle de colisage**, et le produit dit
+**lecteur de code-barres**, jamais « douchette ».
+
+### Conception des écrans suivants
+
+**La maquette du lot 1 est la seule maquette.** Elle fixe le langage visuel une fois pour toutes.
+Aucune autre ne sera produite, sauf demande explicite de Lucas.
+
+**Aucun écran n'est conçu à part avant d'être codé.** Chaque écran nouveau se construit directement,
+à partir de trois sources, et d'aucune autre :
+
+1. les règles de gestion et les parcours opérateur déjà écrits dans les modules de la
+   spécification ;
+2. le glossaire, pour les libellés ;
+3. les écrans et composants existants, en commençant par ceux du lot 1.
+
+**Un composant nouveau ne se crée que lorsqu'aucun composant existant ne convient**, et il suit les
+mêmes jetons.
+
+**Les parcours opérateur disent ce que l'écran doit permettre, pas à quoi il ressemble.** Quand ils ne
+suffisent pas pour construire un écran, le manque précis est signalé — quelle information, quel
+geste, quel cas — au lieu d'être inventé ; il se tranche côté métier, dans la spécification.
+
+**Lucas vérifie les écrans une fois construits, dans l'application**, pas sur maquette.
+
 ### Structure
 
 - Une application monopage, routes par surface, gardées par les permissions de l'utilisateur ; la
@@ -153,7 +191,9 @@ Le **bloc de simulation** de la maquette est un outil de maquette ; il n'est pas
 
 - **Ce qu'on peut faire** : écrire les écrans du lot 1 en reproduisant la maquette.
 - **Ce qu'on ne peut plus faire** : écrire une couleur, une taille ou une police en dur dans un
-  composant ; introduire une bibliothèque de composants stylée ; écrire un libellé hors catalogue.
+  composant ; produire une maquette ou concevoir un écran à part sans demande explicite de Lucas ;
+  combler un parcours opérateur insuffisant par invention ; introduire une bibliothèque de
+  composants stylée ; écrire un libellé hors catalogue.
 - **Ce qu'il faut mettre en place** : la feuille des jetons, la quinzaine de composants, les deux
   catalogues de langue du lot 1.
 - **Ce qu'on accepte de payer** : des composants propres à écrire et à tenir ; un seul thème.

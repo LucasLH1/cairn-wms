@@ -68,20 +68,26 @@ est un outil de maquette. Il ne fait pas partie du produit.
 
 - les couleurs, les polices et les composants — leurs jetons sont relevés dans la fiche de décision
   des écrans (issue `#40`) ;
-- le vocabulaire des écrans ;
+- le vocabulaire des écrans, aux correspondances près relevées ci-dessous : le glossaire fait foi ;
 - les comportements visibles : les refus motivés, les raisons pour lesquelles un stock n'est pas
   prélevable, la main — qui la détient, la demande —, la file de décisions et ses deux onglets.
 
 **Ce qui est indicatif** : la disposition exacte des écrans.
 
 **En cas de désaccord avec la spécification, c'est la spécification qui prime**, et l'écart se
-signale. Écarts relevés à la mise en place de la maquette, le 2026-09-24 :
+signale. Le glossaire fait foi sur tous les libellés : là où la maquette s'en écarte, c'est la
+maquette qui a tort, et l'écran réalisé emploie le terme du glossaire. Le fichier de la maquette
+n'est pas corrigé ; les correspondances ci-dessous suffisent.
 
-- *Rotation du stock*, libellé d'une règle dans le paramétrage : le glossaire nomme cette notion
-  **règle de prélèvement** (`PickingRule`).
-- *Contrôle avant fermeture* : c'est l'expression du scénario 3 ; le glossaire nomme l'objet
-  **contrôle de colisage** (`PackingCheck`) et 3.2 son paramétrage **régime de contrôle**.
-- *Simulation* et *douchette*, dans le bloc de maquette : *simulation* désigne au glossaire tout
-  autre chose — l'exécution d'une règle sans effet (`RuleSimulation`) ; *douchette* n'y figure pas,
-  la spécification parle de lecteur de code-barres. Sans conséquence tant que ce bloc reste hors
-  produit.
+| Dans la maquette | Dans le produit |
+|---|---|
+| Rotation du stock | Règle de prélèvement (`PickingRule`) |
+| Contrôle avant fermeture | Contrôle de colisage (`PackingCheck`) |
+| Douchette | Lecteur de code-barres — jamais « douchette » |
+
+Le bloc *Simulation* de la maquette ne fait pas partie du produit. Son nom ne doit pas être confondu
+avec la *simulation* du glossaire (`RuleSimulation`), l'exécution d'une règle paramétrable sans
+effet.
+
+La maquette du lot 1 est la seule maquette du produit ; la fiche de décision des écrans (`0008`) dit
+comment les écrans suivants se construisent sans maquette.
