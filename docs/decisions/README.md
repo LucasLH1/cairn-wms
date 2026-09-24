@@ -15,13 +15,22 @@ défaire à bon compte, et dont quelqu'un — dans six mois, ou six ans — voud
 | 0006 | [Base de données et journal d'événements](0006-base-de-donnees-et-journal.md) | abandonnée |
 | 0007 | [Interface de programmation et contrat](0007-interface-de-programmation-et-contrat.md) | abandonnée |
 | 0008 | [Écrans](0008-ecrans.md) | abandonnée |
+| 0009 | [Langage : TypeScript de bout en bout](0009-langage-typescript-de-bout-en-bout.md) | actée |
+| 0010 | [Framework des écrans : React](0010-framework-des-ecrans-react.md) | actée |
+| 0011 | [Composants et style](0011-composants-et-style.md) | actée |
+| 0012 | [Base de données : PostgreSQL seul](0012-base-de-donnees-postgresql-seul.md) | proposée |
+| 0013 | [Architecture : monolithe modulaire](0013-architecture-monolithe-modulaire.md) | proposée |
+| 0014 | [Poste : application web dans le navigateur](0014-poste-application-web-dans-le-navigateur.md) | proposée |
+| 0015 | [Livraison : conteneurs, et espace technique en processus distinct](0015-livraison-conteneurs-et-espace-technique-distinct.md) | proposée |
+| 0016 | [Impression : agent d'impression dans les deux modes](0016-impression-par-agent-d-impression.md) | proposée |
+| 0017 | [Garde-fous du serveur TypeScript](0017-garde-fous-du-serveur-typescript.md) | proposée |
 
-**Aucune pile technique n'est choisie.** Les choix techniques ont été réinitialisés le 2026-09-24 à la
-demande de Lucas : les fiches 0002 et 0004 à 0008 sont abandonnées et restent ici pour l'histoire ;
-leurs numéros ne seront jamais réutilisés. Le sujet sera repris dans une nouvelle fiche. La seule
-décision actée porte sur l'ordre de réalisation (0003), pas sur les moyens. Aucune ligne de code ne
-s'écrit avant l'acte d'une nouvelle fiche de pile. Une fiche `proposée` n'engage rien et ne se met pas
-en œuvre.
+**La pile est reprise de zéro depuis le 2026-09-24.** Les fiches 0002 et 0004 à 0008 sont abandonnées
+et restent ici pour l'histoire ; leurs numéros ne seront jamais réutilisés. Sont actés, par Lucas le
+2026-09-24 : le langage, TypeScript de bout en bout (0009) ; le framework des écrans, React (0010) ;
+les composants et le style (0011). Les fiches 0012 à 0017 sont proposées. Une fiche `proposée`
+n'engage rien et ne se met pas en œuvre : tant qu'elles ne sont pas actées, rien de ce qu'elles
+couvrent ne s'écrit.
 
 ## La règle
 
