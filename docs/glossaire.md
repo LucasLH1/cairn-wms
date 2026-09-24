@@ -22,10 +22,13 @@ Règles d'usage :
 | Donneur d'ordre | `Principal` | L'entité qui confie de la marchandise au prestataire. Elle ne possède aucun emplacement mais possède du stock. Porteur principal du paramétrage. |
 | Groupe de donneurs d'ordre | `PrincipalGroup` | Regroupement purement statistique de plusieurs donneurs d'ordre appartenant au même client commercial. Sans effet opérationnel. |
 | Site | `Site` | Un lieu physique exploité par le prestataire, doté d'une adresse postale. |
-| Zone logistique | `Zone` | Découpage d'un site : bâtiment, cellule, mezzanine, quai, atelier, zone de quarantaine. Niveau auquel se déclarent la vocation et les règles de cohabitation. |
+| Zone logistique | `Zone` | Découpage d'un site : bâtiment, cellule, mezzanine, zone de quai, atelier, zone de quarantaine. Niveau auquel se déclarent la vocation et les règles de cohabitation. |
+| Quai | `Dock` | Point d'accostage d'un véhicule sur un site. Porte l'arrivage ou le chargement et son temps d'occupation, jamais de stock. Regroupe les emplacements de quai où se pose ce qu'on y décharge ou charge. |
 | Calendrier de site | `SiteCalendar` | Jours et horaires d'ouverture d'un site, jours fériés et fermetures exceptionnelles. Base de tout calcul en heures ouvrées. |
 | Rôle | `Role` | Ensemble nommé de permissions, composé par le prestataire. |
 | Permission | `Permission` | Autorisation élémentaire d'accomplir un geste précis. Unité indivisible des droits. |
+| Socle | `Foundation` | Partie du produit qui ne présuppose aucun domaine métier : utilisateurs, droits, journal, file de décisions, impressions, échanges… (`RG-EXI-070`). |
+| Logistique | `Logistics` | Le domaine métier de Cairn : tout ce que la spécification décrit hors du socle. |
 | Schéma de numérotation | `NumberingScheme` | Masque de composition des identifiants métier lisibles par les humains. |
 
 ## Référentiel produit
@@ -312,7 +315,8 @@ Règles d'usage :
 |---|---|---|
 | Document imprimable | `PrintableDocument` | Objet destiné au papier : étiquette d'identification, document de flux, document de restitution. |
 | Régime d'impression | `PrintMode` | Caractère automatique ou à la demande de l'émission d'un document. |
-| Destination d'impression | `PrintTarget` | Rattachement d'une imprimante à un poste ou à une zone, qui reçoit les documents émis automatiquement. |
+| Destination d'impression | `PrintTarget` | Rattachement d'une imprimante à un poste, à un quai ou à une zone, qui reçoit les documents émis automatiquement. |
+| Agent d'impression | `PrintAgent` | Programme installé sur un poste d'un site, qui reçoit les documents à imprimer et les remet aux imprimantes du site. Son état se lit dans l'espace technique. |
 | Réimpression | `Reprint` | Nouvelle émission d'un document déjà imprimé, portant sur le papier sa mention et sa date. |
 | Objet non étiqueté | `UnlabeledUnit` | Objet créé dont l'étiquette d'identification n'a pas été émise. Existe, porte son identité, ne peut pas quitter sa zone. |
 
