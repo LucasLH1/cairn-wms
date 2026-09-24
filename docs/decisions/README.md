@@ -11,6 +11,10 @@ défaire à bon compte, et dont quelqu'un — dans six mois, ou six ans — voud
 | 0002 | [Pile d'ensemble](0002-pile-d-ensemble.md) | actée |
 | 0003 | [Précision du découpage en lots](0003-precision-du-decoupage-en-lots.md) | actée |
 | 0004 | [Découpe interne et frontière du socle](0004-decoupe-interne-et-frontiere-du-socle.md) | actée |
+| 0005 | [Chaîne de qualité et intégration continue](0005-chaine-de-qualite.md) | proposée |
+| 0006 | [Base de données et journal d'événements](0006-base-de-donnees-et-journal.md) | proposée |
+| 0007 | [Interface de programmation et contrat](0007-interface-de-programmation-et-contrat.md) | proposée |
+| 0008 | [Écrans](0008-ecrans.md) | proposée |
 
 **La pile d'ensemble est arrêtée par 0002** : .NET (LTS) et C#, PostgreSQL, écrans Vue 3 et
 TypeScript, contrat OpenAPI produit par le serveur. La découpe interne est arrêtée par 0004. Tout
