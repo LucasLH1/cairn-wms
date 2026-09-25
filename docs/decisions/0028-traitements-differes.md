@@ -18,7 +18,7 @@ Ce qui contraint :
 - **Libérations automatiques** au terme de leur seuil (`RG-EXI-025`) ; **absence d'un échange attendu**
   détectée à son échéance (`RG-EXI-026`).
 - **Un traitement qui échoue n'est jamais silencieux** et peut être relancé (`RG-EXI-027`).
-- **Travail lançé par un geste enregistré dans la même transaction que lui** (`RG-EXI-011`).
+- **Travail lancé par un geste enregistré dans la même transaction que lui** (`RG-EXI-011`).
 
 ## Options
 
