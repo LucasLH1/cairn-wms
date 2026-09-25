@@ -13,9 +13,9 @@
 # Tous les modules de la carte sont aujourd'hui « spécifié ». Aucun n'est
 # « en développement » ni « livré » : le dépôt ne contient aucun code applicatif.
 # L'ordre de réalisation en lots est acté par 0003 (section « lots » ci-dessous,
-# remplace 0001). La pile se choisit fiche par fiche (section « pile »
-# ci-dessous) ; une fiche proposée ne se met pas en œuvre, et rien de ce que
-# couvrent les fiches encore proposées ne s'écrit avant leur acte.
+# remplace 0001). La pile est actée par les fiches 0009 à 0028 (section « pile »
+# ci-dessous) ; le code s'écrit dans leur cadre, et tout choix engageant
+# qu'elles ne couvrent pas demande une nouvelle fiche.
 #
 # Le champ « issue » renvoie à l'issue GitHub qui porte le travail restant sur
 # le module : « Réaliser ... » pour un module spécifié. Le module 0.9 ne se
@@ -30,21 +30,33 @@
 projet: Cairn WMS
 mis_a_jour_le: 2026-09-25
 
-# Choix de la pile, repris de zéro le 2026-09-24 (fiches 0002 et 0004 à 0008
-# abandonnées). Reflète l'index de docs/decisions/README.md, qui fait foi.
+# Pile, reprise de zéro le 2026-09-24 (fiches 0002 et 0004 à 0008 abandonnées)
+# et actée le 2026-09-25. Reflète l'index de docs/decisions/README.md, qui fait foi.
 pile:
   issue: 24
+  etat: actée
   actees:
     - { fiche: "0009", objet: "Langage : TypeScript de bout en bout", doc: docs/decisions/0009-langage-typescript-de-bout-en-bout.md }
     - { fiche: "0010", objet: "Framework des écrans : React", doc: docs/decisions/0010-framework-des-ecrans-react.md }
     - { fiche: "0011", objet: "Composants et style", doc: docs/decisions/0011-composants-et-style.md }
-  proposees:
     - { fiche: "0012", objet: "Base de données : PostgreSQL seul", doc: docs/decisions/0012-base-de-donnees-postgresql-seul.md }
     - { fiche: "0013", objet: "Architecture : monolithe modulaire", doc: docs/decisions/0013-architecture-monolithe-modulaire.md }
     - { fiche: "0014", objet: "Poste : application web dans le navigateur", doc: docs/decisions/0014-poste-application-web-dans-le-navigateur.md }
     - { fiche: "0015", objet: "Livraison : conteneurs, et espace technique en processus distinct", doc: docs/decisions/0015-livraison-conteneurs-et-espace-technique-distinct.md }
     - { fiche: "0016", objet: "Impression : agent d'impression dans les deux modes", doc: docs/decisions/0016-impression-par-agent-d-impression.md }
     - { fiche: "0017", objet: "Garde-fous du serveur TypeScript", doc: docs/decisions/0017-garde-fous-du-serveur-typescript.md }
+    - { fiche: "0018", objet: "Environnement d'exécution : Node.js, version à support long", doc: docs/decisions/0018-environnement-d-execution-node.md }
+    - { fiche: "0019", objet: "Cadre du serveur et contrat des gestes", doc: docs/decisions/0019-cadre-du-serveur-et-contrat-des-gestes.md }
+    - { fiche: "0020", objet: "Bibliothèque de schémas : Zod", doc: docs/decisions/0020-bibliotheque-de-schemas-zod.md }
+    - { fiche: "0021", objet: "Accès aux données et migrations : Kysely", doc: docs/decisions/0021-acces-aux-donnees-et-migrations-kysely.md }
+    - { fiche: "0022", objet: "Journal d'événements", doc: docs/decisions/0022-journal-d-evenements.md }
+    - { fiche: "0023", objet: "Organisation du code et découpe interne", doc: docs/decisions/0023-organisation-du-code-et-decoupe-interne.md }
+    - { fiche: "0024", objet: "Chaîne de qualité et intégration continue", doc: docs/decisions/0024-chaine-de-qualite.md }
+    - { fiche: "0025", objet: "Cadre des écrans", doc: docs/decisions/0025-cadre-des-ecrans.md }
+    - { fiche: "0026", objet: "Temps réel : WebSocket et signaux de changement", doc: docs/decisions/0026-temps-reel.md }
+    - { fiche: "0027", objet: "Authentification, sessions et postes", doc: docs/decisions/0027-authentification-sessions-et-postes.md }
+    - { fiche: "0028", objet: "Traitements différés", doc: docs/decisions/0028-traitements-differes.md }
+  proposees: []
 
 couches:
 
