@@ -5,6 +5,25 @@ export const en: LabelCatalog = {
   application: {
     name: 'Cairn WMS',
   },
+  shell: {
+    home: 'Home',
+    dismiss: 'Dismiss',
+  },
+  session: {
+    title: 'Open a session',
+    loginName: 'Login name',
+    password: 'Password',
+    open: 'Open the session',
+    close: 'Close the session',
+  },
+  workstation: {
+    label: 'Workstation',
+    undeclared: 'Undeclared workstation',
+  },
+  failure: {
+    noResponse:
+      'The server is not responding. Check the connection, then try again: nothing will be recorded twice.',
+  },
   refusal: {
     invalidInput: 'The input is incomplete or invalid.',
     notAuthenticated: 'You must sign in.',

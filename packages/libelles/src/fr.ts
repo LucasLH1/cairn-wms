@@ -6,6 +6,25 @@ export const fr = {
   application: {
     name: 'Cairn WMS',
   },
+  shell: {
+    home: 'Accueil',
+    dismiss: 'Masquer',
+  },
+  session: {
+    title: 'Ouvrir une session',
+    loginName: 'Identifiant de connexion',
+    password: 'Mot de passe',
+    open: 'Ouvrir la session',
+    close: 'Fermer la session',
+  },
+  workstation: {
+    label: 'Poste',
+    undeclared: 'Poste non déclaré',
+  },
+  failure: {
+    noResponse:
+      'Le serveur ne répond pas. Vérifiez la connexion, puis recommencez : rien ne sera enregistré deux fois.',
+  },
   refusal: {
     invalidInput: 'La saisie est incomplète ou invalide.',
     notAuthenticated: 'Vous devez vous connecter.',

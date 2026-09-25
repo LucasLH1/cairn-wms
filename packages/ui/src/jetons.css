@@ -9,7 +9,7 @@
   /* Fonds et surfaces */
   --cairn-bg: #080a0e;
   --cairn-nav: #0c1017;
-  --cairn-surface: rgb(22 29 40 / 72%);
+  --cairn-surface: rgb(22 29 40 / 70%);
   --cairn-surface-raised: rgb(20 27 38 / 95%);
   --cairn-field: #161d28;
   --cairn-well: #10151d;
@@ -17,17 +17,25 @@
   --cairn-selected: #222c39;
   --cairn-row-hover: #1a212c;
   --cairn-overlay: rgb(4 6 10 / 66%);
+  --cairn-topbar: rgb(10 13 18 / 92%);
+  --cairn-nav-hover: #1b2330;
+  --cairn-nav-active: rgb(111 227 196 / 12%);
+  --cairn-dismiss: rgb(255 255 255 / 6%);
 
   /* Bords */
   --cairn-border: rgb(255 255 255 / 11%);
   --cairn-border-strong: #35414f;
   --cairn-border-control: #384454;
   --cairn-line: #222c39;
+  --cairn-border-frame: rgb(255 255 255 / 12%);
+  --cairn-border-disabled: #2d3848;
+  --cairn-divider: #2a3442;
 
   /* Texte */
   --cairn-text: #e8edf5;
   --cairn-text-strong: #fff;
   --cairn-text-2: #c3ccd9;
+  --cairn-text-secondary: #b0bbc9;
   --cairn-text-3: #98a3b6;
   --cairn-text-4: #7c879a;
 
@@ -58,6 +66,12 @@
   --cairn-mute-bg: rgb(255 255 255 / 8%);
   --cairn-mute-fg: #c3ccd9;
   --cairn-mute-bd: rgb(255 255 255 / 16%);
+
+  /* Ambiance : deux halos fixes derrière tout l'écran, et celui du pictogramme */
+  --cairn-ambient:
+    radial-gradient(900px 600px at 12% -10%, rgb(60 220 190 / 12%), transparent 60%),
+    radial-gradient(800px 600px at 88% 8%, rgb(132 110 255 / 10%), transparent 62%);
+  --cairn-logo-glow: 0 6px 18px -6px rgb(80 220 200 / 80%);
 
   /* Polices, livrées avec le produit (fiche 0011) */
   --cairn-font-sans: 'Geist Variable', system-ui, sans-serif;

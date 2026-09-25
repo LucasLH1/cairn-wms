@@ -25,6 +25,8 @@ export default tseslint.config(
       parserOptions: {
         projectService: {
           allowDefaultProject: ['*.js', '*.ts', '*.cjs', 'scripts/*.mjs', 'apps/ecrans/vite.config.ts'],
+          // Fichiers de configuration et scripts hors des paquets : options communes, types de Node.
+          defaultProject: 'tsconfig.tooling.json',
         },
         tsconfigRootDir: import.meta.dirname,
       },

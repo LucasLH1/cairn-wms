@@ -17,21 +17,33 @@
   --spacing-1: 4px;
   --spacing-1-5: 6px;
   --spacing-2: 8px;
+  --spacing-2-25: 9px;
   --spacing-2-5: 10px;
+  --spacing-2-75: 11px;
   --spacing-3: 12px;
   --spacing-3-5: 14px;
+  --spacing-3-75: 15px;
   --spacing-4: 16px;
+  --spacing-4-5: 18px;
   --spacing-5: 20px;
+  --spacing-5-5: 22px;
   --spacing-6: 24px;
   --spacing-7: 28px;
+  --spacing-7-5: 30px;
   --spacing-8: 32px;
   --spacing-10: 40px;
   --spacing-12: 48px;
+  --spacing-logo: 30px;
   --spacing-nav: 252px;
+
+  /* Largeurs de contenu : celle du champ de recherche de la maquette sert aux formulaires étroits */
+  --container-narrow: 360px;
 
   /* Rayons */
   --radius-badge: 7px;
   --radius-control: 10px;
+  --radius-field: 11px;
+  --radius-logo: 9px;
   --radius-banner: 12px;
   --radius-panel: 16px;
   --radius-dialog: 18px;
@@ -43,12 +55,18 @@
   --text-secondary: 13px;
   --text-body: 14px;
   --text-heading: 16px;
+  --text-brand: 15px;
   --text-title: 21px;
 
   /* Graisses */
   --font-weight-regular: 400;
   --font-weight-medium: 500;
   --font-weight-semibold: 600;
+
+  /* Interlettrage des sur-titres en capitales */
+  --tracking-label: 0.07em;
+  --tracking-group: 0.1em;
+  --tracking-title: -0.02em;
 
   /* Flous */
   --blur-panel: 18px;
@@ -63,6 +81,10 @@
   --color-nav: var(--cairn-nav);
   --color-surface: var(--cairn-surface);
   --color-surface-raised: var(--cairn-surface-raised);
+  --color-topbar: var(--cairn-topbar);
+  --color-nav-hover: var(--cairn-nav-hover);
+  --color-nav-active: var(--cairn-nav-active);
+  --color-dismiss: var(--cairn-dismiss);
   --color-field: var(--cairn-field);
   --color-well: var(--cairn-well);
   --color-control: var(--cairn-control);
@@ -73,9 +95,13 @@
   --color-border-strong: var(--cairn-border-strong);
   --color-border-control: var(--cairn-border-control);
   --color-line: var(--cairn-line);
+  --color-border-frame: var(--cairn-border-frame);
+  --color-border-disabled: var(--cairn-border-disabled);
+  --color-divider: var(--cairn-divider);
   --color-text: var(--cairn-text);
   --color-text-strong: var(--cairn-text-strong);
   --color-text-2: var(--cairn-text-2);
+  --color-text-secondary: var(--cairn-text-secondary);
   --color-text-3: var(--cairn-text-3);
   --color-text-4: var(--cairn-text-4);
   --color-accent: var(--cairn-accent);
@@ -103,12 +129,20 @@
   --color-mute-fg: var(--cairn-mute-fg);
   --color-mute-bd: var(--cairn-mute-bd);
   --color-transparent: transparent;
+  --shadow-logo: var(--cairn-logo-glow);
+}
+
+:root {
+  /* Colonnes de l'ossature : la navigation fixe, puis le contenu. */
+  --cairn-shell-columns: var(--spacing-nav) minmax(0, 1fr);
 }
 
 @layer base {
   body {
     margin: 0;
     background-color: var(--cairn-bg);
+    background-image: var(--cairn-ambient);
+    background-attachment: fixed;
     color: var(--cairn-text);
     font-family: var(--cairn-font-sans);
     font-size: 14px;

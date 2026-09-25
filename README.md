@@ -39,6 +39,7 @@ cp .env.example .env   # valeurs locales fictives
 pnpm dev               # base, serveur dans ses deux rôles, écrans ; relancés à chaque modification
 pnpm db:reset          # recrée la base et charge le jeu de données des scénarios
 pnpm check             # la chaîne de la fiche 0024
+pnpm e2e               # les tests de bout en bout, dans Chromium
 ```
 
 ## Avancement

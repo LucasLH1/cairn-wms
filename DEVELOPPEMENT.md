@@ -21,6 +21,9 @@ reportée (#72).
 
 Sous Linux ou macOS, seuls les points 3 à 5 s'appliquent.
 
+6. **Chromium pour les tests de bout en bout** : `pnpm exec playwright install --with-deps chromium`
+   (demande les droits d'administration pour les bibliothèques système du navigateur).
+
 ## Première installation
 
 ```sh
@@ -38,6 +41,7 @@ Le `.env` n'est jamais suivi. Les mots de passe y sont ceux de la base jetable d
 | `pnpm dev` | Démarre tout : PostgreSQL par `docker compose`, compilation, migrations, puis compilation continue, rôles « gestes » (http://localhost:3000) et « traitements » relancés à chaque modification, écrans Vite (http://localhost:5173). `Ctrl+C` arrête tout sauf la base. |
 | `pnpm db:reset` | Recrée la base locale, la migre et charge le jeu de données des scénarios du lot 1 (`docs/lots/lot-1/`), toutes valeurs fictives. Refuse d'agir sur une base qui n'est pas sur le poste. |
 | `pnpm check` | La chaîne de la fiche 0024 : compilation, analyse, frontières, format, style, tests Vitest contre PostgreSQL. |
+| `pnpm e2e` | Les tests de bout en bout : compile, construit les écrans, lance une instance à part (base `cairn_e2e`, port 3100) chargée du jeu de données, et déroule les tests Playwright dans Chromium. N'interfère pas avec `pnpm dev`. |
 | `pnpm test` | Les tests seuls. La base `cairn_test` est recréée à chaque lancement. |
 | `pnpm db:migrate` | Compile, puis applique les migrations en attente à la base locale. |
 | `pnpm db:types` | Régénère les types de la base depuis la base migrée, après une nouvelle migration. |
