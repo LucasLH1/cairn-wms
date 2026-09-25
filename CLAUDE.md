@@ -1,7 +1,7 @@
 # Règles de travail — Cairn WMS
 
 Ce dépôt est **public** et, à ce stade, **documentaire**. Il décrit un WMS/ERP logistique
-multi-donneurs d'ordre. Aucune pile technique n'est choisie ; aucun code n'est écrit.
+multi-donneurs d'ordre. La pile est en cours de choix, fiche par fiche ; aucun code n'est écrit.
 
 Ces règles priment sur toute habitude, tout raccourci et toute suggestion contraire.
 
@@ -31,10 +31,16 @@ Un terme absent du glossaire ne doit apparaître nulle part : on l'ajoute au glo
 **Ce qui n'est pas écrit dans `docs/decisions/` n'est pas décidé.**
 
 Aucun langage, aucun framework, aucune base de données, aucune architecture, aucun hébergement,
-aucun outillage n'est arrêté tant qu'une fiche actée ne le dit pas. **Aucune pile n'est choisie.** La
-seule décision actée, `0003`, porte sur l'ordre de réalisation du produit en lots (elle remplace
-`0001`), pas sur les moyens. Les choix techniques antérieurs ont été réinitialisés le 2026-09-24 ;
-leurs fiches sont abandonnées. **Aucune ligne de code avant l'acte d'une nouvelle fiche de pile.**
+aucun outillage n'est arrêté tant qu'une fiche actée ne le dit pas. La pile a été reprise de zéro le
+2026-09-24 ; les fiches 0002 et 0004 à 0008 sont abandonnées. État au 2026-09-25 :
+
+- **actées** : `0003`, l'ordre de réalisation en lots (elle remplace `0001`) ; `0009`, TypeScript de
+  bout en bout ; `0010`, React pour les écrans ; `0011`, composants et style ;
+- **proposées** : `0012` à `0017` — base de données, architecture, poste, livraison, impression,
+  garde-fous du serveur.
+
+**Une fiche `proposée` ne se met pas en œuvre** (`docs/decisions/README.md`) : tant que `0012` à `0017`
+ne sont pas actées, rien de ce qu'elles couvrent ne s'écrit.
 
 Cette règle vise **la pile du produit** : ce avec quoi Cairn WMS est construit, exécuté, éprouvé et
 livré — intégration continue et déploiement compris. L'outillage du **processus de travail** —

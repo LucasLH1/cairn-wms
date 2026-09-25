@@ -12,9 +12,10 @@
 #
 # Tous les modules de la carte sont aujourd'hui « spécifié ». Aucun n'est
 # « en développement » ni « livré » : le dépôt ne contient aucun code applicatif.
-# Aucune pile n'est choisie. La seule décision actée, 0003, porte sur l'ordre de
-# réalisation en lots (section « lots » ci-dessous, remplace 0001). Aucune ligne
-# de code avant l'acte d'une nouvelle fiche de pile.
+# L'ordre de réalisation en lots est acté par 0003 (section « lots » ci-dessous,
+# remplace 0001). La pile se choisit fiche par fiche (section « pile »
+# ci-dessous) ; une fiche proposée ne se met pas en œuvre, et rien de ce que
+# couvrent les fiches encore proposées ne s'écrit avant leur acte.
 #
 # Le champ « issue » renvoie à l'issue GitHub qui porte le travail restant sur
 # le module : « Réaliser ... » pour un module spécifié. Le module 0.9 ne se
@@ -27,7 +28,23 @@
 # À tenir à jour à chaque session, en même temps que journal/ et les issues.
 
 projet: Cairn WMS
-mis_a_jour_le: 2026-09-24
+mis_a_jour_le: 2026-09-25
+
+# Choix de la pile, repris de zéro le 2026-09-24 (fiches 0002 et 0004 à 0008
+# abandonnées). Reflète l'index de docs/decisions/README.md, qui fait foi.
+pile:
+  issue: 24
+  actees:
+    - { fiche: "0009", objet: "Langage : TypeScript de bout en bout", doc: docs/decisions/0009-langage-typescript-de-bout-en-bout.md }
+    - { fiche: "0010", objet: "Framework des écrans : React", doc: docs/decisions/0010-framework-des-ecrans-react.md }
+    - { fiche: "0011", objet: "Composants et style", doc: docs/decisions/0011-composants-et-style.md }
+  proposees:
+    - { fiche: "0012", objet: "Base de données : PostgreSQL seul", doc: docs/decisions/0012-base-de-donnees-postgresql-seul.md }
+    - { fiche: "0013", objet: "Architecture : monolithe modulaire", doc: docs/decisions/0013-architecture-monolithe-modulaire.md }
+    - { fiche: "0014", objet: "Poste : application web dans le navigateur", doc: docs/decisions/0014-poste-application-web-dans-le-navigateur.md }
+    - { fiche: "0015", objet: "Livraison : conteneurs, et espace technique en processus distinct", doc: docs/decisions/0015-livraison-conteneurs-et-espace-technique-distinct.md }
+    - { fiche: "0016", objet: "Impression : agent d'impression dans les deux modes", doc: docs/decisions/0016-impression-par-agent-d-impression.md }
+    - { fiche: "0017", objet: "Garde-fous du serveur TypeScript", doc: docs/decisions/0017-garde-fous-du-serveur-typescript.md }
 
 couches:
 
