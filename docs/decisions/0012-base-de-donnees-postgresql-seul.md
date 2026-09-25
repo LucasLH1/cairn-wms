@@ -1,6 +1,6 @@
 # 0012 — Base de données : PostgreSQL seul
 
-**Statut** : proposée · **Date** : 2026-09-24 · **Remplace** : — · **Remplacée par** : —
+**Statut** : actée · **Date** : 2026-09-25 · **Remplace** : — · **Remplacée par** : —
 
 ## Contexte
 
@@ -67,11 +67,13 @@ ouverts) : cinquante mille lignes par jour, plusieurs centaines de millions d'é
 
 ## Décision
 
-*Proposée par Claude, à valider par Lucas.* **PostgreSQL est la seule base de données de Cairn WMS, et
-porte aussi la file des traitements différés et les notifications de changement** (option A).
+**PostgreSQL est la seule base de données de Cairn WMS, et porte aussi la file des traitements différés
+et les notifications de changement** (option A).
 
 Critère décisif : un geste, son événement, ses effets et les traitements qu'il déclenche s'enregistrent
 dans une seule transaction, et l'instance n'a qu'un composant de données à sauvegarder et à restaurer.
+
+Proposée par Claude le 2026-09-24, validée par Lucas le 2026-09-25.
 
 ## Conséquences
 
