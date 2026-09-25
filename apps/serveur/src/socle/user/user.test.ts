@@ -10,14 +10,20 @@ import {
 import { sql } from 'kysely';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { buildApp } from '../../app.js';
-import { openAdminDatabase, openApplicationDatabase } from '../../test-support/database.js';
+import {
+  applicationConnection,
+  openAdminDatabase,
+  openApplicationDatabase,
+} from '../../test-support/database.js';
+import { SignalRelay } from '../signal/index.js';
 import { readObjectHistory } from '../trace-event/index.js';
 import { hashPassword, SESSION_COOKIE, verifyPassword, WORKSTATION_COOKIE } from './index.js';
 
 const db = openApplicationDatabase();
 const admin = openAdminDatabase();
 const access = { cookieSecret: randomBytes(32).toString('base64url'), sessionIdleMinutes: 60 };
-const app = buildApp({ version: 'test', healthChecks: {}, services: { db, access } });
+const relay = new SignalRelay(applicationConnection());
+const app = buildApp({ version: 'test', healthChecks: {}, services: { db, access, relay } });
 
 afterAll(async () => {
   await Promise.all([db.destroy(), admin.destroy()]);

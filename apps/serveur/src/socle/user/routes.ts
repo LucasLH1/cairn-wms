@@ -110,3 +110,13 @@ export function sessionAuthor(options: AccessOptions): GestureRights['resolveAut
     return { userId: user.userId, workstationId: workstation?.id ?? null };
   };
 }
+
+/** Vrai si la requête porte une session en cours : l'ouverture du canal temps réel l'exige. */
+export function hasSession(options: AccessOptions): (request: FastifyRequest) => Promise<boolean> {
+  return async (request) =>
+    (await resolveSession(
+      options.db,
+      options.config.sessionIdleMinutes,
+      readCookie(request.headers.cookie, SESSION_COOKIE),
+    )) !== undefined;
+}

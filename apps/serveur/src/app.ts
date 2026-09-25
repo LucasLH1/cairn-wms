@@ -3,8 +3,10 @@ import type { Database } from './socle/database/index.js';
 import { registerGestures } from './socle/gesture/index.js';
 import { runHealthChecks, type HealthCheck } from './socle/health/index.js';
 import { authorize } from './socle/permission/index.js';
+import { registerSignalRoute, type SignalRelay } from './socle/signal/index.js';
 import {
   declareWorkstationHandler,
+  hasSession,
   registerSessionRoutes,
   sessionAuthor,
   type AccessConfig,
@@ -16,7 +18,7 @@ export interface AppOptions {
   /** Vérifications qui décident si l'instance est utilisable. */
   readonly healthChecks: Readonly<Record<string, HealthCheck>>;
   /** Base et réglages d'accès : sans eux, seules les routes techniques existent. */
-  readonly services?: { readonly db: Database; readonly access: AccessConfig };
+  readonly services?: { readonly db: Database; readonly access: AccessConfig; readonly relay: SignalRelay };
 }
 
 /**
@@ -35,8 +37,9 @@ export function buildApp(options: AppOptions): FastifyInstance {
   app.get('/version', () => ({ version: options.version }));
 
   if (options.services !== undefined) {
-    const { db, access } = options.services;
+    const { db, access, relay } = options.services;
     registerSessionRoutes(app, { db, config: access });
+    registerSignalRoute(app, { relay, authenticate: hasSession({ db, config: access }) });
     registerGestures(app, {
       db,
       rights: {

@@ -11,7 +11,7 @@ export default defineConfig({
   server: {
     proxy: {
       // Les routes du contrat vivent sous /api, côté serveur comme côté écrans.
-      '/api': { target: 'http://localhost:3000' },
+      '/api': { target: 'http://localhost:3000', ws: true },
     },
   },
 });

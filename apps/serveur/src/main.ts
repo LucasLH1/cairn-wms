@@ -2,17 +2,27 @@ import { buildApp } from './app.js';
 import { readConfig } from './config.js';
 import { createDatabase, readApplicationConnection } from './socle/database/index.js';
 import { databaseHealthCheck } from './socle/health/index.js';
+import { SignalRelay } from './socle/signal/index.js';
 import { readAccessConfig } from './socle/user/index.js';
 
 const config = readConfig(process.env);
-const db = createDatabase(readApplicationConnection(process.env));
+const connection = readApplicationConnection(process.env);
+const db = createDatabase(connection);
 
 if (config.role === 'gestures') {
+  const relay = new SignalRelay(connection);
+  await relay.start();
   const app = buildApp({
     version: config.version,
-    healthChecks: { database: databaseHealthCheck(db) },
-    services: { db, access: readAccessConfig(process.env) },
+    healthChecks: {
+      database: databaseHealthCheck(db),
+      signals: () => Promise.resolve(relay.listening ? undefined : 'signal relay not listening'),
+    },
+    services: { db, access: readAccessConfig(process.env), relay },
   });
-  app.addHook('onClose', () => db.destroy());
+  app.addHook('onClose', async () => {
+    await relay.stop();
+    await db.destroy();
+  });
   await app.listen({ host: config.host, port: config.port });
 }
