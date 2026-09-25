@@ -1,8 +1,11 @@
 import Fastify, { type FastifyInstance } from 'fastify';
+import { runHealthChecks, type HealthCheck } from './socle/health/index.js';
 
 export interface AppOptions {
   /** Commit servi, rendu par `/version`. */
   readonly version: string;
+  /** Vérifications qui décident si l'instance est utilisable. */
+  readonly healthChecks: Readonly<Record<string, HealthCheck>>;
 }
 
 /**
@@ -13,7 +16,10 @@ export function buildApp(options: AppOptions): FastifyInstance {
   const app = Fastify({ logger: false });
 
   app.get('/live', () => ({ status: 'ok' as const }));
-  app.get('/health', () => ({ status: 'ok' as const }));
+  app.get('/health', async (_request, reply) => {
+    const report = await runHealthChecks(options.healthChecks);
+    return reply.code(report.status === 'ok' ? 200 : 503).send(report);
+  });
   app.get('/version', () => ({ version: options.version }));
 
   return app;

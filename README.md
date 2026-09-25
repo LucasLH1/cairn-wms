@@ -35,6 +35,11 @@ pnpm install --frozen-lockfile
 pnpm check        # compilation, analyse, frontières, style, tests : la chaîne de la fiche 0024
 ```
 
+Les tests s'exécutent contre un vrai PostgreSQL 18 : la base `cairn_test` y est recréée à chaque
+lancement. Les variables `CAIRN_TEST_DATABASE_*` le désignent ; leur modèle est dans `.env.example`.
+Les migrations s'appliquent par `pnpm -F @cairn/serveur migrate`, les types de la base se régénèrent
+par `pnpm -F @cairn/serveur db:types`.
+
 ## Avancement
 
 Six couches, 23 modules, tous spécifiés ; cinq lots, dont le lot 1 en cours de réalisation. L'état se

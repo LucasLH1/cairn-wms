@@ -3,7 +3,7 @@ import { buildApp } from './app.js';
 import { readConfig } from './config.js';
 
 describe('routes techniques', () => {
-  const app = buildApp({ version: 'abc1234' });
+  const app = buildApp({ version: 'abc1234', healthChecks: {} });
 
   it('/live répond tant que le processus répond', async () => {
     const response = await app.inject({ method: 'GET', url: '/live' });

@@ -19,6 +19,31 @@ jobs:
     name: Compilation, analyse, frontières, style, tests
     runs-on: ubuntu-24.04
     timeout-minutes: 20
+    # Base jetable de la chaîne : les tests s'exécutent contre un vrai PostgreSQL (fiche 0024).
+    # Mots de passe fictifs, valables le temps du conteneur ; ceux des rôles de test sont tirés au lancement.
+    services:
+      postgres:
+        image: postgres:18.6-alpine@sha256:77f585114c32fbca283dc835b0596f4e52b51b4c6662d7810b2f4084f60a1873
+        env:
+          POSTGRES_PASSWORD: ci-admin-fictif
+          POSTGRES_DB: cairn
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres" --health-interval 5s --health-timeout 5s --health-retries 10
+    env:
+      CAIRN_DATABASE_HOST: localhost
+      CAIRN_DATABASE_PORT: 5432
+      CAIRN_DATABASE_NAME: cairn
+      CAIRN_DATABASE_ADMIN_USER: postgres
+      CAIRN_DATABASE_ADMIN_PASSWORD: ci-admin-fictif
+      CAIRN_DATABASE_ADMIN_URL: postgres://postgres:ci-admin-fictif@localhost:5432/cairn
+      CAIRN_DATABASE_OWNER_PASSWORD: ci-owner-fictif
+      CAIRN_DATABASE_APP_PASSWORD: ci-application-fictif
+      CAIRN_TEST_DATABASE_HOST: localhost
+      CAIRN_TEST_DATABASE_PORT: 5432
+      CAIRN_TEST_DATABASE_ADMIN_USER: postgres
+      CAIRN_TEST_DATABASE_ADMIN_PASSWORD: ci-admin-fictif
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
@@ -28,6 +53,12 @@ jobs:
         run: corepack enable
       - name: Installer depuis le fichier de verrouillage seul
         run: pnpm install --frozen-lockfile
+      - name: Compiler
+        run: pnpm build
+      - name: Migrer une base vierge par le point d'entrée compilé (fiche 0021)
+        run: pnpm -F @cairn/serveur migrate
+      - name: Types de la base à jour de ses migrations (fiche 0021)
+        run: pnpm -F @cairn/serveur db:types:check
       - name: Chaîne complète
         run: pnpm check
       - name: Audit des vulnérabilités

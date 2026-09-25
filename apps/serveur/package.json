@@ -5,11 +5,21 @@
   "type": "module",
   "scripts": {
     "build": "tsc -b tsconfig.build.json",
-    "start": "node dist/main.js"
+    "start": "node dist/main.js",
+    "migrate": "node dist/migrate.js",
+    "db:types": "kysely-codegen --dialect postgres --camel-case --default-schema public --exclude-pattern \"migration.*\" --out-file src/socle/database/database.generated.ts --url \"env(CAIRN_DATABASE_ADMIN_URL)\"",
+    "db:types:check": "kysely-codegen --dialect postgres --camel-case --default-schema public --exclude-pattern \"migration.*\" --out-file src/socle/database/database.generated.ts --url \"env(CAIRN_DATABASE_ADMIN_URL)\" --verify"
   },
   "dependencies": {
     "@cairn/contrat": "workspace:*",
     "fastify": "5.12.5",
+    "kysely": "0.29.6",
+    "pg": "8.23.0",
     "zod": "4.6.5"
+  },
+  "devDependencies": {
+    "@types/pg": "8.23.1",
+    "kysely-codegen": "0.20.0",
+    "vitest": "5.0.1"
   }
 }
