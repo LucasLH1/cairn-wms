@@ -1,6 +1,6 @@
 # 0015 — Livraison : conteneurs, et espace technique en processus distinct
 
-**Statut** : proposée · **Date** : 2026-09-24 · **Remplace** : — · **Remplacée par** : —
+**Statut** : actée · **Date** : 2026-09-25 · **Remplace** : — · **Remplacée par** : —
 
 ## Contexte
 
@@ -76,12 +76,15 @@ Ce qui contraint :
 
 ## Décision
 
-*Proposée par Claude, à valider par Lucas.* **Une instance de Cairn WMS se livre en images de conteneurs
-assemblées par un fichier de composition, identiques dans les deux modes ; l'espace technique est un
-processus distinct, livré de la même façon, qui pilote l'instance** (options A et D).
+**Une instance de Cairn WMS se livre en images de conteneurs assemblées par un fichier de composition,
+identiques dans les deux modes ; l'espace technique est un processus distinct, livré de la même façon,
+qui pilote l'instance** (options A et D).
 
 Critère décisif : une même livraison sert les deux modes, se met à jour et se restaure en changeant
 d'image, et l'espace technique survit à la défaillance de l'application.
+
+Proposée par Claude le 2026-09-24. Actée par Claude le 2026-09-25, sur délégation explicite de Lucas :
+« Prends les décisions qu'il faut, je veux passer au dev le plus rapidement possible. »
 
 ## Conséquences
 
@@ -89,8 +92,9 @@ d'image, et l'espace technique survit à la défaillance de l'application.
   conteneurs ; revenir à la version précédente ; exploiter les instances hébergées en série.
 - **Ce qu'on ne peut plus faire** : livrer une instance sous une autre forme sans nouvelle fiche.
 - **Ce qu'il faut mettre en place** :
-  - dès le lot 1 : images et fichier de composition reproductibles, migrations de données appliquées
-    d'elles-mêmes à la mise à jour (`RG-EXI-057`, `060`) ;
+  - dès le lot 1 : images et fichier de composition reproductibles, construits par l'intégration
+    continue (fiche 0024), migrations de données appliquées d'elles-mêmes à la mise à jour
+    (`RG-EXI-057`, `060`, fiche 0021) ;
   - au lot 5 : l'espace technique, et une fiche sur sa sécurité — isolement de l'accès privilégié,
     authentification propre, exposition réseau ;
   - une fiche sur la sauvegarde et la restauration (fréquence, perte maximale de `RG-EXI-074`,
