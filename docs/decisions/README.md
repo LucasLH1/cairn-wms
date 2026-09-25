@@ -18,7 +18,7 @@ défaire à bon compte, et dont quelqu'un — dans six mois, ou six ans — voud
 | 0009 | [Langage : TypeScript de bout en bout](0009-langage-typescript-de-bout-en-bout.md) | actée |
 | 0010 | [Framework des écrans : React](0010-framework-des-ecrans-react.md) | actée |
 | 0011 | [Composants et style](0011-composants-et-style.md) | actée |
-| 0012 | [Base de données : PostgreSQL seul](0012-base-de-donnees-postgresql-seul.md) | proposée |
+| 0012 | [Base de données : PostgreSQL seul](0012-base-de-donnees-postgresql-seul.md) | actée |
 | 0013 | [Architecture : monolithe modulaire](0013-architecture-monolithe-modulaire.md) | proposée |
 | 0014 | [Poste : application web dans le navigateur](0014-poste-application-web-dans-le-navigateur.md) | proposée |
 | 0015 | [Livraison : conteneurs, et espace technique en processus distinct](0015-livraison-conteneurs-et-espace-technique-distinct.md) | proposée |
@@ -26,11 +26,11 @@ défaire à bon compte, et dont quelqu'un — dans six mois, ou six ans — voud
 | 0017 | [Garde-fous du serveur TypeScript](0017-garde-fous-du-serveur-typescript.md) | proposée |
 
 **La pile est reprise de zéro depuis le 2026-09-24.** Les fiches 0002 et 0004 à 0008 sont abandonnées
-et restent ici pour l'histoire ; leurs numéros ne seront jamais réutilisés. Sont actés, par Lucas le
+et restent ici pour l'histoire ; leurs numéros ne seront jamais réutilisés. Sont actés par Lucas, le
 2026-09-24 : le langage, TypeScript de bout en bout (0009) ; le framework des écrans, React (0010) ;
-les composants et le style (0011). Les fiches 0012 à 0017 sont proposées. Une fiche `proposée`
-n'engage rien et ne se met pas en œuvre : tant qu'elles ne sont pas actées, rien de ce qu'elles
-couvrent ne s'écrit.
+les composants et le style (0011) ; le 2026-09-25 : la base de données, PostgreSQL seul (0012). Les
+fiches 0013 à 0017 sont proposées. Une fiche `proposée` n'engage rien et ne se met pas en œuvre : tant
+qu'elles ne sont pas actées, rien de ce qu'elles couvrent ne s'écrit.
 
 ## La règle
 
