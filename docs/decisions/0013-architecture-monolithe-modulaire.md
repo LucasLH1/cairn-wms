@@ -1,6 +1,6 @@
 # 0013 — Architecture : monolithe modulaire
 
-**Statut** : proposée · **Date** : 2026-09-24 · **Remplace** : — · **Remplacée par** : —
+**Statut** : actée · **Date** : 2026-09-25 · **Remplace** : — · **Remplacée par** : —
 
 ## Contexte
 
@@ -56,12 +56,14 @@ Ce qui contraint :
 
 ## Décision
 
-*Proposée par Claude, à valider par Lucas.* **Le serveur de Cairn WMS est un monolithe modulaire : une
-seule application livrée d'un bloc, découpée en modules aux frontières vérifiées automatiquement, dont
-les modules du socle ne dépendent d'aucun module logistique** (option A).
+**Le serveur de Cairn WMS est un monolithe modulaire : une seule application livrée d'un bloc, découpée
+en modules aux frontières vérifiées automatiquement, dont les modules du socle ne dépendent d'aucun
+module logistique** (option A).
 
 Critère décisif : un geste et tous ses effets tiennent dans une seule transaction, sans composant de
 plus à exploiter.
+
+Proposée par Claude le 2026-09-24, validée par Lucas le 2026-09-25.
 
 ## Conséquences
 
@@ -69,9 +71,9 @@ plus à exploiter.
   application.
 - **Ce qu'on ne peut plus faire** : faire dépendre un module du socle d'un module logistique ; extraire
   un service sans nouvelle fiche.
-- **Ce qu'il faut mettre en place** : une fiche sur la découpe interne — liste des modules, sens des
-  dépendances permises, règle vérifiée par l'intégration continue. La même application peut être
-  lancée dans plusieurs rôles (fiche 0017) : c'est toujours un seul code et une seule livraison.
+- **Ce qu'il faut mettre en place** : la découpe interne — liste des modules, sens des dépendances
+  permises, règle vérifiée par l'intégration continue (fiche 0023). La même application est lancée
+  dans deux rôles (fiche 0017) : c'est toujours un seul code et une seule livraison.
 - **Ce qu'on accepte de payer** : la tenue des frontières repose sur une vérification automatique, pas
   sur une séparation physique.
 - **Ce qui la remettrait en cause** : un besoin de mise à l'échelle qu'une seule application ne tient
