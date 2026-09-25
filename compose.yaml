@@ -1,0 +1,24 @@
+# Environnement de développement local (fiches 0015, 0021) : la base seule. Les deux rôles du
+# serveur et les écrans tournent sur le poste, relancés à chaque modification (`pnpm dev`).
+# Les valeurs viennent du fichier .env, jamais suivi ; son modèle est .env.example.
+name: cairn-wms
+
+services:
+  postgres:
+    image: postgres:18.6-alpine@sha256:77f585114c32fbca283dc835b0596f4e52b51b4c6662d7810b2f4084f60a1873
+    environment:
+      POSTGRES_USER: ${CAIRN_DATABASE_ADMIN_USER:?copier .env.example en .env}
+      POSTGRES_PASSWORD: ${CAIRN_DATABASE_ADMIN_PASSWORD:?copier .env.example en .env}
+      POSTGRES_DB: ${CAIRN_DATABASE_NAME:?copier .env.example en .env}
+    ports:
+      - 127.0.0.1:${CAIRN_DATABASE_PORT:-5432}:5432
+    volumes:
+      - postgres:/var/lib/postgresql
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U "$${POSTGRES_USER}" -d "$${POSTGRES_DB}"']
+      interval: 2s
+      timeout: 5s
+      retries: 30
+
+volumes:
+  postgres:

@@ -61,3 +61,21 @@ traitements différés.
 - Navigateur non déclaré comme poste : à trancher en conversation métier (fiche 0027).
 - Stockage du journal au-delà de quarante gigaoctets à l'hypothèse de volumétrie (fiches 0012, 0022).
 - Fiches encore à écrire : échanges (lot 5), sécurité de l'espace technique (lot 5).
+
+## Complément — 0029 et 0030 (ajouté par la session suivante)
+
+L'entrée ci-dessus s'arrêtait à 0028. La même conversation a ensuite produit deux fiches, arrivées dans
+le dépôt par les commits `b551616`, `43be54c` et `15ff1d3` :
+
+- **0029 — Environnements et déploiement** : un environnement de préproduction nommé **« staging »**,
+  nom retenu par Lucas ; déploiement par Coolify, une image par commit, routes `/version`, `/health`,
+  `/live`. Actée par Claude sur délégation.
+- **0030 — Sauvegarde et restauration** : pgBackRest, restauration éprouvée par la chaîne. Actée par
+  Claude sur délégation.
+
+La pile actée va donc de 0009 à 0030 : 0012 et 0013 validées par Lucas, 0014 à 0030 actées par Claude sur
+délégation.
+
+**Infrastructure reportée** (Lucas, 2026-09-25) : 0029 et 0030 restent actées, mais leur mise en œuvre
+attend. Développement en local uniquement : ni image publiée, ni déploiement, ni Coolify, ni pgBackRest,
+ni proxy. Suivi : `#72`.

@@ -22,23 +22,24 @@ produit. La pile est actée par les fiches `docs/decisions/0009` à `0030` ; le 
 | `packages/libelles/` | Les libellés, en français et en anglais, tirés du glossaire. |
 | `journal/` | Une entrée par session de travail : ce qui a été fait, décidé, touché. |
 | `status.yml` | L'état d'avancement des modules, des lots et de la pile. |
+| `DEVELOPPEMENT.md` | Développer en local : prérequis, commandes. |
+| `compose.yaml` | La base PostgreSQL du poste de développement. |
+| `scripts/` | Scripts locaux : démarrage, remise à zéro de la base, contrôle des valeurs Tailwind. |
 | `CLAUDE.md` | Les règles de travail dans ce dépôt. |
 | `.claude/settings.json` | Hooks Claude Code du fil d'activité. Sans effet sur un poste où le script qu'ils appellent est absent. |
 
 ## Travailler sur le code
 
-Node.js 24.21.0 (`.node-version`) et pnpm, fixé par Corepack (`packageManager`).
+En local uniquement pour l'instant. Prérequis (WSL, Docker, Node.js, pnpm) et commandes :
+[`DEVELOPPEMENT.md`](DEVELOPPEMENT.md).
 
 ```sh
-corepack enable
 pnpm install --frozen-lockfile
-pnpm check        # compilation, analyse, frontières, style, tests : la chaîne de la fiche 0024
+cp .env.example .env   # valeurs locales fictives
+pnpm dev               # base, serveur dans ses deux rôles, écrans ; relancés à chaque modification
+pnpm db:reset          # recrée la base et charge le jeu de données des scénarios
+pnpm check             # la chaîne de la fiche 0024
 ```
-
-Les tests s'exécutent contre un vrai PostgreSQL 18 : la base `cairn_test` y est recréée à chaque
-lancement. Les variables `CAIRN_TEST_DATABASE_*` le désignent ; leur modèle est dans `.env.example`.
-Les migrations s'appliquent par `pnpm -F @cairn/serveur migrate`, les types de la base se régénèrent
-par `pnpm -F @cairn/serveur db:types`.
 
 ## Avancement
 
