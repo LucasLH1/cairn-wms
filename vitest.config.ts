@@ -7,8 +7,11 @@ if (existsSync('.env')) {
 }
 
 export default defineConfig({
+  // Les paquets de l'espace de travail se lisent depuis leurs sources, jamais depuis un dist périmé.
   resolve: { conditions: ['@cairn/source'] },
+  ssr: { resolve: { conditions: ['@cairn/source'] } },
   test: {
+    server: { deps: { inline: [/^@cairn\//u] } },
     globalSetup: ['apps/serveur/src/test-support/global-setup.ts'],
     include: ['apps/*/src/**/*.test.ts', 'packages/*/src/**/*.test.ts'],
   },
