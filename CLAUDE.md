@@ -1,7 +1,7 @@
 # Règles de travail — Cairn WMS
 
-Ce dépôt est **public** et, à ce stade, **documentaire**. Il décrit un WMS/ERP logistique
-multi-donneurs d'ordre. La pile est actée (fiches 0009 à 0028) ; le code s'écrit dans leur cadre.
+Ce dépôt est **public**. Il décrit et réalise un WMS/ERP logistique multi-donneurs d'ordre. La pile
+est actée (fiches 0009 à 0030) ; le code s'écrit dans leur cadre.
 
 Ces règles priment sur toute habitude, tout raccourci et toute suggestion contraire.
 
@@ -33,7 +33,7 @@ Un terme absent du glossaire ne doit apparaître nulle part : on l'ajoute au glo
 Aucun langage, aucun framework, aucune base de données, aucune architecture, aucun hébergement,
 aucun outillage n'est arrêté tant qu'une fiche actée ne le dit pas. La pile a été reprise de zéro le
 2026-09-24 (fiches 0002 et 0004 à 0008 abandonnées) ; elle est **actée** par les fiches `0009` à
-`0028`, et l'ordre de réalisation en lots par `0003`.
+`0030`, et l'ordre de réalisation en lots par `0003`.
 
 **Le code s'écrit dans le cadre de ces fiches.** Tout choix engageant qu'elles ne couvrent pas — un
 langage, une bibliothèque structurante, un composant de plus, une règle de dépendance, une forme de
@@ -48,8 +48,9 @@ Au moindre doute sur ce qui tombe de quel côté : on pose la question.
 
 En conséquence, dans ce dépôt :
 
-- ne pas créer de code applicatif, de fichier de configuration de pile, de manifeste de dépendances,
-  de conteneur, de schéma de base ;
+- ne créer de code applicatif, de configuration de pile, de manifeste de dépendances, de conteneur
+  ou de schéma de base que dans le cadre d'une fiche actée ;
+- n'ajouter aucune dépendance, aucun composant ni aucun outil qu'une fiche actée ne couvre pas ;
 - ne pas déduire un choix technique d'un fichier existant, d'un nom de dossier, ni de l'habitude
   d'un autre projet ;
 - ne pas « commencer par » une technologie en attendant que la décision soit prise. Le provisoire

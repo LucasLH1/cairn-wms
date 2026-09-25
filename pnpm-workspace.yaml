@@ -1,0 +1,13 @@
+# Espace de travail pnpm (fiche 0023) et garde-fous des dépendances (fiche 0017).
+packages:
+  - apps/*
+  - packages/*
+
+# Versions exactes, jamais de plage.
+savePrefix: ''
+
+# Délai minimal avant d'adopter une version nouvellement publiée : trois jours.
+minimumReleaseAge: 4320
+
+# Aucun script d'installation ne s'exécute sans être autorisé ici, nommément.
+strictDepBuilds: true

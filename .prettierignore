@@ -1,0 +1,10 @@
+docs/
+journal/
+*.md
+status.yml
+pnpm-lock.yaml
+**/dist/
+**/coverage/
+**/playwright-report/
+**/test-results/
+**/.tsbuild/

@@ -39,3 +39,13 @@ $RECYCLE.BIN/
 tmp/
 temp/
 .cache/
+
+# --- Code ---
+node_modules/
+dist/
+coverage/
+*.tsbuildinfo
+playwright-report/
+test-results/
+blob-report/
+.tsbuild/

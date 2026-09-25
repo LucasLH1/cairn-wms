@@ -1,0 +1,15 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": ".tsbuild/out",
+    "tsBuildInfoFile": ".tsbuild/check.tsbuildinfo",
+    "emitDeclarationOnly": true
+  },
+  "include": ["src"],
+  "references": [
+    {
+      "path": "../../packages/contrat"
+    }
+  ]
+}

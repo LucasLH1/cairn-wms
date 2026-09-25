@@ -1,0 +1,15 @@
+{
+  "name": "@cairn/serveur",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc -b tsconfig.build.json",
+    "start": "node dist/main.js"
+  },
+  "dependencies": {
+    "@cairn/contrat": "workspace:*",
+    "fastify": "5.12.5",
+    "zod": "4.6.5"
+  }
+}

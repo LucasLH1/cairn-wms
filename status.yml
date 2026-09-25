@@ -13,7 +13,7 @@
 # Tous les modules de la carte sont aujourd'hui « spécifié ». Aucun n'est
 # « en développement » ni « livré » : le dépôt ne contient aucun code applicatif.
 # L'ordre de réalisation en lots est acté par 0003 (section « lots » ci-dessous,
-# remplace 0001). La pile est actée par les fiches 0009 à 0028 (section « pile »
+# remplace 0001). La pile est actée par les fiches 0009 à 0030 (section « pile »
 # ci-dessous) ; le code s'écrit dans leur cadre, et tout choix engageant
 # qu'elles ne couvrent pas demande une nouvelle fiche.
 #
@@ -31,7 +31,7 @@ projet: Cairn WMS
 mis_a_jour_le: 2026-09-25
 
 # Pile, reprise de zéro le 2026-09-24 (fiches 0002 et 0004 à 0008 abandonnées)
-# et actée le 2026-09-25. Reflète l'index de docs/decisions/README.md, qui fait foi.
+# et actée le 2026-09-25 (fiches 0009 à 0030). Reflète l'index de docs/decisions/README.md, qui fait foi.
 pile:
   issue: 24
   etat: actée
@@ -56,6 +56,8 @@ pile:
     - { fiche: "0026", objet: "Temps réel : WebSocket et signaux de changement", doc: docs/decisions/0026-temps-reel.md }
     - { fiche: "0027", objet: "Authentification, sessions et postes", doc: docs/decisions/0027-authentification-sessions-et-postes.md }
     - { fiche: "0028", objet: "Traitements différés", doc: docs/decisions/0028-traitements-differes.md }
+    - { fiche: "0029", objet: "Environnements et déploiement : le staging", doc: docs/decisions/0029-environnements-et-deploiement.md }
+    - { fiche: "0030", objet: "Sauvegarde et restauration", doc: docs/decisions/0030-sauvegarde-et-restauration.md }
   proposees: []
 
 couches:

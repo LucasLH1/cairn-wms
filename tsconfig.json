@@ -1,0 +1,9 @@
+{
+  "files": [],
+  "references": [
+    { "path": "packages/contrat" },
+    { "path": "packages/libelles" },
+    { "path": "packages/ui" },
+    { "path": "apps/serveur" }
+  ]
+}

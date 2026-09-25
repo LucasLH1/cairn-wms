@@ -275,6 +275,19 @@ Règles d'usage :
 | État de santé | `InstanceHealth` | Indicateurs techniques d'une instance — disponibilité, traitements différés, échanges et impressions en échec, sauvegardes, stockage — dénombrés, jamais détaillés par leur contenu métier. |
 | Poste | `Workstation` | L'ordinateur depuis lequel un utilisateur travaille : fixe, ou embarqué sur un chariot. Origine tracée des événements et destination d'impression. Ne désigne jamais l'établi d'atelier (`Bench`). |
 
+## Gestes et accès
+
+| Français | Anglais | Définition |
+|---|---|---|
+| Geste | `Gesture` | Demande, venue d'un utilisateur ou d'un système, d'enregistrer un fait ou un changement. Un geste est enregistré avec tous ses effets, ou refusé ; jamais laissé indéterminé (`RG-EXI-006`). |
+| Identifiant de geste | `GestureId` | Identifiant attribué à un geste par le poste qui l'émet. Un geste reçu deux fois sous le même identifiant n'est enregistré qu'une fois (`RG-EXI-007`). |
+| Refus | `Refusal` | Réponse du produit à un geste qu'il n'enregistre pas. Porte son motif et produit un événement (`RG-TRA-005`). |
+| Motif de refus | `RefusalReason` | Raison d'un refus, prise dans un catalogue fermé fourni par le produit. |
+| Utilisateur | `User` | Personne qui se connecte au produit, porteuse de rôles et de périmètres. Ne se supprime pas ; se désactive (`RG-ORG-023`). |
+| Session | `Session` | Connexion d'un utilisateur au produit depuis un navigateur. Un utilisateur peut en tenir plusieurs à la fois (`RG-SUR-006`). |
+| Clé d'agent | `AgentKey` | Secret émis par l'instance pour identifier un agent d'impression ou un système externe, jamais un utilisateur. Révocable. |
+| Signal de changement | `ChangeSignal` | Avis envoyé aux écrans qu'un objet a changé, sans rien de son contenu ; l'écran relit l'objet avec ses droits. |
+
 ## Encadrement et périmètres
 
 | Français | Anglais | Définition |

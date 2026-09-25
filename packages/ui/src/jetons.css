@@ -1,0 +1,65 @@
+/*
+ * Jetons du produit, tirés de la maquette du lot 1 (docs/lots/lot-1/maquette.html).
+ * Seule source des couleurs, espacements, rayons et polices (fiche 0011). Un thème clair
+ * s'ajoutera en redéfinissant ces variables, sans toucher à un composant.
+ */
+:root {
+  color-scheme: dark;
+
+  /* Fonds et surfaces */
+  --cairn-bg: #080a0e;
+  --cairn-nav: #0c1017;
+  --cairn-surface: rgb(22 29 40 / 72%);
+  --cairn-surface-raised: rgb(20 27 38 / 95%);
+  --cairn-field: #161d28;
+  --cairn-well: #10151d;
+  --cairn-control: #1e2733;
+  --cairn-selected: #222c39;
+  --cairn-row-hover: #1a212c;
+  --cairn-overlay: rgb(4 6 10 / 66%);
+
+  /* Bords */
+  --cairn-border: rgb(255 255 255 / 11%);
+  --cairn-border-strong: #35414f;
+  --cairn-border-control: #384454;
+  --cairn-line: #222c39;
+
+  /* Texte */
+  --cairn-text: #e8edf5;
+  --cairn-text-strong: #fff;
+  --cairn-text-2: #c3ccd9;
+  --cairn-text-3: #98a3b6;
+  --cairn-text-4: #7c879a;
+
+  /* Accent */
+  --cairn-accent: #6fe3c4;
+  --cairn-on-accent: #06231c;
+  --cairn-accent-text: #7fe9cd;
+  --cairn-code: #bfe9dc;
+  --cairn-accent-2: #4bb9f5;
+  --cairn-accent-soft: rgb(111 227 196 / 9%);
+
+  /* États : fond, texte, bord */
+  --cairn-ok-bg: rgb(111 227 196 / 14%);
+  --cairn-ok-fg: #7fe9cd;
+  --cairn-ok-bd: rgb(111 227 196 / 40%);
+  --cairn-warn-bg: rgb(255 196 92 / 13%);
+  --cairn-warn-fg: #ffd68a;
+  --cairn-warn-bd: rgb(255 196 92 / 45%);
+  --cairn-bad-bg: rgb(255 120 110 / 15%);
+  --cairn-bad-fg: #ffb3ab;
+  --cairn-bad-bd: rgb(255 120 110 / 55%);
+  --cairn-info-bg: rgb(120 190 255 / 14%);
+  --cairn-info-fg: #8fd3ff;
+  --cairn-info-bd: rgb(120 190 255 / 40%);
+  --cairn-hand-bg: rgb(132 110 255 / 18%);
+  --cairn-hand-fg: #c3b8ff;
+  --cairn-hand-bd: rgb(132 110 255 / 45%);
+  --cairn-mute-bg: rgb(255 255 255 / 8%);
+  --cairn-mute-fg: #c3ccd9;
+  --cairn-mute-bd: rgb(255 255 255 / 16%);
+
+  /* Polices, livrées avec le produit (fiche 0011) */
+  --cairn-font-sans: 'Geist Variable', system-ui, sans-serif;
+  --cairn-font-mono: 'Geist Mono Variable', ui-monospace, monospace;
+}

@@ -1,0 +1,39 @@
+{
+  "extends": ["stylelint-config-standard"],
+  "ignoreFiles": ["**/dist/**", "**/node_modules/**"],
+  "rules": {
+    "color-no-hex": true,
+    "color-named": "never",
+    "function-disallowed-list": [
+      "rgb",
+      "rgba",
+      "hsl",
+      "hsla",
+      "hwb",
+      "lab",
+      "lch",
+      "oklab",
+      "oklch",
+      "color-mix"
+    ],
+    "at-rule-no-unknown": [
+      true,
+      {
+        "ignoreAtRules": ["theme", "source", "utility", "variant", "custom-variant", "apply", "reference"]
+      }
+    ],
+    "import-notation": "string",
+    "custom-property-pattern": null,
+    "custom-property-empty-line-before": null
+  },
+  "overrides": [
+    {
+      "files": ["packages/ui/src/jetons.css"],
+      "rules": {
+        "color-no-hex": null,
+        "color-named": null,
+        "function-disallowed-list": null
+      }
+    }
+  ]
+}

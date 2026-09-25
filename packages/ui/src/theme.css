@@ -1,0 +1,118 @@
+/*
+ * Thème Tailwind réduit aux jetons (fiche 0011) : toutes les valeurs par défaut de Tailwind
+ * sont supprimées, seules restent celles déclarées ici, qui renvoient aux jetons.
+ * À importer après `@import "tailwindcss";`.
+ */
+@import '@fontsource-variable/geist';
+@import '@fontsource-variable/geist-mono';
+@import './jetons.css';
+
+@theme {
+  --*: initial;
+
+  /* Espacements : échelle unique du produit */
+  --spacing-0: 0;
+  --spacing-px: 1px;
+  --spacing-0-5: 2px;
+  --spacing-1: 4px;
+  --spacing-1-5: 6px;
+  --spacing-2: 8px;
+  --spacing-2-5: 10px;
+  --spacing-3: 12px;
+  --spacing-3-5: 14px;
+  --spacing-4: 16px;
+  --spacing-5: 20px;
+  --spacing-6: 24px;
+  --spacing-7: 28px;
+  --spacing-8: 32px;
+  --spacing-10: 40px;
+  --spacing-12: 48px;
+  --spacing-nav: 252px;
+
+  /* Rayons */
+  --radius-badge: 7px;
+  --radius-control: 10px;
+  --radius-banner: 12px;
+  --radius-panel: 16px;
+  --radius-dialog: 18px;
+  --radius-full: 9999px;
+
+  /* Tailles de texte */
+  --text-label: 11px;
+  --text-small: 12px;
+  --text-secondary: 13px;
+  --text-body: 14px;
+  --text-heading: 16px;
+  --text-title: 21px;
+
+  /* Graisses */
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+
+  /* Flous */
+  --blur-panel: 18px;
+  --blur-raised: 22px;
+}
+
+@theme inline {
+  --font-sans: var(--cairn-font-sans);
+  --font-mono: var(--cairn-font-mono);
+
+  --color-bg: var(--cairn-bg);
+  --color-nav: var(--cairn-nav);
+  --color-surface: var(--cairn-surface);
+  --color-surface-raised: var(--cairn-surface-raised);
+  --color-field: var(--cairn-field);
+  --color-well: var(--cairn-well);
+  --color-control: var(--cairn-control);
+  --color-selected: var(--cairn-selected);
+  --color-row-hover: var(--cairn-row-hover);
+  --color-overlay: var(--cairn-overlay);
+  --color-border: var(--cairn-border);
+  --color-border-strong: var(--cairn-border-strong);
+  --color-border-control: var(--cairn-border-control);
+  --color-line: var(--cairn-line);
+  --color-text: var(--cairn-text);
+  --color-text-strong: var(--cairn-text-strong);
+  --color-text-2: var(--cairn-text-2);
+  --color-text-3: var(--cairn-text-3);
+  --color-text-4: var(--cairn-text-4);
+  --color-accent: var(--cairn-accent);
+  --color-on-accent: var(--cairn-on-accent);
+  --color-accent-text: var(--cairn-accent-text);
+  --color-code: var(--cairn-code);
+  --color-accent-2: var(--cairn-accent-2);
+  --color-accent-soft: var(--cairn-accent-soft);
+  --color-ok-bg: var(--cairn-ok-bg);
+  --color-ok-fg: var(--cairn-ok-fg);
+  --color-ok-bd: var(--cairn-ok-bd);
+  --color-warn-bg: var(--cairn-warn-bg);
+  --color-warn-fg: var(--cairn-warn-fg);
+  --color-warn-bd: var(--cairn-warn-bd);
+  --color-bad-bg: var(--cairn-bad-bg);
+  --color-bad-fg: var(--cairn-bad-fg);
+  --color-bad-bd: var(--cairn-bad-bd);
+  --color-info-bg: var(--cairn-info-bg);
+  --color-info-fg: var(--cairn-info-fg);
+  --color-info-bd: var(--cairn-info-bd);
+  --color-hand-bg: var(--cairn-hand-bg);
+  --color-hand-fg: var(--cairn-hand-fg);
+  --color-hand-bd: var(--cairn-hand-bd);
+  --color-mute-bg: var(--cairn-mute-bg);
+  --color-mute-fg: var(--cairn-mute-fg);
+  --color-mute-bd: var(--cairn-mute-bd);
+  --color-transparent: transparent;
+}
+
+@layer base {
+  body {
+    margin: 0;
+    background-color: var(--cairn-bg);
+    color: var(--cairn-text);
+    font-family: var(--cairn-font-sans);
+    font-size: 14px;
+    line-height: 1.45;
+    -webkit-font-smoothing: antialiased;
+  }
+}

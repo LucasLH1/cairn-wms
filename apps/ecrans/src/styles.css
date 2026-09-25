@@ -1,0 +1,4 @@
+@import 'tailwindcss';
+@import '@cairn/ui/theme.css';
+
+@source '../../../packages/ui/src';
