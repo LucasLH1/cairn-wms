@@ -288,6 +288,7 @@ Règles d'usage :
 | Mot de passe | `Password` | Secret d'un utilisateur, jamais conservé en clair : l'instance n'en garde qu'une empreinte. |
 | Session | `Session` | Connexion d'un utilisateur au produit depuis un navigateur. Un utilisateur peut en tenir plusieurs à la fois (`RG-SUR-006`). |
 | Clé d'agent | `AgentKey` | Secret émis par l'instance pour identifier un agent d'impression ou un système externe, jamais un utilisateur. Révocable. |
+| Traitement différé | `Job` | Travail exécuté hors du geste qui l'a demandé, par le rôle « traitements ». Ajouté dans la transaction du geste, rejouable sans effet double (fiche 0028). |
 | Signal de changement | `ChangeSignal` | Avis envoyé aux écrans qu'un objet a changé, sans rien de son contenu ; l'écran relit l'objet avec ses droits. |
 
 ## Encadrement et périmètres

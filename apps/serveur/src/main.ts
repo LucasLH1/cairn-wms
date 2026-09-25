@@ -2,6 +2,7 @@ import { buildApp } from './app.js';
 import { readConfig } from './config.js';
 import { createDatabase, readApplicationConnection } from './socle/database/index.js';
 import { databaseHealthCheck } from './socle/health/index.js';
+import { startJobRunner } from './socle/job/index.js';
 import { SignalRelay } from './socle/signal/index.js';
 import { readAccessConfig } from './socle/user/index.js';
 
@@ -25,4 +26,12 @@ if (config.role === 'gestures') {
     await db.destroy();
   });
   await app.listen({ host: config.host, port: config.port });
+}
+
+if (config.role === 'jobs') {
+  // Rôle « traitements » (fiches 0017, 0028) : la file seule, sans route HTTP. Les traitements du
+  // produit s'inscrivent ici à mesure que les modules en déclarent.
+  const runner = await startJobRunner({ connection, db, jobs: [] });
+  await runner.promise;
+  await db.destroy();
 }

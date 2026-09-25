@@ -7,13 +7,14 @@
     "build": "tsc -b tsconfig.build.json",
     "start": "node dist/main.js",
     "migrate": "node dist/migrate.js",
-    "db:types": "kysely-codegen --dialect postgres --camel-case --default-schema public --exclude-pattern \"migration.*\" --out-file src/socle/database/database.generated.ts --url \"env(CAIRN_DATABASE_ADMIN_URL)\"",
-    "db:types:check": "kysely-codegen --dialect postgres --camel-case --default-schema public --exclude-pattern \"migration.*\" --out-file src/socle/database/database.generated.ts --url \"env(CAIRN_DATABASE_ADMIN_URL)\" --verify"
+    "db:types": "kysely-codegen --dialect postgres --camel-case --default-schema public --include-pattern \"{foundation,logistics}.*\" --out-file src/socle/database/database.generated.ts --url \"env(CAIRN_DATABASE_ADMIN_URL)\"",
+    "db:types:check": "kysely-codegen --dialect postgres --camel-case --default-schema public --include-pattern \"{foundation,logistics}.*\" --out-file src/socle/database/database.generated.ts --url \"env(CAIRN_DATABASE_ADMIN_URL)\" --verify"
   },
   "dependencies": {
     "@cairn/contrat": "workspace:*",
     "@fastify/websocket": "11.3.1",
     "fastify": "5.12.5",
+    "graphile-worker": "0.18.0",
     "kysely": "0.29.6",
     "pg": "8.23.0",
     "zod": "4.6.5"
