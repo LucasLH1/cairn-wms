@@ -1,12 +1,12 @@
 # 0017 — Garde-fous du serveur TypeScript
 
-**Statut** : proposée · **Date** : 2026-09-24 · **Remplace** : — · **Remplacée par** : —
+**Statut** : actée · **Date** : 2026-09-25 · **Remplace** : — · **Remplacée par** : —
 
 ## Contexte
 
 La fiche 0009 retient TypeScript de bout en bout en connaissant quatre faiblesses du langage côté
-serveur, chacune jugée parable. Cette fiche propose les parades. Elles conditionnent la tenue de
-plusieurs exigences de `socle/0.9`.
+serveur, chacune jugée parable. Cette fiche fixe les parades. Elles conditionnent la tenue de plusieurs
+exigences de `socle/0.9`.
 
 | Faiblesse | Ce qu'elle menace |
 |---|---|
@@ -44,7 +44,7 @@ plusieurs exigences de `socle/0.9`.
 
 - **Ce que c'est** : la même application (fiche 0013) est lancée deux fois : un rôle sert les écrans et
   les gestes, l'autre exécute les traitements différés et le travail lourd, qu'il prend dans la file de
-  la base (fiche 0012).
+  la base (fiches 0012 et 0028).
 - **En faveur** : un traitement lourd ne ralentit jamais un geste ; une panne de traitement laisse les
   écrans debout ; la reprise des échéances après arrêt se fait par la file (`RG-EXI-022`).
 - **En défaveur** : deux processus en mémoire.
@@ -52,9 +52,9 @@ plusieurs exigences de `socle/0.9`.
 
 ## Décision
 
-*Proposée par Claude, à valider par Lucas.* **Le serveur TypeScript est tenu par les garde-fous
-ci-dessous, vérifiés par l'intégration continue, qui bloque en cas d'écart ; le travail lourd tourne
-dans un second rôle de l'application, jamais dans celui qui sert les gestes** (options A et D).
+**Le serveur TypeScript est tenu par les garde-fous ci-dessous, vérifiés par l'intégration continue,
+qui bloque en cas d'écart ; le travail lourd tourne dans un second rôle de l'application, jamais dans
+celui qui sert les gestes** (options A et D).
 
 1. **Typage strict.** Mode strict du compilateur ; `any`, les conversions non vérifiées et les
    suppressions d'erreur interdites par l'analyse de code.
@@ -72,15 +72,18 @@ dans un second rôle de l'application, jamais dans celui qui sert les gestes** (
 Critère décisif : les faiblesses retenues en 0009 ne sont acceptables que si leur parade tient sans
 dépendre de la discipline.
 
+Proposée par Claude le 2026-09-24. Actée par Claude le 2026-09-25, sur délégation explicite de Lucas :
+« Prends les décisions qu'il faut, je veux passer au dev le plus rapidement possible. »
+
 ## Conséquences
 
 - **Ce qu'on peut faire** : s'appuyer sur les types à l'intérieur du serveur ; tenir `RG-EXI-073` même
   pendant un import ou une photo quotidienne.
 - **Ce qu'on ne peut plus faire** : lancer un travail lourd depuis le rôle « gestes » ; ajouter une
   dépendance sans justification ; stocker une quantité ou un montant en virgule flottante.
-- **Ce qu'il faut mettre en place** : la bibliothèque de schémas, par fiche ; l'outillage de
-  vérification dans l'intégration continue, dès le premier code ; l'unité de base de chaque grandeur,
-  avec le modèle de données.
+- **Ce qu'il faut mettre en place** : la bibliothèque de schémas (fiche 0020) ; l'outillage de
+  vérification dans l'intégration continue, dès le premier code (fiche 0024) ; les réglages du
+  gestionnaire de paquets (fiche 0023) ; l'unité de base de chaque grandeur, avec le modèle de données.
 - **Ce qu'on accepte de payer** : deux processus en mémoire ; une adoption plus lente des nouvelles
   versions de dépendances, y compris des correctifs, sauf faille connue.
 - **Ce qui la remettrait en cause** : les deux rôles qui ne tiennent pas dans quatre gigaoctets avec la
