@@ -33,6 +33,32 @@ export interface FoundationGesture {
   workstationId: string | null;
 }
 
+export interface FoundationRole {
+  id: Generated<string>;
+  name: string;
+  nature: string;
+}
+
+export interface FoundationRolePermission {
+  permission: string;
+  roleId: string;
+}
+
+export interface FoundationSession {
+  expiresAt: Timestamp;
+  id: Generated<string>;
+  revoked: Generated<boolean>;
+  tokenHash: Buffer;
+  userId: string;
+}
+
+export interface FoundationSite {
+  code: string;
+  id: Generated<string>;
+  name: string;
+  timeZone: string;
+}
+
 export interface FoundationTraceEvent {
   authorUserId: string | null;
   data: Generated<Json>;
@@ -53,8 +79,42 @@ export interface FoundationTraceEventObject {
   occurredAt: Timestamp;
 }
 
+export interface FoundationUser {
+  active: Generated<boolean>;
+  displayName: string;
+  id: Generated<string>;
+  loginName: string;
+  passwordHash: string;
+}
+
+export interface FoundationUserRole {
+  roleId: string;
+  userId: string;
+}
+
+export interface FoundationUserSite {
+  execution: Generated<boolean>;
+  siteId: string;
+  userId: string;
+}
+
+export interface FoundationWorkstation {
+  id: Generated<string>;
+  name: string;
+  revoked: Generated<boolean>;
+  siteId: string;
+}
+
 export interface DB {
   "foundation.gesture": FoundationGesture;
+  "foundation.role": FoundationRole;
+  "foundation.rolePermission": FoundationRolePermission;
+  "foundation.session": FoundationSession;
+  "foundation.site": FoundationSite;
   "foundation.traceEvent": FoundationTraceEvent;
   "foundation.traceEventObject": FoundationTraceEventObject;
+  "foundation.user": FoundationUser;
+  "foundation.userRole": FoundationUserRole;
+  "foundation.userSite": FoundationUserSite;
+  "foundation.workstation": FoundationWorkstation;
 }

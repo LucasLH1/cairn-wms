@@ -39,9 +39,13 @@ Le `.env` n'est jamais suivi. Les mots de passe y sont ceux de la base jetable d
 | `pnpm db:reset` | Recrée la base locale, la migre et charge le jeu de données des scénarios du lot 1 (`docs/lots/lot-1/`), toutes valeurs fictives. Refuse d'agir sur une base qui n'est pas sur le poste. |
 | `pnpm check` | La chaîne de la fiche 0024 : compilation, analyse, frontières, format, style, tests Vitest contre PostgreSQL. |
 | `pnpm test` | Les tests seuls. La base `cairn_test` est recréée à chaque lancement. |
-| `pnpm -F @cairn/serveur migrate` | Applique les migrations en attente (après `pnpm build`). |
-| `pnpm -F @cairn/serveur db:types` | Régénère les types de la base depuis la base migrée, après une nouvelle migration. |
+| `pnpm db:migrate` | Compile, puis applique les migrations en attente à la base locale. |
+| `pnpm db:types` | Régénère les types de la base depuis la base migrée, après une nouvelle migration. |
 | `docker compose down` | Arrête la base ; `docker compose down --volumes` l'efface. |
+
+Après `pnpm db:reset`, les utilisateurs du scénario 1 — `anna`, `chloe`, `remi`, `bruno` — ouvrent
+une session avec le mot de passe fictif `demo-fictif`, commun au jeu de données et sans valeur ailleurs.
+Leurs rôles ne sont pas encore posés : ils viendront avec le scénario 1 (#60).
 
 Routes techniques du serveur : `/live` (le processus répond), `/health` (la base répond et est
 migrée), `/version` (le commit servi).
@@ -50,5 +54,5 @@ migrée), `/version` (le commit servi).
 
 1. Écrire `apps/serveur/src/migrations/nnnn-sujet.ts` et l'inscrire en fin de liste dans
    `apps/serveur/src/migrations/index.ts`. Une migration publiée ne se modifie plus (fiche 0021).
-2. `pnpm build && pnpm -F @cairn/serveur migrate`, puis `pnpm -F @cairn/serveur db:types`.
+2. `pnpm db:migrate`, puis `pnpm db:types`.
 3. Committer la migration et `database.generated.ts` ensemble : la chaîne vérifie qu'ils concordent.

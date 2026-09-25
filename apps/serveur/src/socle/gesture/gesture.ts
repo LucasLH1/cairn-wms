@@ -24,7 +24,8 @@ import { GestureRefusal, refusalStatus, type RefusalDetails } from './refusal.js
 /** Qui émet le geste, et depuis quel poste (fiche 0027, règle 4). */
 export interface GestureAuthor {
   readonly userId: string;
-  readonly workstationId: string;
+  /** Toujours présent, sauf pour un geste admis depuis un poste non déclaré. */
+  readonly workstationId: string | null;
 }
 
 /** Périmètre d'exécution que le geste engage : le site où il agit (RG-SUR-026 à 028). */
@@ -67,6 +68,10 @@ type AnyGestureDefinition = GestureDefinition<string, z.ZodType, z.ZodType, stri
 
 export interface GestureHandler<Definition extends AnyGestureDefinition> {
   readonly definition: Definition;
+  /** Admis depuis un navigateur sans poste déclaré : la seule exception est la déclaration du poste. */
+  readonly allowUndeclaredWorkstation?: boolean;
+  /** Complète la réponse acceptée, première comme rejouée ; ne dépend que du résultat. */
+  respond?(reply: FastifyReply, result: z.infer<Definition['output']>): void;
   /** Le périmètre engagé, lu au besoin dans la base ; par défaut, aucun site. */
   scope?(input: z.infer<Definition['input']>, transaction: DatabaseTransaction): Promise<GestureScope>;
   execute(context: GestureContext<z.infer<Definition['input']>>): Promise<z.infer<Definition['output']>>;
@@ -100,7 +105,8 @@ const storedGestureSchema = z.object({
   response: z.object({ reason: z.string().optional() }).loose(),
 });
 
-const uniqueViolationSchema = z.object({ code: z.literal('23505') });
+/** Doublon d'identifiant de geste, et lui seul : un autre doublon reste l'affaire du traitement. */
+const duplicateGestureSchema = z.object({ code: z.literal('23505'), constraint: z.literal('gesture_pkey') });
 
 export interface GesturesOptions {
   readonly db: Database;
@@ -140,6 +146,8 @@ export function registerGestures(app: FastifyInstance, options: GesturesOptions)
   function send(reply: FastifyReply, response: StoredResponse): FastifyReply {
     return reply.code(response.status).send(response.body);
   }
+
+  const acceptedBodySchema = z.object({ outcome: z.literal('accepted'), result: z.unknown() });
 
   function refusalBody(reason: string, details: RefusalDetails | undefined) {
     return details === undefined
@@ -184,7 +192,7 @@ export function registerGestures(app: FastifyInstance, options: GesturesOptions)
         });
       });
     } catch (error) {
-      if (uniqueViolationSchema.safeParse(error).success) {
+      if (duplicateGestureSchema.safeParse(error).success) {
         return replayed(gestureId, userId);
       }
       throw error;
@@ -226,6 +234,10 @@ export function registerGestures(app: FastifyInstance, options: GesturesOptions)
         return unrecorded('invalidInput');
       }
       if (stored !== undefined) {
+        const accepted = acceptedBodySchema.safeParse(stored.body);
+        if (accepted.success) {
+          handler.respond?.(reply, definition.output.parse(accepted.data.result));
+        }
         return send(reply, stored);
       }
 
@@ -242,7 +254,7 @@ export function registerGestures(app: FastifyInstance, options: GesturesOptions)
           ),
         );
 
-      if (workstationId === null) {
+      if (workstationId === null && handler.allowUndeclaredWorkstation !== true) {
         return refuse(new GestureRefusal('undeclaredWorkstation'));
       }
       const input = definition.input.safeParse(request.body);
@@ -267,8 +279,8 @@ export function registerGestures(app: FastifyInstance, options: GesturesOptions)
               appendTraceEvent(transaction, {
                 ...event,
                 author: { userId },
-                workstationId,
                 gestureId: gestureId.data,
+                ...(workstationId === null ? {} : { workstationId }),
               }),
           });
           const accepted = { outcome: 'accepted' as const, result: definition.output.parse(result) };
@@ -285,13 +297,14 @@ export function registerGestures(app: FastifyInstance, options: GesturesOptions)
             .execute();
           return accepted;
         });
+        handler.respond?.(reply, body.result);
         return await reply.code(200).send(body);
       } catch (error) {
         if (error instanceof GestureRefusal) {
           return refuse(error);
         }
         // Le même geste, reçu deux fois en même temps : le second attend le premier, puis le rend.
-        if (uniqueViolationSchema.safeParse(error).success) {
+        if (duplicateGestureSchema.safeParse(error).success) {
           return send(reply, await replayed(gestureId.data, userId));
         }
         throw error;

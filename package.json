@@ -10,6 +10,8 @@
     "build": "tsc -b tsconfig.build.json",
     "dev": "node scripts/dev.mjs",
     "db:reset": "node scripts/db-reset.mjs",
+    "db:migrate": "tsc -b tsconfig.build.json && node scripts/with-env.mjs pnpm -F @cairn/serveur migrate",
+    "db:types": "node scripts/with-env.mjs pnpm -F @cairn/serveur db:types",
     "typecheck": "tsc -b && tsc -p apps/ecrans",
     "lint": "eslint .",
     "format": "prettier --write .",

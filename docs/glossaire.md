@@ -284,6 +284,8 @@ Règles d'usage :
 | Refus | `Refusal` | Réponse du produit à un geste qu'il n'enregistre pas. Porte son motif et produit un événement (`RG-TRA-005`). |
 | Motif de refus | `RefusalReason` | Raison d'un refus, prise dans un catalogue fermé fourni par le produit. |
 | Utilisateur | `User` | Personne qui se connecte au produit, porteuse de rôles et de périmètres. Ne se supprime pas ; se désactive (`RG-ORG-023`). |
+| Identifiant de connexion | `LoginName` | Nom unique par lequel un utilisateur s'identifie pour ouvrir une session. |
+| Mot de passe | `Password` | Secret d'un utilisateur, jamais conservé en clair : l'instance n'en garde qu'une empreinte. |
 | Session | `Session` | Connexion d'un utilisateur au produit depuis un navigateur. Un utilisateur peut en tenir plusieurs à la fois (`RG-SUR-006`). |
 | Clé d'agent | `AgentKey` | Secret émis par l'instance pour identifier un agent d'impression ou un système externe, jamais un utilisateur. Révocable. |
 | Signal de changement | `ChangeSignal` | Avis envoyé aux écrans qu'un objet a changé, sans rien de son contenu ; l'écran relit l'objet avec ses droits. |

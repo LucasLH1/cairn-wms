@@ -12,5 +12,9 @@ export const en: LabelCatalog = {
     outOfScope: 'This object is outside your scope.',
     undeclaredWorkstation: 'This workstation is not declared: no gesture is possible.',
     editLockHeldByOther: '{{holder}} holds the edit lock.',
+    invalidCredentials: 'Incorrect login name or password.',
+    tooManyAttempts: 'Too many attempts: try again in a few minutes.',
+    workstationNameTaken: 'A workstation is already named {{name}}.',
+    unknownSite: 'This site does not exist.',
   },
 };

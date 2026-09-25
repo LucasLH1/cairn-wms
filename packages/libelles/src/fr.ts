@@ -13,6 +13,10 @@ export const fr = {
     outOfScope: 'Cet objet est hors de votre périmètre.',
     undeclaredWorkstation: 'Ce poste n’est pas déclaré : aucun geste n’est possible.',
     editLockHeldByOther: '{{holder}} a la main.',
+    invalidCredentials: 'Identifiant de connexion ou mot de passe incorrect.',
+    tooManyAttempts: 'Trop de tentatives : réessayez dans quelques minutes.',
+    workstationNameTaken: 'Un poste porte déjà le nom {{name}}.',
+    unknownSite: 'Ce site n’existe pas.',
   },
 } as const;
 

@@ -10,7 +10,8 @@ export default defineConfig({
   },
   server: {
     proxy: {
-      '/api': { target: 'http://localhost:3000', rewrite: (path) => path.replace(/^\/api/u, '') },
+      // Les routes du contrat vivent sous /api, côté serveur comme côté écrans.
+      '/api': { target: 'http://localhost:3000' },
     },
   },
 });
