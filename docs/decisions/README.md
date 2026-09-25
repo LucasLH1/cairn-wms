@@ -35,18 +35,22 @@ défaire à bon compte, et dont quelqu'un — dans six mois, ou six ans — voud
 | 0026 | [Temps réel : WebSocket et signaux de changement](0026-temps-reel.md) | actée |
 | 0027 | [Authentification, sessions et postes](0027-authentification-sessions-et-postes.md) | actée |
 | 0028 | [Traitements différés](0028-traitements-differes.md) | actée |
+| 0029 | [Environnements et déploiement : le staging](0029-environnements-et-deploiement.md) | actée |
+| 0030 | [Sauvegarde et restauration](0030-sauvegarde-et-restauration.md) | actée |
 
 **La pile est reprise de zéro depuis le 2026-09-24 et actée.** Les fiches 0002 et 0004 à 0008 sont
 abandonnées et restent ici pour l'histoire ; leurs numéros ne seront jamais réutilisés.
 
-- Validées par Lucas : 0009, 0010 et 0011 le 2026-09-24 ; 0012 et 0013 le 2026-09-25.
+- Validées par Lucas : 0009, 0010 et 0011 le 2026-09-24 ; 0012 et 0013 le 2026-09-25 ; le nom et le
+  principe du staging (0029) le 2026-09-25.
 - Actées par Claude le 2026-09-25, sur délégation explicite de Lucas (« Prends les décisions qu'il
-  faut, je veux passer au dev le plus rapidement possible ») : 0014 à 0028. Chaque fiche le mentionne.
+  faut, je veux passer au dev le plus rapidement possible ») : 0014 à 0030, hormis ce qui précède.
+  Chaque fiche le mentionne.
 
 Le code du lot 1 peut s'écrire dans le cadre de ces fiches. Tout choix engageant qu'elles ne couvrent
 pas demande une nouvelle fiche avant d'être mis en œuvre. Restent à écrire, avant le lot où ils servent :
-la sauvegarde et la restauration, la sécurité et l'exploitation en série de l'espace technique
-(fiche 0015).
+la sécurité et l'exploitation en série de l'espace technique (fiche 0015), le stockage des fichiers
+(fiche 0030).
 
 ## La règle
 
