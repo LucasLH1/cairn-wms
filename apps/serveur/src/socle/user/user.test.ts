@@ -144,6 +144,8 @@ describe('sessions (fiche 0027, règles 2 et 3)', () => {
     expect(current.json()).toEqual({
       user: { id: users.operator, displayName: 'operator' },
       workstation: null,
+      sites: [{ id: siteId, code: `A-${suffix}`, name: 'Site A', execution: true }],
+      permissions: [],
     });
   });
 

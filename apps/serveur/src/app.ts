@@ -1,14 +1,24 @@
 import Fastify, { type FastifyInstance } from 'fastify';
+import { listItemsHandler } from './logistique/item/index.js';
+import { listPrincipalsHandler } from './logistique/organization/index.js';
+import { listSuppliersHandler } from './logistique/party/index.js';
+import {
+  createExpectedReceiptHandler,
+  getExpectedReceiptHandler,
+  listOpenExpectedReceiptsHandler,
+} from './logistique/reception/index.js';
 import type { Database } from './socle/database/index.js';
 import { registerGestures } from './socle/gesture/index.js';
 import { runHealthChecks, type HealthCheck } from './socle/health/index.js';
 import { authorize } from './socle/permission/index.js';
+import { registerQueries } from './socle/query/index.js';
 import { registerSignalRoute, type SignalRelay } from './socle/signal/index.js';
 import {
   declareWorkstationHandler,
   hasSession,
   registerSessionRoutes,
   sessionAuthor,
+  sessionUserId,
   type AccessConfig,
 } from './socle/user/index.js';
 
@@ -47,7 +57,18 @@ export function buildApp(options: AppOptions): FastifyInstance {
         authorize: (transaction, author, permission, scope) =>
           authorize(transaction, author.userId, permission, scope),
       },
-      handlers: [declareWorkstationHandler(access.cookieSecret)],
+      handlers: [declareWorkstationHandler(access.cookieSecret), createExpectedReceiptHandler],
+    });
+    registerQueries(app, {
+      db,
+      resolveUser: sessionUserId({ db, config: access }),
+      handlers: [
+        listPrincipalsHandler,
+        listSuppliersHandler,
+        listItemsHandler,
+        listOpenExpectedReceiptsHandler,
+        getExpectedReceiptHandler,
+      ],
     });
   }
 

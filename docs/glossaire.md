@@ -280,6 +280,7 @@ Règles d'usage :
 | Français | Anglais | Définition |
 |---|---|---|
 | Geste | `Gesture` | Demande, venue d'un utilisateur ou d'un système, d'enregistrer un fait ou un changement. Un geste est enregistré avec tous ses effets, ou refusé ; jamais laissé indéterminé (`RG-EXI-006`). |
+| Consultation | `Query` | Lecture sans effet, déclarée au contrat comme un geste : ce qu'elle reçoit, ce qu'elle rend. Ne montre que ce que le périmètre de l'utilisateur lui permet de voir (`RG-EXI-050`). |
 | Identifiant de geste | `GestureId` | Identifiant attribué à un geste par le poste qui l'émet. Un geste reçu deux fois sous le même identifiant n'est enregistré qu'une fois (`RG-EXI-007`). |
 | Refus | `Refusal` | Réponse du produit à un geste qu'il n'enregistre pas. Porte son motif et produit un événement (`RG-TRA-005`). |
 | Motif de refus | `RefusalReason` | Raison d'un refus, prise dans un catalogue fermé fourni par le produit. |

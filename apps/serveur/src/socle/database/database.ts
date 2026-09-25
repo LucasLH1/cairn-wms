@@ -3,6 +3,10 @@ import pg from 'pg';
 import type { ConnectionSettings } from './config.js';
 import type { DB } from './database.generated.js';
 
+// Une date sans heure reste une date : jamais convertie en instant du fuseau du serveur.
+const DATE_OID = 1082;
+pg.types.setTypeParser(DATE_OID, (value) => value);
+
 export type Database = Kysely<DB>;
 export type DatabaseTransaction = Transaction<DB>;
 

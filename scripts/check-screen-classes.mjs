@@ -10,6 +10,8 @@ const layout = new RegExp(
     [
       'flex(?:-(?:row|col|wrap|1|auto|none))?',
       'grid(?:-(?:cols|rows|flow)-[a-z0-9-]+)?',
+      // Gabarit de grille tiré d'une variable des jetons, jamais d'une valeur écrite.
+      'grid-(?:cols|rows)-\\(--cairn-[a-z0-9-]+\\)',
       'col(?:-span)?-[a-z0-9-]+',
       'row(?:-span)?-[a-z0-9-]+',
       '(?:inline-)?(?:block|flex|grid)',

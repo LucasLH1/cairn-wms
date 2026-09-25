@@ -9,6 +9,8 @@ export type Generated<T> = T extends ColumnType<infer S, infer I, infer U>
   ? ColumnType<S, I | undefined, U>
   : ColumnType<T, T | undefined, T>;
 
+export type Int8 = ColumnType<string, bigint | number | string, bigint | number | string>;
+
 export type Json = JsonValue;
 
 export type JsonArray = JsonValue[];
@@ -31,6 +33,13 @@ export interface FoundationGesture {
   receivedAt: Generated<Timestamp>;
   response: Json;
   workstationId: string | null;
+}
+
+export interface FoundationNumberingScheme {
+  nextValue: Generated<Int8>;
+  objectType: string;
+  prefix: string;
+  width: number;
 }
 
 export interface FoundationRole {
@@ -105,8 +114,72 @@ export interface FoundationWorkstation {
   siteId: string;
 }
 
+export interface LogisticsExpectedReceipt {
+  expectedArrivalDate: string;
+  id: Generated<string>;
+  number: string;
+  principalId: string;
+  siteId: string;
+  state: Generated<string>;
+  supplierId: string;
+  version: Generated<number>;
+}
+
+export interface LogisticsExpectedReceiptLine {
+  expectedQuantity: number;
+  expectedReceiptId: string;
+  id: Generated<string>;
+  itemId: string;
+  lineNumber: number;
+  servedQuantity: Generated<number>;
+}
+
+export interface LogisticsItem {
+  code: string;
+  family: string | null;
+  id: Generated<string>;
+  longLabel: string | null;
+  principalId: string;
+  shortLabel: string;
+  state: Generated<string>;
+  trackingMode: string;
+}
+
+export interface LogisticsItemBarcode {
+  active: Generated<boolean>;
+  code: string;
+  itemId: string;
+  nature: string;
+  principalId: string;
+}
+
+export interface LogisticsPackagingLevel {
+  itemId: string;
+  name: string;
+  rank: number;
+  unitsOfLowerLevel: number | null;
+}
+
+export interface LogisticsParty {
+  active: Generated<boolean>;
+  code: string;
+  family: string;
+  id: Generated<string>;
+  name: string;
+  principalId: string | null;
+}
+
+export interface LogisticsPrincipal {
+  active: Generated<boolean>;
+  code: string;
+  id: Generated<string>;
+  name: string;
+  principalGroup: string | null;
+}
+
 export interface DB {
   "foundation.gesture": FoundationGesture;
+  "foundation.numberingScheme": FoundationNumberingScheme;
   "foundation.role": FoundationRole;
   "foundation.rolePermission": FoundationRolePermission;
   "foundation.session": FoundationSession;
@@ -117,4 +190,11 @@ export interface DB {
   "foundation.userRole": FoundationUserRole;
   "foundation.userSite": FoundationUserSite;
   "foundation.workstation": FoundationWorkstation;
+  "logistics.expectedReceipt": LogisticsExpectedReceipt;
+  "logistics.expectedReceiptLine": LogisticsExpectedReceiptLine;
+  "logistics.item": LogisticsItem;
+  "logistics.itemBarcode": LogisticsItemBarcode;
+  "logistics.packagingLevel": LogisticsPackagingLevel;
+  "logistics.party": LogisticsParty;
+  "logistics.principal": LogisticsPrincipal;
 }

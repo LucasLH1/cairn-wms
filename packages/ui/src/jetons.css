@@ -72,6 +72,7 @@
     radial-gradient(900px 600px at 12% -10%, rgb(60 220 190 / 12%), transparent 60%),
     radial-gradient(800px 600px at 88% 8%, rgb(132 110 255 / 10%), transparent 62%);
   --cairn-logo-glow: 0 6px 18px -6px rgb(80 220 200 / 80%);
+  --cairn-menu-shadow: 0 28px 60px -24px #000;
 
   /* Polices, livrées avec le produit (fiche 0011) */
   --cairn-font-sans: 'Geist Variable', system-ui, sans-serif;

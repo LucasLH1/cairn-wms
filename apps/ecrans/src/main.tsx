@@ -1,5 +1,6 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { RouterProvider } from '@tanstack/react-router';
+import { RouterProvider as AriaRouterProvider } from 'react-aria-components';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { BarcodeService, BarcodeServiceContext } from './barcode/service.js';
@@ -34,7 +35,14 @@ createRoot(container).render(
     <QueryClientProvider client={queryClient}>
       <SignalChannelContext value={signals}>
         <BarcodeServiceContext value={barcode}>
-          <RouterProvider router={router} />
+          {/* Les liens des composants React Aria naviguent par le routeur, sans recharger la page. */}
+          <AriaRouterProvider
+            navigate={(path) => {
+              router.history.push(path);
+            }}
+          >
+            <RouterProvider router={router} />
+          </AriaRouterProvider>
         </BarcodeServiceContext>
       </SignalChannelContext>
     </QueryClientProvider>

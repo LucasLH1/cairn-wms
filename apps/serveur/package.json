@@ -7,8 +7,8 @@
     "build": "tsc -b tsconfig.build.json",
     "start": "node dist/main.js",
     "migrate": "node dist/migrate.js",
-    "db:types": "kysely-codegen --dialect postgres --camel-case --default-schema public --include-pattern \"{foundation,logistics}.*\" --out-file src/socle/database/database.generated.ts --url \"env(CAIRN_DATABASE_ADMIN_URL)\"",
-    "db:types:check": "kysely-codegen --dialect postgres --camel-case --default-schema public --include-pattern \"{foundation,logistics}.*\" --out-file src/socle/database/database.generated.ts --url \"env(CAIRN_DATABASE_ADMIN_URL)\" --verify"
+    "db:types": "kysely-codegen --dialect postgres --date-parser string --camel-case --default-schema public --include-pattern \"{foundation,logistics}.*\" --out-file src/socle/database/database.generated.ts --url \"env(CAIRN_DATABASE_ADMIN_URL)\"",
+    "db:types:check": "kysely-codegen --dialect postgres --date-parser string --camel-case --default-schema public --include-pattern \"{foundation,logistics}.*\" --out-file src/socle/database/database.generated.ts --url \"env(CAIRN_DATABASE_ADMIN_URL)\" --verify"
   },
   "dependencies": {
     "@cairn/contrat": "workspace:*",

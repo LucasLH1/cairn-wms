@@ -68,6 +68,9 @@
   --tracking-group: 0.1em;
   --tracking-title: -0.02em;
 
+  /* Durées : la seule transition de la maquette, celle de la navigation */
+  --default-transition-duration: 160ms;
+
   /* Flous */
   --blur-panel: 18px;
   --blur-raised: 22px;
@@ -130,14 +133,30 @@
   --color-mute-bd: var(--cairn-mute-bd);
   --color-transparent: transparent;
   --shadow-logo: var(--cairn-logo-glow);
+  --shadow-menu: var(--cairn-menu-shadow);
 }
 
 :root {
   /* Colonnes de l'ossature : la navigation fixe, puis le contenu. */
   --cairn-shell-columns: var(--spacing-nav) minmax(0, 1fr);
+
+  /* Largeurs de colonne des tableaux denses, relevées dans la maquette */
+  --cairn-column-code: 100px;
+  --cairn-column-number: 90px;
+  --cairn-column-date: 120px;
+  --cairn-column-status: 150px;
+  --cairn-column-text-min: 180px;
+
+  /* Ligne de saisie : référence, quantité (champ de quantité de la maquette, 230 px), action */
+  --cairn-line-columns: minmax(0, 1fr) 230px auto;
 }
 
 @layer base {
+  a {
+    color: var(--cairn-accent);
+    text-decoration: none;
+  }
+
   body {
     margin: 0;
     background-color: var(--cairn-bg);

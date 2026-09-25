@@ -1,1 +1,1 @@
-export { authorize, type PermissionScope } from './permission.js';
+export { authorize, canSeeSite, visibleSiteIds, type PermissionScope } from './permission.js';

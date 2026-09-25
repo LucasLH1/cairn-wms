@@ -49,7 +49,11 @@ Le `.env` n'est jamais suivi. Les mots de passe y sont ceux de la base jetable d
 
 Après `pnpm db:reset`, les utilisateurs du scénario 1 — `anna`, `chloe`, `remi`, `bruno` — ouvrent
 une session avec le mot de passe fictif `demo-fictif`, commun au jeu de données et sans valeur ailleurs.
-Leurs rôles ne sont pas encore posés : ils viendront avec le scénario 1 (#60).
+Anna porte le rôle « Gestionnaire », qui saisit les attendus ; les autres rôles viennent avec les
+étapes suivantes du scénario 1. Le site A compte un poste déclaré, « Poste bureau 1 » ; aucun geste
+n'est possible sans poste. En attendant qu'un utilisateur du jeu de données déclare les postes (#73),
+`pnpm dev:workstation` donne le cookie de ce poste, à poser dans le navigateur (outils de
+développement > Application > Cookies).
 
 Routes techniques du serveur : `/live` (le processus répond), `/health` (la base répond et est
 migrée), `/version` (le commit servi).

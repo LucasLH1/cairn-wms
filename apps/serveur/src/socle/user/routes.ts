@@ -2,6 +2,7 @@ import {
   APPLICATION_HEADER,
   APPLICATION_HEADER_VALUE,
   openSessionInputSchema,
+  permissionSchema,
   SESSION_CLOSE_PATH,
   SESSION_PATH,
   type CurrentSession,
@@ -21,6 +22,32 @@ export interface AccessOptions {
 }
 
 const refused = (reason: string) => ({ outcome: 'refused' as const, reason });
+
+/** Permissions de l'utilisateur : l'union de celles de ses rôles (RG-ORG-021). */
+async function permissionsOf(db: Database, userId: string): Promise<CurrentSession['permissions']> {
+  const rows = await db
+    .selectFrom('foundation.userRole as userRole')
+    .innerJoin('foundation.rolePermission as rolePermission', 'rolePermission.roleId', 'userRole.roleId')
+    .select('rolePermission.permission')
+    .distinct()
+    .where('userRole.userId', '=', userId)
+    .execute();
+  return rows.flatMap((row) => {
+    const permission = permissionSchema.safeParse(row.permission);
+    return permission.success ? [permission.data] : [];
+  });
+}
+
+/** Sites de rattachement de l'utilisateur, et si son périmètre d'exécution les couvre. */
+async function sitesOf(db: Database, userId: string): Promise<CurrentSession['sites']> {
+  return db
+    .selectFrom('foundation.userSite as userSite')
+    .innerJoin('foundation.site as site', 'site.id', 'userSite.siteId')
+    .select(['site.id', 'site.code', 'site.name', 'userSite.execution'])
+    .where('userSite.userId', '=', userId)
+    .orderBy('site.code')
+    .execute();
+}
 
 /**
  * Routes de session du contrat : ouvrir, lire, fermer (fiche 0027). Toutes exigent l'en-tête de
@@ -62,6 +89,8 @@ export function registerSessionRoutes(app: FastifyInstance, options: AccessOptio
     const session: CurrentSession = {
       user: { id: opened.userId, displayName: opened.displayName },
       workstation: workstation ?? null,
+      sites: await sitesOf(db, opened.userId),
+      permissions: await permissionsOf(db, opened.userId),
     };
     return reply.header('set-cookie', cookies).send({ outcome: 'accepted', result: session });
   });
@@ -79,6 +108,8 @@ export function registerSessionRoutes(app: FastifyInstance, options: AccessOptio
     const session: CurrentSession = {
       user: { id: user.userId, displayName: user.displayName },
       workstation: workstation ?? null,
+      sites: await sitesOf(db, user.userId),
+      permissions: await permissionsOf(db, user.userId),
     };
     return session;
   });
@@ -119,4 +150,16 @@ export function hasSession(options: AccessOptions): (request: FastifyRequest) =>
       options.config.sessionIdleMinutes,
       readCookie(request.headers.cookie, SESSION_COOKIE),
     )) !== undefined;
+}
+
+/** L'utilisateur de la session en cours, ou `null` : ce qu'une consultation exige. */
+export function sessionUserId(options: AccessOptions): (request: FastifyRequest) => Promise<string | null> {
+  return async (request) =>
+    (
+      await resolveSession(
+        options.db,
+        options.config.sessionIdleMinutes,
+        readCookie(request.headers.cookie, SESSION_COOKIE),
+      )
+    )?.userId ?? null;
 }

@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { permissionSchema } from './permission.js';
 import { refusalSchema } from './refusal.js';
 
 /**
@@ -23,5 +24,12 @@ export const sessionRefusalSchema = refusalSchema(sessionRefusalReasonSchema);
 export const currentSessionSchema = z.object({
   user: z.object({ id: z.uuid(), displayName: z.string() }),
   workstation: z.object({ id: z.uuid(), name: z.string() }).nullable(),
+  /** Sites de rattachement, et si l'utilisateur y agit (RG-ORG-015, RG-SUR-026). */
+  sites: z.array(z.object({ id: z.uuid(), code: z.string(), name: z.string(), execution: z.boolean() })),
+  /**
+   * Permissions de l'utilisateur, pour que l'écran ne propose pas un geste qu'il refuserait
+   * (RG-SUR-028). Le serveur contrôle chaque geste quand même (RG-EXI-012).
+   */
+  permissions: z.array(permissionSchema),
 });
 export type CurrentSession = z.infer<typeof currentSessionSchema>;

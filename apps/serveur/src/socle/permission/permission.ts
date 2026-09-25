@@ -1,5 +1,6 @@
 import type { Permission } from '@cairn/contrat';
-import type { DatabaseTransaction } from '../database/index.js';
+import type { Kysely } from 'kysely';
+import type { DatabaseTransaction, DB } from '../database/index.js';
 
 export interface PermissionScope {
   readonly siteId?: string;
@@ -41,4 +42,19 @@ export async function authorize(
     }
   }
   return undefined;
+}
+
+/** Sites que l'utilisateur voit : ceux de son rattachement (RG-ORG-015). La hiérarchie viendra avec les équipes. */
+export async function visibleSiteIds(db: Kysely<DB>, userId: string): Promise<readonly string[]> {
+  const rows = await db
+    .selectFrom('foundation.userSite')
+    .select('siteId')
+    .where('userId', '=', userId)
+    .execute();
+  return rows.map((row) => row.siteId);
+}
+
+/** Vrai si le site est dans la visibilité de l'utilisateur (RG-EXI-050). */
+export async function canSeeSite(db: Kysely<DB>, userId: string, siteId: string): Promise<boolean> {
+  return (await visibleSiteIds(db, userId)).includes(siteId);
 }
