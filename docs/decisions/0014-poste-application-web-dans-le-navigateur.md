@@ -1,6 +1,6 @@
 # 0014 — Poste : application web dans le navigateur
 
-**Statut** : proposée · **Date** : 2026-09-24 · **Remplace** : — · **Remplacée par** : —
+**Statut** : actée · **Date** : 2026-09-25 · **Remplace** : — · **Remplacée par** : —
 
 ## Contexte
 
@@ -41,11 +41,14 @@ Ce qui contraint :
 
 ## Décision
 
-*Proposée par Claude, à valider par Lucas.* **Les écrans de Cairn WMS sont une application web ouverte
-dans le navigateur du poste ; rien n'est installé sur le poste pour les écrans** (option A).
+**Les écrans de Cairn WMS sont une application web ouverte dans le navigateur du poste ; rien n'est
+installé sur le poste pour les écrans** (option A).
 
 Critère décisif : mettre à jour une instance met à jour tous ses écrans, sans intervention sur les
 postes.
+
+Proposée par Claude le 2026-09-24. Actée par Claude le 2026-09-25, sur délégation explicite de Lucas :
+« Prends les décisions qu'il faut, je veux passer au dev le plus rapidement possible. »
 
 ## Conséquences
 
@@ -53,7 +56,7 @@ postes.
 - **Ce qu'on ne peut plus faire** : compter sur le poste pour imprimer ou pour piloter un matériel
   local.
 - **Ce qu'il faut mettre en place** : l'impression par l'agent d'impression (fiche 0016) ; la liste des
-  navigateurs pris en charge, avec le cadre des écrans.
+  navigateurs pris en charge, avec le cadre des écrans (fiche 0025).
 - **Ce qu'on accepte de payer** : un composant d'impression séparé des écrans.
 - **Ce qui la remettrait en cause** : un matériel exigé par la spécification qui ne se branche ni comme
   un clavier ni par le réseau.
