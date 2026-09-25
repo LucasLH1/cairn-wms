@@ -1,6 +1,6 @@
 # 0016 — Impression : agent d'impression dans les deux modes
 
-**Statut** : proposée · **Date** : 2026-09-24 · **Remplace** : — · **Remplacée par** : —
+**Statut** : actée · **Date** : 2026-09-25 · **Remplace** : — · **Remplacée par** : —
 
 ## Contexte
 
@@ -18,8 +18,8 @@ Ce qui contraint :
   transporteur (`RG-EXI-078`).
 - **Deux modes d'exploitation, une même version** ; tout ce qui dépend de l'environnement, imprimantes
   comprises, se déclare par paramétrage (`RG-EXI-059`, `063`).
-- **Les écrans sont ouverts dans le navigateur** (fiche 0014, proposée) : un navigateur n'imprime pas en
-  silence vers une imprimante désignée.
+- **Les écrans sont ouverts dans le navigateur** (fiche 0014) : un navigateur n'imprime pas en silence
+  vers une imprimante désignée.
 - **Le glossaire définit déjà l'agent d'impression** (`PrintAgent`) : programme installé sur un poste
   d'un site, qui reçoit les documents à imprimer et les remet aux imprimantes du site ; son état se lit
   dans l'espace technique.
@@ -70,12 +70,14 @@ le réseau de l'entrepôt, derrière son routeur. Le serveur ne peut pas ouvrir 
 
 ## Décision
 
-*Proposée par Claude, à valider par Lucas.* **Toute impression passe par l'agent d'impression installé
-sur un poste de chaque site, qui se connecte de lui-même au serveur, dans les deux modes
-d'exploitation** (option B).
+**Toute impression passe par l'agent d'impression installé sur un poste de chaque site, qui se connecte
+de lui-même au serveur, dans les deux modes d'exploitation** (option B).
 
 Critère décisif : un seul chemin d'impression pour les deux modes, sans rien ouvrir sur le réseau de
 l'entrepôt, avec l'échec remonté au serveur.
+
+Proposée par Claude le 2026-09-24. Actée par Claude le 2026-09-25, sur délégation explicite de Lucas :
+« Prends les décisions qu'il faut, je veux passer au dev le plus rapidement possible. »
 
 ## Conséquences
 
@@ -85,7 +87,7 @@ l'entrepôt, avec l'échec remonté au serveur.
 - **Ce qu'il faut mettre en place** :
   - dès le lot 1 : l'agent d'impression, écrit en TypeScript (fiche 0009), et son installation sur un
     poste Windows et Linux ;
-  - la file des travaux d'impression côté serveur, avec relance, dans la base (fiche 0012, proposée) ;
+  - la file des travaux d'impression côté serveur, avec relance, dans la base (fiches 0012 et 0028) ;
   - la déclaration des destinations d'impression par paramétrage (`RG-EXI-063`) ;
   - la mise à jour de l'agent : automatique, depuis le serveur, pour qu'il suive la version de
     l'instance.
@@ -97,7 +99,7 @@ l'entrepôt, avec l'échec remonté au serveur.
 ### Non prouvé
 
 - L'empaquetage d'un programme TypeScript en exécutable installable sur Windows : possible, maturité à
-  vérifier dans la fiche sur l'environnement d'exécution.
+  vérifier (fiche 0018).
 - Que l'acceptation d'un travail par l'imprimante soit toujours lisible selon le protocole employé
   (`RG-EXI-077`) : dépend des modèles d'imprimante, à éprouver au lot 1.
 - Le poste qui héberge l'agent comme point unique de défaillance d'un site : sa gravité dépend des
