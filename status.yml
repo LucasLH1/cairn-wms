@@ -10,8 +10,9 @@
 #   en développement   la réalisation est engagée
 #   livré              la réalisation est en production sur main
 #
-# Tous les modules de la carte sont aujourd'hui « spécifié ». Aucun n'est
-# « en développement » ni « livré » : le dépôt ne contient aucun code applicatif.
+# Tous les modules de la carte sont spécifiés. Ceux que le lot 1 a commencé à
+# réaliser sont « en développement » : du code existe sur dev pour une partie de
+# leurs règles, rien n'est « livré » (aucune promotion vers main).
 # L'ordre de réalisation en lots est acté par 0003 (section « lots » ci-dessous,
 # remplace 0001). La pile est actée par les fiches 0009 à 0030 (section « pile »
 # ci-dessous) ; le code s'écrit dans leur cadre, et tout choix engageant
@@ -68,13 +69,13 @@ couches:
     modules:
       - id: "0.1"
         nom: Organisation et multi-clients
-        etat: spécifié
+        etat: en développement
         issue: 1
         doc: docs/socle/0.1-organisation.md
         prefixe_regles: RG-ORG
       - id: "0.2"
         nom: Référentiel produit
-        etat: spécifié
+        etat: en développement
         issue: 2
         doc: docs/socle/0.2-referentiel-produit.md
         prefixe_regles: RG-REF
@@ -92,7 +93,7 @@ couches:
         prefixe_regles: RG-STK
       - id: "0.5"
         nom: Tiers
-        etat: spécifié
+        etat: en développement
         issue: 5
         doc: docs/socle/0.5-tiers.md
         prefixe_regles: RG-TRS
@@ -104,13 +105,13 @@ couches:
         prefixe_regles: RG-WKF
       - id: "0.7"
         nom: Traçabilité et unités d'œuvre
-        etat: spécifié
+        etat: en développement
         issue: 7
         doc: docs/socle/0.7-tracabilite-unites-oeuvre.md
         prefixe_regles: RG-TRA
       - id: "0.8"
         nom: Surfaces, travail partagé et échanges
-        etat: spécifié
+        etat: en développement
         issue: 25
         doc: docs/socle/0.8-surfaces-et-travail-partage.md
         prefixe_regles: RG-SUR
@@ -127,7 +128,7 @@ couches:
     modules:
       - id: "1.1"
         nom: Réception
-        etat: spécifié
+        etat: en développement
         issue: 8
         doc: docs/flux-entrants/1.1-reception.md
         prefixe_regles: RG-REC
@@ -243,7 +244,7 @@ lots:
 
   - id: 1
     nom: L'entrepôt minimal
-    etat: à faire
+    etat: en développement
     jalon: Lot 1 — L'entrepôt minimal
     contenu: >-
       Un donneur d'ordre, un site, gestion quantitative. Attendu saisi à la main,
@@ -257,11 +258,17 @@ lots:
       code-barres, alertes dans l'application, impression des étiquettes de
       support et des documents de flux.
     prouve: La marchandise entre, se range, se prélève, sort, et le stock se corrige.
+    # Ossature réalisée, verte en intégration continue : espace de travail, chaîne,
+    # environnement local, base et journal, contrat des gestes, comptes et postes,
+    # temps réel, traitements différés, cadre des écrans (#51 à #59).
+    ossature: réalisée
     criteres: docs/lots/lot-1/README.md
     maquette: docs/lots/lot-1/maquette.html
     scenarios:
       - doc: docs/lots/lot-1/reception-et-rangement.md
         issue: 48
+        # Étapes couvertes par un test de bout en bout vert (tests/scenarios/).
+        etapes_realisees: [1]
       - doc: docs/lots/lot-1/commande-et-preparation.md
         issue: 49
       - doc: docs/lots/lot-1/controle-colisage-expedition.md
