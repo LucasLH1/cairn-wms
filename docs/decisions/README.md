@@ -19,18 +19,34 @@ défaire à bon compte, et dont quelqu'un — dans six mois, ou six ans — voud
 | 0010 | [Framework des écrans : React](0010-framework-des-ecrans-react.md) | actée |
 | 0011 | [Composants et style](0011-composants-et-style.md) | actée |
 | 0012 | [Base de données : PostgreSQL seul](0012-base-de-donnees-postgresql-seul.md) | actée |
-| 0013 | [Architecture : monolithe modulaire](0013-architecture-monolithe-modulaire.md) | proposée |
-| 0014 | [Poste : application web dans le navigateur](0014-poste-application-web-dans-le-navigateur.md) | proposée |
-| 0015 | [Livraison : conteneurs, et espace technique en processus distinct](0015-livraison-conteneurs-et-espace-technique-distinct.md) | proposée |
-| 0016 | [Impression : agent d'impression dans les deux modes](0016-impression-par-agent-d-impression.md) | proposée |
-| 0017 | [Garde-fous du serveur TypeScript](0017-garde-fous-du-serveur-typescript.md) | proposée |
+| 0013 | [Architecture : monolithe modulaire](0013-architecture-monolithe-modulaire.md) | actée |
+| 0014 | [Poste : application web dans le navigateur](0014-poste-application-web-dans-le-navigateur.md) | actée |
+| 0015 | [Livraison : conteneurs, et espace technique en processus distinct](0015-livraison-conteneurs-et-espace-technique-distinct.md) | actée |
+| 0016 | [Impression : agent d'impression dans les deux modes](0016-impression-par-agent-d-impression.md) | actée |
+| 0017 | [Garde-fous du serveur TypeScript](0017-garde-fous-du-serveur-typescript.md) | actée |
+| 0018 | [Environnement d'exécution : Node.js, version à support long](0018-environnement-d-execution-node.md) | actée |
+| 0019 | [Cadre du serveur et contrat des gestes](0019-cadre-du-serveur-et-contrat-des-gestes.md) | actée |
+| 0020 | [Bibliothèque de schémas : Zod](0020-bibliotheque-de-schemas-zod.md) | actée |
+| 0021 | [Accès aux données et migrations : Kysely](0021-acces-aux-donnees-et-migrations-kysely.md) | actée |
+| 0022 | [Journal d'événements](0022-journal-d-evenements.md) | actée |
+| 0023 | [Organisation du code et découpe interne](0023-organisation-du-code-et-decoupe-interne.md) | actée |
+| 0024 | [Chaîne de qualité et intégration continue](0024-chaine-de-qualite.md) | actée |
+| 0025 | [Cadre des écrans](0025-cadre-des-ecrans.md) | actée |
+| 0026 | [Temps réel : WebSocket et signaux de changement](0026-temps-reel.md) | actée |
+| 0027 | [Authentification, sessions et postes](0027-authentification-sessions-et-postes.md) | actée |
+| 0028 | [Traitements différés](0028-traitements-differes.md) | actée |
 
-**La pile est reprise de zéro depuis le 2026-09-24.** Les fiches 0002 et 0004 à 0008 sont abandonnées
-et restent ici pour l'histoire ; leurs numéros ne seront jamais réutilisés. Sont actés par Lucas, le
-2026-09-24 : le langage, TypeScript de bout en bout (0009) ; le framework des écrans, React (0010) ;
-les composants et le style (0011) ; le 2026-09-25 : la base de données, PostgreSQL seul (0012). Les
-fiches 0013 à 0017 sont proposées. Une fiche `proposée` n'engage rien et ne se met pas en œuvre : tant
-qu'elles ne sont pas actées, rien de ce qu'elles couvrent ne s'écrit.
+**La pile est reprise de zéro depuis le 2026-09-24 et actée.** Les fiches 0002 et 0004 à 0008 sont
+abandonnées et restent ici pour l'histoire ; leurs numéros ne seront jamais réutilisés.
+
+- Validées par Lucas : 0009, 0010 et 0011 le 2026-09-24 ; 0012 et 0013 le 2026-09-25.
+- Actées par Claude le 2026-09-25, sur délégation explicite de Lucas (« Prends les décisions qu'il
+  faut, je veux passer au dev le plus rapidement possible ») : 0014 à 0028. Chaque fiche le mentionne.
+
+Le code du lot 1 peut s'écrire dans le cadre de ces fiches. Tout choix engageant qu'elles ne couvrent
+pas demande une nouvelle fiche avant d'être mis en œuvre. Restent à écrire, avant le lot où ils servent :
+la sauvegarde et la restauration, la sécurité et l'exploitation en série de l'espace technique
+(fiche 0015).
 
 ## La règle
 
