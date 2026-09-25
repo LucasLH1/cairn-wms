@@ -1,6 +1,7 @@
 export { AppShell, Brand, BrandMark, type AppShellProps, type BrandProps } from './AppShell.js';
 export { Banner, type BannerProps } from './Banner.js';
 export { Button, type ButtonProps, type ButtonVariant } from './Button.js';
+export { Card, CardGrid, type CardGridProps, type CardProps } from './Card.js';
 export { DataTable, type ColumnSize, type DataColumn, type DataTableProps } from './DataTable.js';
 export { DateField, type DateFieldProps } from './DateField.js';
 export {

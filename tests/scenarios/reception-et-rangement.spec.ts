@@ -57,3 +57,38 @@ test("Étape 1 — Anna saisit l'attendu", async ({ page }) => {
   await expect(row.getByRole('cell').nth(4)).toHaveText('3');
   await expect(row).toContainText(labels.states.open);
 });
+
+test("Étape 2 — Chloé ouvre l'arrivage", async ({ page, browser }) => {
+  // Anna garde l'écran des réceptions ouvert : le changement doit lui parvenir sans rechargement.
+  const baseURL = test.info().project.use.baseURL;
+  const annaContext = await browser.newContext(baseURL === undefined ? {} : { baseURL });
+  const anna = await annaContext.newPage();
+  await useWorkstation(anna, OFFICE_WORKSTATION_ID);
+  await signIn(anna, 'anna');
+  await anna.getByRole('link', { name: fr.navigation.receptions }).click();
+  const annaDock = anna.getByRole('article', { name: 'Quai Q1' });
+  await expect(annaDock).toContainText(fr.dock.free);
+
+  // Chloé, au poste du bureau comme dans la maquette, ouvre l'arrivage au quai Q1.
+  await useWorkstation(page, OFFICE_WORKSTATION_ID);
+  await signIn(page, 'chloe');
+  await page.getByRole('link', { name: fr.navigation.receptions }).click();
+  const dock = page.getByRole('article', { name: 'Quai Q1' });
+  await dock.getByRole('button', { name: fr.arrival.open }).click();
+  await page.getByLabel(fr.arrival.vehicle).fill('AB-123-CD');
+  await choose(page, fr.arrival.carrier, 'Messagerie Démo');
+  await page.getByRole('button', { name: fr.arrival.submit }).click();
+
+  // On constate : le quai Q1 passe occupé, sa durée d'occupation défile en direct.
+  await expect(dock).toContainText(fr.dock.occupied);
+  await expect(dock).toContainText('AB-123-CD · Messagerie Démo');
+  await expect(dock).toContainText('Ouvert par Chloé');
+  const elapsed = dock.getByText(/^\d{2}:\d{2}:\d{2}$/u);
+  const first = await elapsed.textContent();
+  await expect(elapsed).not.toHaveText(first ?? '', { timeout: 3000 });
+
+  // Et chez Anna, sans rechargement (RG-EXI-001).
+  await expect(annaDock).toContainText(fr.dock.occupied);
+  await expect(annaDock).toContainText('Ouvert par Chloé');
+  await annaContext.close();
+});

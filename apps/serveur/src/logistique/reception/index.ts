@@ -1,3 +1,4 @@
+export { INBOUND_ARRIVAL, inboundArrivalOpenedEvent, openInboundArrivalHandler } from './arrival.js';
 export {
   createExpectedReceiptHandler,
   EXPECTED_RECEIPT,

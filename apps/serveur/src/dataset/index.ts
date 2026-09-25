@@ -1,4 +1,4 @@
-import type { Database } from '../socle/database/index.js';
+import type { Database, DatabaseTransaction } from '../socle/database/index.js';
 import { hashPassword } from '../socle/user/index.js';
 
 /** Ce qu'un chargement a posé, par objet : le chargeur rend compte de ce qu'il fait. */
@@ -29,6 +29,7 @@ export const DATASET_ITEMS = [
  */
 export const DATASET_WORKSTATIONS = [
   { id: '0199f000-0000-7000-8000-000000000001', name: 'Poste bureau 1' },
+  { id: '0199f000-0000-7000-8000-000000000002', name: 'Poste chariot 1' },
 ] as const;
 
 /**
@@ -37,6 +38,7 @@ export const DATASET_WORKSTATIONS = [
  */
 const DATASET_ROLES = [
   { name: 'Gestionnaire', holders: ['anna'], permissions: ['createExpectedReceipt'] },
+  { name: 'Cheffe de quai', holders: ['chloe'], permissions: ['openInboundArrival'] },
 ] as const;
 
 /**
@@ -96,6 +98,14 @@ export async function loadScenarioDataset(db: Database): Promise<DatasetReport> 
       .values({ family: 'supplier', principalId: principal.id, code: 'FD', name: 'Fournisseur Démo' })
       .execute();
 
+    // Transporteur du prestataire (scénario 3, § 4), utilisable par tous les donneurs d'ordre.
+    await transaction
+      .insertInto('logistics.party')
+      .values({ family: 'carrier', principalId: null, code: 'MSG', name: 'Messagerie Démo' })
+      .execute();
+
+    const locations = await loadWarehouse(transaction, site.id);
+
     // Références, gestion quantitative, conditionnées en cartons (§ 4).
     for (const definition of DATASET_ITEMS) {
       const item = await transaction
@@ -128,7 +138,107 @@ export async function loadScenarioDataset(db: Database): Promise<DatasetReport> 
       Role: DATASET_ROLES.length,
       Principal: 1,
       Supplier: 1,
+      Carrier: 1,
+      Location: locations,
       Item: DATASET_ITEMS.length,
     };
   });
+}
+
+/**
+ * Plan du site A (§ 4) : zone de quai, deux quais et deux emplacements de quai par quai ; réserve en
+ * régime libre, allées A et B, dix travées, trois niveaux, un support par emplacement ; un
+ * emplacement de débordement. Adresses de la maquette : « Q1-1 », « A-03-1 », « DEB-01 ».
+ * La cohabitation des zones n'est pas dite : elles sont mutualisées, la règle la moins restrictive (#73).
+ */
+async function loadWarehouse(transaction: DatabaseTransaction, siteId: string): Promise<number> {
+  const zone = async (code: string, name: string, purpose: string, addressPattern: object[]) =>
+    (
+      await transaction
+        .insertInto('logistics.zone')
+        .values({
+          siteId,
+          code,
+          name,
+          purpose,
+          cohabitation: 'shared',
+          addressPattern: JSON.stringify(addressPattern),
+        })
+        .returning('id')
+        .executeTakeFirstOrThrow()
+    ).id;
+  const rows: {
+    zoneId: string;
+    dockId: string | null;
+    type: string;
+    address: string;
+    segments: string;
+    supportCapacity: number | null;
+    overflow: boolean;
+  }[] = [];
+
+  const dockZone = await zone('QUAI', 'Zone de quai', 'receiving', [
+    { name: 'quai', format: 'alphanumeric', length: 2 },
+    { name: 'numéro', format: 'numeric', length: 1 },
+  ]);
+  for (const dockCode of ['Q1', 'Q2']) {
+    const dock = await transaction
+      .insertInto('logistics.dock')
+      .values({ zoneId: dockZone, code: dockCode })
+      .returning('id')
+      .executeTakeFirstOrThrow();
+    for (const number of ['1', '2']) {
+      rows.push({
+        zoneId: dockZone,
+        dockId: dock.id,
+        type: 'receivingDock',
+        address: `${dockCode}-${number}`,
+        segments: JSON.stringify([dockCode, number]),
+        supportCapacity: null,
+        overflow: false,
+      });
+    }
+  }
+
+  const reserve = await zone('RES', 'Réserve', 'storage', [
+    { name: 'allée', format: 'alphabetic', length: 1 },
+    { name: 'travée', format: 'numeric', length: 2 },
+    { name: 'niveau', format: 'numeric', length: 1 },
+  ]);
+  for (const aisle of ['A', 'B']) {
+    for (let bay = 1; bay <= 10; bay += 1) {
+      for (let level = 1; level <= 3; level += 1) {
+        const segments = [aisle, String(bay).padStart(2, '0'), String(level)];
+        rows.push({
+          zoneId: reserve,
+          dockId: null,
+          type: 'reserve',
+          address: segments.join('-'),
+          segments: JSON.stringify(segments),
+          supportCapacity: 1,
+          overflow: false,
+        });
+      }
+    }
+  }
+
+  const overflowZone = await zone('DEB', 'Débordement', 'storage', [
+    { name: 'zone', format: 'alphabetic', length: 3 },
+    { name: 'numéro', format: 'numeric', length: 2 },
+  ]);
+  rows.push({
+    zoneId: overflowZone,
+    dockId: null,
+    type: 'reserve',
+    address: 'DEB-01',
+    segments: JSON.stringify(['DEB', '01']),
+    supportCapacity: null,
+    overflow: true,
+  });
+
+  await transaction
+    .insertInto('logistics.location')
+    .values(rows.map((row, index) => ({ ...row, siteId, routeSequence: (index + 1) * 10 })))
+    .execute();
+  return rows.length;
 }

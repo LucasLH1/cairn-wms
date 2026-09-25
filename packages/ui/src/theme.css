@@ -55,6 +55,7 @@
   --text-secondary: 13px;
   --text-body: 14px;
   --text-heading: 16px;
+  --text-figure: 22px;
   --text-brand: 15px;
   --text-title: 21px;
 
@@ -88,6 +89,8 @@
   --color-nav-hover: var(--cairn-nav-hover);
   --color-nav-active: var(--cairn-nav-active);
   --color-dismiss: var(--cairn-dismiss);
+  --color-occupied-bg: var(--cairn-occupied-bg);
+  --color-occupied-bd: var(--cairn-occupied-bd);
   --color-field: var(--cairn-field);
   --color-well: var(--cairn-well);
   --color-control: var(--cairn-control);
@@ -146,6 +149,9 @@
   --cairn-column-date: 120px;
   --cairn-column-status: 150px;
   --cairn-column-text-min: 180px;
+
+  /* Grille des cartes (quais, zones…) : autant de colonnes de 280 px au moins que la largeur permet */
+  --cairn-card-columns: repeat(auto-fit, minmax(280px, 1fr));
 
   /* Ligne de saisie : référence, quantité (champ de quantité de la maquette, 230 px), action */
   --cairn-line-columns: minmax(0, 1fr) 230px auto;

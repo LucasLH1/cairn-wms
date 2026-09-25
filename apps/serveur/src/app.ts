@@ -1,11 +1,13 @@
 import Fastify, { type FastifyInstance } from 'fastify';
 import { listItemsHandler } from './logistique/item/index.js';
+import { listDocksHandler } from './logistique/location/index.js';
 import { listPrincipalsHandler } from './logistique/organization/index.js';
-import { listSuppliersHandler } from './logistique/party/index.js';
+import { listCarriersHandler, listSuppliersHandler } from './logistique/party/index.js';
 import {
   createExpectedReceiptHandler,
   getExpectedReceiptHandler,
   listOpenExpectedReceiptsHandler,
+  openInboundArrivalHandler,
 } from './logistique/reception/index.js';
 import type { Database } from './socle/database/index.js';
 import { registerGestures } from './socle/gesture/index.js';
@@ -57,7 +59,11 @@ export function buildApp(options: AppOptions): FastifyInstance {
         authorize: (transaction, author, permission, scope) =>
           authorize(transaction, author.userId, permission, scope),
       },
-      handlers: [declareWorkstationHandler(access.cookieSecret), createExpectedReceiptHandler],
+      handlers: [
+        declareWorkstationHandler(access.cookieSecret),
+        createExpectedReceiptHandler,
+        openInboundArrivalHandler,
+      ],
     });
     registerQueries(app, {
       db,
@@ -68,6 +74,8 @@ export function buildApp(options: AppOptions): FastifyInstance {
         listItemsHandler,
         listOpenExpectedReceiptsHandler,
         getExpectedReceiptHandler,
+        listCarriersHandler,
+        listDocksHandler,
       ],
     });
   }

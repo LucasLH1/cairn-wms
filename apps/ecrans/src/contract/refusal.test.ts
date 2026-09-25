@@ -2,6 +2,7 @@ import {
   commonRefusalReasonSchema,
   createExpectedReceipt,
   declareWorkstation,
+  openInboundArrival,
   sessionRefusalReasonSchema,
 } from '@cairn/contrat';
 import { catalogs, languages } from '@cairn/libelles';
@@ -13,6 +14,7 @@ const reasons = [
   ...sessionRefusalReasonSchema.options,
   ...declareWorkstation.refusalReasons,
   ...createExpectedReceipt.refusalReasons,
+  ...openInboundArrival.refusalReasons,
 ];
 
 describe('libellés des motifs de refus', () => {

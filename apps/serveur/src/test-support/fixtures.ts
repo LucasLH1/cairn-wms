@@ -164,3 +164,34 @@ export async function createCatalog(db: Database) {
   };
   return { own: await create(), other: await create() };
 }
+
+/** Une zone de quai et un quai sur le site ; un transporteur du prestataire. */
+export async function createDock(
+  db: Database,
+  siteId: string,
+): Promise<{ dockId: string; carrierId: string }> {
+  const suffix = randomUUID().slice(0, 8);
+  const zone = await db
+    .insertInto('logistics.zone')
+    .values({
+      siteId,
+      code: `QUAI-${suffix}`,
+      name: 'Zone de quai',
+      purpose: 'receiving',
+      cohabitation: 'shared',
+      addressPattern: JSON.stringify([{ name: 'quai', format: 'alphanumeric', length: 2 }]),
+    })
+    .returning('id')
+    .executeTakeFirstOrThrow();
+  const dock = await db
+    .insertInto('logistics.dock')
+    .values({ zoneId: zone.id, code: `Q-${suffix}` })
+    .returning('id')
+    .executeTakeFirstOrThrow();
+  const carrier = await db
+    .insertInto('logistics.party')
+    .values({ family: 'carrier', principalId: null, code: `T-${suffix}`, name: 'Transporteur de test' })
+    .returning('id')
+    .executeTakeFirstOrThrow();
+  return { dockId: dock.id, carrierId: carrier.id };
+}

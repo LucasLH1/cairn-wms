@@ -114,6 +114,13 @@ export interface FoundationWorkstation {
   siteId: string;
 }
 
+export interface LogisticsDock {
+  active: Generated<boolean>;
+  code: string;
+  id: Generated<string>;
+  zoneId: string;
+}
+
 export interface LogisticsExpectedReceipt {
   expectedArrivalDate: string;
   id: Generated<string>;
@@ -134,6 +141,17 @@ export interface LogisticsExpectedReceiptLine {
   servedQuantity: Generated<number>;
 }
 
+export interface LogisticsInboundArrival {
+  arrivedAt: Generated<Timestamp>;
+  carrierId: string | null;
+  dockId: string;
+  id: Generated<string>;
+  releasedAt: Timestamp | null;
+  siteId: string;
+  vehicleIdentification: string;
+  version: Generated<number>;
+}
+
 export interface LogisticsItem {
   code: string;
   family: string | null;
@@ -151,6 +169,20 @@ export interface LogisticsItemBarcode {
   itemId: string;
   nature: string;
   principalId: string;
+}
+
+export interface LogisticsLocation {
+  active: Generated<boolean>;
+  address: string;
+  dockId: string | null;
+  id: Generated<string>;
+  overflow: Generated<boolean>;
+  routeSequence: number;
+  segments: Json;
+  siteId: string;
+  supportCapacity: number | null;
+  type: string;
+  zoneId: string;
 }
 
 export interface LogisticsPackagingLevel {
@@ -177,6 +209,20 @@ export interface LogisticsPrincipal {
   principalGroup: string | null;
 }
 
+export interface LogisticsZone {
+  active: Generated<boolean>;
+  addressPattern: Json;
+  addressSeparator: Generated<string>;
+  code: string;
+  cohabitation: string;
+  id: Generated<string>;
+  name: string;
+  principalId: string | null;
+  purpose: string;
+  putawayMode: Generated<string>;
+  siteId: string;
+}
+
 export interface DB {
   "foundation.gesture": FoundationGesture;
   "foundation.numberingScheme": FoundationNumberingScheme;
@@ -190,11 +236,15 @@ export interface DB {
   "foundation.userRole": FoundationUserRole;
   "foundation.userSite": FoundationUserSite;
   "foundation.workstation": FoundationWorkstation;
+  "logistics.dock": LogisticsDock;
   "logistics.expectedReceipt": LogisticsExpectedReceipt;
   "logistics.expectedReceiptLine": LogisticsExpectedReceiptLine;
+  "logistics.inboundArrival": LogisticsInboundArrival;
   "logistics.item": LogisticsItem;
   "logistics.itemBarcode": LogisticsItemBarcode;
+  "logistics.location": LogisticsLocation;
   "logistics.packagingLevel": LogisticsPackagingLevel;
   "logistics.party": LogisticsParty;
   "logistics.principal": LogisticsPrincipal;
+  "logistics.zone": LogisticsZone;
 }

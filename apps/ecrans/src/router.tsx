@@ -10,6 +10,7 @@ import { currentSessionQuery } from './contract/session.js';
 import { ExpectedReceiptScreen } from './screens/ExpectedReceiptScreen.js';
 import { HomeScreen } from './screens/HomeScreen.js';
 import { NewExpectedReceiptScreen } from './screens/NewExpectedReceiptScreen.js';
+import { OpenArrivalScreen } from './screens/OpenArrivalScreen.js';
 import { ReceptionsScreen } from './screens/ReceptionsScreen.js';
 import { SessionScreen } from './screens/SessionScreen.js';
 import type { ScreenPlace } from './shell/place.js';
@@ -75,9 +76,22 @@ const expectedReceiptRoute = createRoute({
   staticData: { place: 'receptions' },
 });
 
+const openArrivalRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/docks/$dockId/arrival',
+  component: OpenArrivalScreen,
+  staticData: { place: 'receptions' },
+});
+
 const routeTree = rootRoute.addChildren([
   sessionRoute,
-  shellRoute.addChildren([homeRoute, receptionsRoute, newExpectedReceiptRoute, expectedReceiptRoute]),
+  shellRoute.addChildren([
+    homeRoute,
+    receptionsRoute,
+    newExpectedReceiptRoute,
+    expectedReceiptRoute,
+    openArrivalRoute,
+  ]),
 ]);
 
 export function createAppRouter(queryClient: QueryClient) {

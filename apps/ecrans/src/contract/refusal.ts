@@ -14,3 +14,18 @@ function isKnown(reason: string, labels: typeof fr.refusal): reason is RefusalRe
 export function refusalLabelKey(reason: string, labels: typeof fr.refusal): RefusalLabelKey {
   return isKnown(reason, labels) ? (`refusal.${reason}` as const) : 'refusal.invalidInput';
 }
+
+/** Détails d'un refus, tels que le contrat les porte. */
+export type RefusalDetails = Readonly<Record<string, string | number | boolean>> | undefined;
+
+/**
+ * Valeurs d'interpolation d'un libellé de refus : chaque variable des libellés de refus, tirée des
+ * détails du refus, vide si le refus ne la porte pas.
+ */
+export function refusalValues(details: RefusalDetails): { holder: string; name: string; dock: string } {
+  const text = (key: string) => {
+    const value = details?.[key];
+    return value === undefined ? '' : String(value);
+  };
+  return { holder: text('holder'), name: text('name'), dock: text('dock') };
+}

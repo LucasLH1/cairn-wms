@@ -21,6 +21,8 @@
   --cairn-nav-hover: #1b2330;
   --cairn-nav-active: rgb(111 227 196 / 12%);
   --cairn-dismiss: rgb(255 255 255 / 6%);
+  --cairn-occupied-bg: rgb(111 227 196 / 8%);
+  --cairn-occupied-bd: rgb(111 227 196 / 30%);
 
   /* Bords */
   --cairn-border: rgb(255 255 255 / 11%);

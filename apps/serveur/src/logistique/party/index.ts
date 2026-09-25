@@ -1,1 +1,1 @@
-export { findActiveSupplier, listSuppliersHandler } from './party.js';
+export { findActiveCarrier, findActiveSupplier, listCarriersHandler, listSuppliersHandler } from './party.js';
