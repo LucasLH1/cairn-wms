@@ -56,6 +56,10 @@ n'est possible sans poste. En attendant qu'un utilisateur du jeu de données dé
 `pnpm dev:workstation` donne le cookie de ce poste, à poser dans le navigateur (outils de
 développement > Application > Cookies).
 
+Un compte d'administration propre au poste — tous les droits, tous les sites — se déclare dans le
+`.env` (`CAIRN_LOCAL_ADMIN_LOGIN`, `CAIRN_LOCAL_ADMIN_EMAIL`, `CAIRN_LOCAL_ADMIN_PASSWORD`) : `pnpm
+db:reset` le recrée à chaque fois. Ses valeurs ne quittent jamais le poste.
+
 Routes techniques du serveur : `/live` (le processus répond), `/health` (la base répond et est
 migrée), `/version` (le commit servi).
 

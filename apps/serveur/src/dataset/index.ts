@@ -1,4 +1,5 @@
 import type { Database, DatabaseTransaction } from '../socle/database/index.js';
+import { permissionSchema } from '@cairn/contrat';
 import { hashPassword } from '../socle/user/index.js';
 
 /** Ce qu'un chargement a posé, par objet : le chargeur rend compte de ce qu'il fait. */
@@ -47,7 +48,21 @@ const DATASET_ROLES = [
  * Deux valeurs n'y sont pas données et sont posées ici, manifestement fictives : le code du
  * fournisseur et le nom du niveau de base des références (#73).
  */
-export async function loadScenarioDataset(db: Database): Promise<DatasetReport> {
+/**
+ * Compte d'administration propre au poste de développement : ses valeurs viennent du `.env`, jamais
+ * du dépôt, qui est public. Il porte un rôle qui détient toute permission du catalogue, et agit sur
+ * tous les sites.
+ */
+export interface LocalAdministrator {
+  readonly loginName: string;
+  readonly email: string | null;
+  readonly password: string;
+}
+
+export async function loadScenarioDataset(
+  db: Database,
+  localAdministrator?: LocalAdministrator,
+): Promise<DatasetReport> {
   const passwordHash = await hashPassword(DATASET_PASSWORD);
   return db.transaction().execute(async (transaction) => {
     // Prestataire et site A (§ 4) : ouvert du lundi au vendredi de 7 h à 19 h, fuseau Europe/Paris.
@@ -149,6 +164,36 @@ export async function loadScenarioDataset(db: Database): Promise<DatasetReport> 
       await transaction
         .insertInto('logistics.itemBarcode')
         .values({ principalId: principal.id, code: definition.code, itemId: item.id, nature: 'internal' })
+        .execute();
+    }
+
+    if (localAdministrator !== undefined) {
+      const role = await transaction
+        .insertInto('foundation.role')
+        .values({ name: 'Tous les droits', nature: 'operational' })
+        .returning('id')
+        .executeTakeFirstOrThrow();
+      await transaction
+        .insertInto('foundation.rolePermission')
+        .values(permissionSchema.options.map((permission) => ({ roleId: role.id, permission })))
+        .execute();
+      const user = await transaction
+        .insertInto('foundation.user')
+        .values({
+          loginName: localAdministrator.loginName,
+          displayName: 'Administrateur local',
+          email: localAdministrator.email,
+          passwordHash: await hashPassword(localAdministrator.password),
+        })
+        .returning('id')
+        .executeTakeFirstOrThrow();
+      await transaction
+        .insertInto('foundation.userRole')
+        .values({ userId: user.id, roleId: role.id })
+        .execute();
+      await transaction
+        .insertInto('foundation.userSite')
+        .values({ userId: user.id, siteId: site.id, execution: true })
         .execute();
     }
 
