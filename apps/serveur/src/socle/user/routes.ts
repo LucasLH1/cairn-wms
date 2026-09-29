@@ -90,15 +90,14 @@ export function registerSessionRoutes(app: FastifyInstance, options: AccessOptio
     const auto = config.devAutoWorkstation;
     if (
       workstation === undefined &&
-      auto !== undefined &&
-      auto.loginName.toLowerCase() === input.data.loginName.toLowerCase() &&
+      auto?.loginName.toLowerCase() === input.data.loginName.toLowerCase() &&
       ['localhost', '127.0.0.1'].includes(request.hostname)
     ) {
       // Le poste doit exister et ne pas être révoqué : la même vérification qu'un cookie reçu.
       workstation = await resolveWorkstation(
         db,
         config.cookieSecret,
-        workstationCookieValue(config.cookieSecret, auto.workstationId),
+        workstationCookieValue(config.cookieSecret, auto?.workstationId ?? ''),
       );
     }
     if (workstation !== undefined) {
