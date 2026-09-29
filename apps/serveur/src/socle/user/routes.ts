@@ -15,7 +15,7 @@ import { LoginAttempts } from './attempts.js';
 import type { AccessConfig } from './config.js';
 import { readCookie, serializeCookie, SESSION_COOKIE, WORKSTATION_COOKIE } from './cookie.js';
 import { closeSession, openSession, resolveSession } from './session.js';
-import { resolveWorkstation, workstationCookie } from './workstation.js';
+import { resolveWorkstation, workstationCookie, workstationCookieValue } from './workstation.js';
 
 export interface AccessOptions {
   readonly db: Database;
@@ -80,11 +80,27 @@ export function registerSessionRoutes(app: FastifyInstance, options: AccessOptio
     }
     const cookies = [serializeCookie(SESSION_COOKIE, opened.token, idle * 60)];
     // Le cookie de poste est renouvelé à chaque ouverture : un poste utilisé ne perd jamais sa déclaration.
-    const workstation = await resolveWorkstation(
+    let workstation = await resolveWorkstation(
       db,
       config.cookieSecret,
       readCookie(request.headers.cookie, WORKSTATION_COOKIE),
     );
+    // Développement seulement (voir AccessConfig) : le compte d'administration local, sur localhost,
+    // reçoit le poste déclaré dans le .env s'il n'en a pas. Sans la variable, rien de tout cela n'existe.
+    const auto = config.devAutoWorkstation;
+    if (
+      workstation === undefined &&
+      auto !== undefined &&
+      auto.loginName.toLowerCase() === input.data.loginName.toLowerCase() &&
+      ['localhost', '127.0.0.1'].includes(request.hostname)
+    ) {
+      // Le poste doit exister et ne pas être révoqué : la même vérification qu'un cookie reçu.
+      workstation = await resolveWorkstation(
+        db,
+        config.cookieSecret,
+        workstationCookieValue(config.cookieSecret, auto.workstationId),
+      );
+    }
     if (workstation !== undefined) {
       cookies.push(workstationCookie(config.cookieSecret, workstation.id));
     }
