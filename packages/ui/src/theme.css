@@ -16,6 +16,7 @@
   --spacing-0-5: 2px;
   --spacing-1: 4px;
   --spacing-1-5: 6px;
+  --spacing-1-75: 7px;
   --spacing-2: 8px;
   --spacing-2-25: 9px;
   --spacing-2-5: 10px;
@@ -44,6 +45,7 @@
   --radius-control: 10px;
   --radius-field: 11px;
   --radius-logo: 9px;
+  --radius-chip: 9px;
   --radius-banner: 12px;
   --radius-panel: 16px;
   --radius-dialog: 18px;
@@ -91,6 +93,8 @@
   --color-dismiss: var(--cairn-dismiss);
   --color-occupied-bg: var(--cairn-occupied-bg);
   --color-occupied-bd: var(--cairn-occupied-bd);
+  --color-chip-active-bg: var(--cairn-chip-active-bg);
+  --color-border-tabs: var(--cairn-border-tabs);
   --color-field: var(--cairn-field);
   --color-well: var(--cairn-well);
   --color-control: var(--cairn-control);
@@ -155,6 +159,9 @@
 
   /* Ligne de saisie : référence, quantité (champ de quantité de la maquette, 230 px), action */
   --cairn-line-columns: minmax(0, 1fr) 230px auto;
+
+  /* Ligne du calendrier : le jour, ses plages, l'ajout d'une plage */
+  --cairn-calendar-columns: 120px minmax(0, 1fr) auto;
 }
 
 @layer base {

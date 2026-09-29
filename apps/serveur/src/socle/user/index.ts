@@ -11,6 +11,8 @@ export {
 } from './routes.js';
 export {
   declareWorkstationHandler,
+  listWorkstationsHandler,
+  revokeWorkstationHandler,
   workstationCookieValue,
   workstationDeclaredEvent,
 } from './workstation.js';

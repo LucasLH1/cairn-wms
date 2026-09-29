@@ -1,8 +1,9 @@
 import { createHmac, timingSafeEqual } from 'node:crypto';
 import { sql } from 'kysely';
-import { declareWorkstation } from '@cairn/contrat';
+import { declareWorkstation, listWorkstations, revokeWorkstation } from '@cairn/contrat';
 import type { Database } from '../database/index.js';
 import { defineGestureHandler, GestureRefusal } from '../gesture/index.js';
+import { defineQueryHandler } from '../query/index.js';
 import { defineTraceEventType } from '../trace-event/index.js';
 import { z } from 'zod';
 import { serializeCookie, WORKSTATION_COOKIE } from './cookie.js';
@@ -101,3 +102,52 @@ export function declareWorkstationHandler(secret: string) {
     },
   });
 }
+
+export const listWorkstationsHandler = defineQueryHandler({
+  definition: listWorkstations,
+  permissions: ['declareWorkstation'],
+  async execute({ db }) {
+    const workstations = await db
+      .selectFrom('foundation.workstation as workstation')
+      .innerJoin('foundation.site as site', 'site.id', 'workstation.siteId')
+      .select([
+        'workstation.id',
+        'workstation.name',
+        'workstation.siteId',
+        'site.name as siteName',
+        'workstation.revoked',
+      ])
+      .orderBy('site.name')
+      .orderBy('workstation.name')
+      .execute();
+    return { workstations };
+  },
+});
+
+export const workstationRevokedEvent = defineTraceEventType('workstationRevoked', z.object({}));
+
+export const revokeWorkstationHandler = defineGestureHandler({
+  definition: revokeWorkstation,
+  async scope(input, transaction) {
+    const workstation = await transaction
+      .selectFrom('foundation.workstation')
+      .select('siteId')
+      .where('id', '=', input.workstationId)
+      .executeTakeFirst();
+    return workstation === undefined ? {} : { siteId: workstation.siteId };
+  },
+  async execute({ transaction, input, appendEvent }) {
+    const revoked = await transaction
+      .updateTable('foundation.workstation')
+      .set({ revoked: true })
+      .where('id', '=', input.workstationId)
+      .executeTakeFirst();
+    if (revoked.numUpdatedRows === 0n) throw new GestureRefusal('unknownWorkstation');
+    await appendEvent({
+      eventType: workstationRevokedEvent,
+      data: {},
+      objects: [{ type: 'Workstation', id: input.workstationId }],
+    });
+    return {};
+  },
+});

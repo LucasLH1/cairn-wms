@@ -15,7 +15,7 @@ export function Panel({ title, meta, actions, children }: PanelProps) {
       <header className="flex flex-wrap items-center gap-3 border-b border-divider px-5 py-3-5">
         <h2 className="m-0 text-heading font-semibold">{title}</h2>
         {meta === undefined ? null : <span className="text-secondary text-text-3">{meta}</span>}
-        {actions === undefined ? null : <div className="ml-auto flex gap-2">{actions}</div>}
+        {actions === undefined ? null : <div className="ml-auto flex items-center gap-2">{actions}</div>}
       </header>
       <div className="grid gap-4 px-5 py-4">{children}</div>
     </section>

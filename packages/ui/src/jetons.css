@@ -23,6 +23,8 @@
   --cairn-dismiss: rgb(255 255 255 / 6%);
   --cairn-occupied-bg: rgb(111 227 196 / 8%);
   --cairn-occupied-bd: rgb(111 227 196 / 30%);
+  --cairn-chip-active-bg: rgb(111 227 196 / 16%);
+  --cairn-border-tabs: #27313f;
 
   /* Bords */
   --cairn-border: rgb(255 255 255 / 11%);

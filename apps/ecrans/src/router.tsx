@@ -7,6 +7,13 @@ import {
   redirect,
 } from '@tanstack/react-router';
 import { currentSessionQuery } from './contract/session.js';
+import { PrincipalScreen, PrincipalsScreen } from './screens/administration/PrincipalsScreen.js';
+import { RoleScreen } from './screens/administration/RoleScreen.js';
+import { SettingsScreen } from './screens/administration/SettingsScreen.js';
+import { SiteScreen } from './screens/administration/SiteScreen.js';
+import { TeamScreen } from './screens/administration/TeamScreen.js';
+import { UserScreen } from './screens/administration/UserScreen.js';
+import { UsersAndTeamsScreen } from './screens/administration/UsersAndTeamsScreen.js';
 import { ExpectedReceiptScreen } from './screens/ExpectedReceiptScreen.js';
 import { HomeScreen } from './screens/HomeScreen.js';
 import { NewExpectedReceiptScreen } from './screens/NewExpectedReceiptScreen.js';
@@ -83,6 +90,55 @@ const openArrivalRoute = createRoute({
   staticData: { place: 'receptions' },
 });
 
+const settingsRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/administration/settings',
+  component: SettingsScreen,
+  staticData: { place: 'settings' },
+});
+const siteRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/administration/sites/$siteId',
+  component: SiteScreen,
+  staticData: { place: 'settings' },
+});
+const usersRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/administration/users',
+  component: UsersAndTeamsScreen,
+  staticData: { place: 'usersAndTeams' },
+});
+const userRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/administration/users/$userId',
+  component: UserScreen,
+  staticData: { place: 'usersAndTeams' },
+});
+const roleRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/administration/roles/$roleId',
+  component: RoleScreen,
+  staticData: { place: 'usersAndTeams' },
+});
+const teamRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/administration/teams/$teamId',
+  component: TeamScreen,
+  staticData: { place: 'usersAndTeams' },
+});
+const principalsRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/administration/principals',
+  component: PrincipalsScreen,
+  staticData: { place: 'principals' },
+});
+const principalRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/administration/principals/$principalId',
+  component: PrincipalScreen,
+  staticData: { place: 'principals' },
+});
+
 const routeTree = rootRoute.addChildren([
   sessionRoute,
   shellRoute.addChildren([
@@ -91,6 +147,14 @@ const routeTree = rootRoute.addChildren([
     newExpectedReceiptRoute,
     expectedReceiptRoute,
     openArrivalRoute,
+    settingsRoute,
+    siteRoute,
+    usersRoute,
+    userRoute,
+    roleRoute,
+    teamRoute,
+    principalsRoute,
+    principalRoute,
   ]),
 ]);
 
