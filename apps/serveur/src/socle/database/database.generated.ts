@@ -35,17 +35,27 @@ export interface FoundationGesture {
   workstationId: string | null;
 }
 
-export interface FoundationNumberingScheme {
-  nextValue: Generated<Int8>;
+export interface FoundationNumberingCounter {
+  nextValue: Int8;
   objectType: string;
-  prefix: string;
-  width: number;
+  partitionKey: string;
+}
+
+export interface FoundationNumberingScheme {
+  objectType: string;
+  segments: Json;
+}
+
+export interface FoundationProvider {
+  name: string | null;
+  singleton: Generated<boolean>;
 }
 
 export interface FoundationRole {
   id: Generated<string>;
   name: string;
   nature: string;
+  template: string | null;
 }
 
 export interface FoundationRolePermission {
@@ -62,10 +72,43 @@ export interface FoundationSession {
 }
 
 export interface FoundationSite {
+  active: Generated<boolean>;
+  addressLine1: string | null;
+  addressLine2: string | null;
+  city: string | null;
   code: string;
+  countryCode: Generated<string>;
   id: Generated<string>;
   name: string;
+  postalCode: string | null;
   timeZone: string;
+}
+
+export interface FoundationSiteClosure {
+  day: string;
+  kind: string;
+  label: string;
+  siteId: string;
+}
+
+export interface FoundationSiteOpeningRange {
+  closesAt: string;
+  opensAt: string;
+  siteId: string;
+  weekday: number;
+}
+
+export interface FoundationTeam {
+  active: Generated<boolean>;
+  id: Generated<string>;
+  leadUserId: string | null;
+  name: string;
+  siteId: string;
+}
+
+export interface FoundationTeamMember {
+  teamId: string;
+  userId: string;
 }
 
 export interface FoundationTraceEvent {
@@ -77,6 +120,7 @@ export interface FoundationTraceEvent {
   occurredAt: Generated<Timestamp>;
   origin: string | null;
   originAt: Timestamp | null;
+  teamId: string | null;
   type: string;
   workstationId: string | null;
 }
@@ -91,9 +135,11 @@ export interface FoundationTraceEventObject {
 export interface FoundationUser {
   active: Generated<boolean>;
   displayName: string;
+  email: string | null;
   id: Generated<string>;
   loginName: string;
   passwordHash: string;
+  reportsToUserId: string | null;
 }
 
 export interface FoundationUserRole {
@@ -203,15 +249,28 @@ export interface LogisticsParty {
 
 export interface LogisticsPrincipal {
   active: Generated<boolean>;
+  addressLine1: string | null;
+  addressLine2: string | null;
+  city: string | null;
   code: string;
+  countryCode: string | null;
+  email: string | null;
   id: Generated<string>;
+  internal: Generated<boolean>;
   name: string;
+  phone: string | null;
+  postalCode: string | null;
   principalGroup: string | null;
+}
+
+export interface LogisticsUserPrincipalRestriction {
+  principalId: string;
+  userId: string;
 }
 
 export interface LogisticsZone {
   active: Generated<boolean>;
-  addressPattern: Json;
+  addressPattern: Json | null;
   addressSeparator: Generated<string>;
   code: string;
   cohabitation: string;
@@ -225,11 +284,17 @@ export interface LogisticsZone {
 
 export interface DB {
   "foundation.gesture": FoundationGesture;
+  "foundation.numberingCounter": FoundationNumberingCounter;
   "foundation.numberingScheme": FoundationNumberingScheme;
+  "foundation.provider": FoundationProvider;
   "foundation.role": FoundationRole;
   "foundation.rolePermission": FoundationRolePermission;
   "foundation.session": FoundationSession;
   "foundation.site": FoundationSite;
+  "foundation.siteClosure": FoundationSiteClosure;
+  "foundation.siteOpeningRange": FoundationSiteOpeningRange;
+  "foundation.team": FoundationTeam;
+  "foundation.teamMember": FoundationTeamMember;
   "foundation.traceEvent": FoundationTraceEvent;
   "foundation.traceEventObject": FoundationTraceEventObject;
   "foundation.user": FoundationUser;
@@ -246,5 +311,6 @@ export interface DB {
   "logistics.packagingLevel": LogisticsPackagingLevel;
   "logistics.party": LogisticsParty;
   "logistics.principal": LogisticsPrincipal;
+  "logistics.userPrincipalRestriction": LogisticsUserPrincipalRestriction;
   "logistics.zone": LogisticsZone;
 }

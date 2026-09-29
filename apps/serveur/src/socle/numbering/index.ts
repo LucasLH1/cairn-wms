@@ -1,1 +1,1 @@
-export { nextNumber } from './numbering.js';
+export { nextNumber, NumberingExhaustedError, type NumberingContext } from './numbering.js';

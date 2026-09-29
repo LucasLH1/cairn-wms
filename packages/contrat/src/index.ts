@@ -1,6 +1,7 @@
 export * from './dock.js';
 export * from './gesture.js';
 export * from './item.js';
+export * from './numbering.js';
 export * from './organization.js';
 export * from './party.js';
 export * from './permission.js';
