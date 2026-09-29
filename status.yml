@@ -29,7 +29,7 @@
 # À tenir à jour à chaque session, en même temps que journal/ et les issues.
 
 projet: Cairn WMS
-mis_a_jour_le: 2026-09-25
+mis_a_jour_le: 2026-09-29
 
 # Pile, reprise de zéro le 2026-09-24 (fiches 0002 et 0004 à 0008 abandonnées)
 # et actée le 2026-09-25 (fiches 0009 à 0030). Reflète l'index de docs/decisions/README.md, qui fait foi.
@@ -81,7 +81,7 @@ couches:
         prefixe_regles: RG-REF
       - id: "0.3"
         nom: Emplacements et plan d'entrepôt
-        etat: spécifié
+        etat: en développement
         issue: 3
         doc: docs/socle/0.3-emplacements-plan-entrepot.md
         prefixe_regles: RG-EMP
@@ -268,7 +268,7 @@ lots:
       - doc: docs/lots/lot-1/reception-et-rangement.md
         issue: 48
         # Étapes couvertes par un test de bout en bout vert (tests/scenarios/).
-        etapes_realisees: [1]
+        etapes_realisees: [1, 2]
       - doc: docs/lots/lot-1/commande-et-preparation.md
         issue: 49
       - doc: docs/lots/lot-1/controle-colisage-expedition.md
