@@ -107,7 +107,8 @@ Règles d'usage :
 
 | Français | Anglais | Définition |
 |---|---|---|
-| Parcours | `ProcessFlow` | Trajectoire configurable d'un article physique à travers une suite d'étapes. |
+| Parcours | `ProcessFlow` | Trajectoire configurable d'un article à travers une suite d'étapes. |
+| Article | `FlowItem` | Ce qu'un parcours suit : l'unité de stock issue d'une validation de réception, ou l'objet sérialisé. Jamais une référence (`#74`). |
 | Version de parcours | `FlowVersion` | État figé et publié d'un parcours. Un dossier suit la version en vigueur à son entrée. Cas particulier de la version de règle (`RuleVersion`). |
 | Condition d'entrée | `FlowEntryCondition` | Critère décidant quels articles empruntent un parcours donné. |
 | Étape | `FlowStep` | Un palier d'un parcours, instancié à partir d'un type d'étape du catalogue. |
@@ -185,7 +186,8 @@ Règles d'usage :
 |---|---|---|
 | Mission | `WorkOrder` | Unité de travail interne à exécuter : origine, contenu, destination, priorité, état. Une mission de rangement est une mission de type rangement. |
 | Type de mission | `WorkOrderType` | Nature du travail : rangement, réapprovisionnement, transfert interne, départ de transfert, résorption, comptage, mise en quarantaine. |
-| Transfert | `StockTransfer` | Déplacement de marchandise entre deux sites, chapeautant l'expédition au départ et la réception à l'arrivée. |
+| Transfert | `StockTransfer` | Acheminement de marchandise entre deux sites, chapeautant l'expédition au départ et la réception à l'arrivée. Toujours inter-sites : un changement d'emplacement dans un site est un déplacement (`#74`). |
+| Déplacement | `StockMove` | Changement d'emplacement ou de support d'une unité de stock au sein d'un même site, par un mouvement de stock. Jamais « transfert » (`#74`). |
 | Ligne de transfert | `StockTransferLine` | Une référence transférée, avec ses quantités demandée, partie et arrivée. |
 | Demande de réapprovisionnement | `ReplenishmentRequest` | Besoin de recomplètement d'un emplacement de prélèvement dédié, né d'un seuil, d'une anticipation ou d'une demande manuelle. |
 | Quantité attendue | `IncomingQuantity` | Stock en transit vers un site, visible mais ni prélevable ni réservable. |
@@ -195,7 +197,7 @@ Règles d'usage :
 | Issue de litige | `DisputeOutcome` | Résultat de la clôture, choisi dans un catalogue fermé. Porte des quantités, jamais un montant. |
 | Fil d'instruction | `DisputeThread` | Suite en ajout seul des événements, pièces et décisions d'un litige. |
 | Mise en quarantaine | `QuarantineMove` | Mission de regroupement d'une unité bloquée vers la zone de quarantaine du site, générée par une campagne de blocage. |
-| Déplacement en masse | `BulkMove` | Sélection de stock générant un lot de missions de transfert interne. |
+| Déplacement en masse | `BulkMove` | Sélection de stock générant un lot de missions de déplacement. |
 
 ## Inventaires
 
@@ -378,7 +380,7 @@ Ces mots sont ambigus ou déjà pris. Ils ne doivent apparaître nulle part.
 | À ne pas employer | Employer à la place | Pourquoi |
 |---|---|---|
 | Client | Donneur d'ordre, ou client final | Désigne deux choses opposées selon l'interlocuteur. |
-| Article, produit, SKU, code article | Référence / `Item` | Quatre mots pour un seul objet. |
+| Article *(pour désigner une référence)*, produit, SKU, code article | Référence / `Item` | Quatre mots pour un seul objet. « Article » ne désigne que ce qu'un parcours suit (`FlowItem`). |
 | Statut (seul, à propos du stock) | État qualité, ou statut de disponibilité | La confusion entre les deux axes est l'erreur de conception que le modèle évite. |
 | Workflow (en français) | Parcours, ou cycle de vie | Le français doit distinguer ce qui est configurable de ce qui ne l'est pas. |
 | Palette (comme objet de gestion) | Support | Une palette est un type de support parmi d'autres. |

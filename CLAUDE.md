@@ -33,7 +33,7 @@ Un terme absent du glossaire ne doit apparaître nulle part : on l'ajoute au glo
 Aucun langage, aucun framework, aucune base de données, aucune architecture, aucun hébergement,
 aucun outillage n'est arrêté tant qu'une fiche actée ne le dit pas. La pile a été reprise de zéro le
 2026-09-24 (fiches 0002 et 0004 à 0008 abandonnées) ; elle est **actée** par les fiches `0009` à
-`0030`, et l'ordre de réalisation en lots par `0003`.
+`0030`, et l'ordre de réalisation — module par module, chacun en entier — par `0032`.
 
 **Le code s'écrit dans le cadre de ces fiches.** Tout choix engageant qu'elles ne couvrent pas — un
 langage, une bibliothèque structurante, un composant de plus, une règle de dépendance, une forme de

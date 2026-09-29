@@ -13,8 +13,9 @@
 # Tous les modules de la carte sont spécifiés. Ceux que le lot 1 a commencé à
 # réaliser sont « en développement » : du code existe sur dev pour une partie de
 # leurs règles, rien n'est « livré » (aucune promotion vers main).
-# L'ordre de réalisation en lots est acté par 0003 (section « lots » ci-dessous,
-# remplace 0001). La pile est actée par les fiches 0009 à 0030 (section « pile »
+# L'ordre de réalisation est acté par 0032 (remplace 0003) : module par module,
+# chacun en entier, dans l'ordre de la section « ordre_de_realisation » ; les lots
+# ne sont plus que des jalons de recette. La pile est actée par les fiches 0009 à 0030 (section « pile »
 # ci-dessous) ; le code s'écrit dans leur cadre, et tout choix engageant
 # qu'elles ne couvrent pas demande une nouvelle fiche.
 #
@@ -61,6 +62,11 @@ pile:
     - { fiche: "0030", objet: "Sauvegarde et restauration", doc: docs/decisions/0030-sauvegarde-et-restauration.md }
   proposees:
     - { fiche: "0031", objet: "Langage et protocole des imprimantes d'étiquettes", doc: docs/decisions/0031-langage-et-protocole-des-imprimantes.md }
+
+# Ordre de réalisation (fiche 0032) : chaque module en entier ; les fonctions de 0.8
+# naissent avec le premier module qui les exige.
+ordre_de_realisation: ["0.1", "0.5", "0.2", "0.3", "0.4", "0.7", "0.6", "1.1", "1.4", "2.1", "2.3", "2.4", "2.2", "3.1", "3.2", "3.3", "1.3", "1.2", "4.1", "4.2", "5.1"]
+module_en_cours: "0.1"
 
 couches:
 
@@ -232,7 +238,8 @@ couches:
         doc: docs/pilotage/5.1-kpi-tableaux-de-bord-exports.md
         prefixe_regles: RG-KPI
 
-# Découpage en lots livrables, acté par docs/decisions/0003-precision-du-decoupage-en-lots.md,
+# Jalons de recette. Les lots de 0003 ne fixent plus l'ordre de réalisation (0032) ;
+# leurs scénarios restent la recette de bout en bout. Découpage d'origine : docs/decisions/0003-precision-du-decoupage-en-lots.md,
 # qui remplace 0001. Un lot est clos quand ses scénarios, écrits sous docs/lots/,
 # sont automatisés en tests de bout en bout qui passent, et que les moments listés
 # dans le README du lot ont été constatés à l'écran. Un module est traversé par

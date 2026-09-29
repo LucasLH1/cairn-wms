@@ -1,6 +1,6 @@
 # 0003 — Précision du découpage en lots
 
-**Statut** : actée · **Date** : 2026-09-23 · **Remplace** : 0001 · **Remplacée par** : —
+**Statut** : remplacée · **Date** : 2026-09-23 · **Remplace** : 0001 · **Remplacée par** : 0032
 
 ## Contexte
 

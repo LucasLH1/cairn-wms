@@ -9,7 +9,7 @@ défaire à bon compte, et dont quelqu'un — dans six mois, ou six ans — voud
 |---|---|---|
 | 0001 | [Découpage du produit en lots livrables](0001-decoupage-en-lots-livrables.md) | remplacée par 0003 |
 | 0002 | [Pile d'ensemble](0002-pile-d-ensemble.md) | abandonnée |
-| 0003 | [Précision du découpage en lots](0003-precision-du-decoupage-en-lots.md) | actée |
+| 0003 | [Précision du découpage en lots](0003-precision-du-decoupage-en-lots.md) | remplacée par 0032 |
 | 0004 | [Découpe interne et frontière du socle](0004-decoupe-interne-et-frontiere-du-socle.md) | abandonnée |
 | 0005 | [Chaîne de qualité et intégration continue](0005-chaine-de-qualite.md) | abandonnée |
 | 0006 | [Base de données et journal d'événements](0006-base-de-donnees-et-journal.md) | abandonnée |
@@ -38,6 +38,7 @@ défaire à bon compte, et dont quelqu'un — dans six mois, ou six ans — voud
 | 0029 | [Environnements et déploiement : le staging](0029-environnements-et-deploiement.md) | actée |
 | 0030 | [Sauvegarde et restauration](0030-sauvegarde-et-restauration.md) | actée |
 | 0031 | [Langage et protocole des imprimantes d'étiquettes](0031-langage-et-protocole-des-imprimantes.md) | proposée |
+| 0032 | [Réalisation module par module, dans leur version complète](0032-realisation-module-par-module.md) | actée |
 
 **La pile est reprise de zéro depuis le 2026-09-24 et actée.** Les fiches 0002 et 0004 à 0008 sont
 abandonnées et restent ici pour l'histoire ; leurs numéros ne seront jamais réutilisés.
