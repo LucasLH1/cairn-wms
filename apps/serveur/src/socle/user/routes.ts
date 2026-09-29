@@ -2,7 +2,6 @@ import {
   APPLICATION_HEADER,
   APPLICATION_HEADER_VALUE,
   openSessionInputSchema,
-  permissionSchema,
   SESSION_CLOSE_PATH,
   SESSION_PATH,
   type CurrentSession,
@@ -10,6 +9,7 @@ import {
 import type { FastifyInstance, FastifyRequest } from 'fastify';
 import type { Database } from '../database/index.js';
 import type { GestureRights } from '../gesture/index.js';
+import { effectivePermissions } from '../permission/index.js';
 import { LoginAttempts } from './attempts.js';
 import type { AccessConfig } from './config.js';
 import { readCookie, serializeCookie, SESSION_COOKIE, WORKSTATION_COOKIE } from './cookie.js';
@@ -23,19 +23,9 @@ export interface AccessOptions {
 
 const refused = (reason: string) => ({ outcome: 'refused' as const, reason });
 
-/** Permissions de l'utilisateur : l'union de celles de ses rôles (RG-ORG-021). */
+/** Permissions effectives de l'utilisateur, héritage hiérarchique compris (RG-ORG-021, RG-SUR-023). */
 async function permissionsOf(db: Database, userId: string): Promise<CurrentSession['permissions']> {
-  const rows = await db
-    .selectFrom('foundation.userRole as userRole')
-    .innerJoin('foundation.rolePermission as rolePermission', 'rolePermission.roleId', 'userRole.roleId')
-    .select('rolePermission.permission')
-    .distinct()
-    .where('userRole.userId', '=', userId)
-    .execute();
-  return rows.flatMap((row) => {
-    const permission = permissionSchema.safeParse(row.permission);
-    return permission.success ? [permission.data] : [];
-  });
+  return [...(await effectivePermissions(db, userId))].sort();
 }
 
 /** Sites de rattachement de l'utilisateur, et si son périmètre d'exécution les couvre. */

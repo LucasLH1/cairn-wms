@@ -64,6 +64,13 @@ export async function appendTraceEvent<TData extends TraceEventData>(
       type: event.eventType.type,
       data,
       authorUserId: 'userId' in event.author ? event.author.userId : null,
+      // L'équipe de l'auteur au moment du geste reste attachée à l'événement (RG-SUR-015).
+      teamId:
+        'userId' in event.author
+          ? sql<
+              string | null
+            >`(select team_id from foundation.team_member where user_id = ${event.author.userId})`
+          : null,
       origin: 'origin' in event.author ? event.author.origin : null,
       originAt: 'origin' in event.author ? (event.author.originAt ?? null) : null,
       workstationId: event.workstationId ?? null,
