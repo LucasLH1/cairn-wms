@@ -12,6 +12,7 @@ import { defaultSite, WorkingSiteContext } from './site.js';
 const titles = {
   home: 'shell.home',
   receptions: 'navigation.receptions',
+  parties: 'party.menu',
   settings: 'administration.settings',
   usersAndTeams: 'administration.usersAndTeams',
   principals: 'administration.principals',
@@ -64,6 +65,9 @@ export function Shell() {
   const settings = settingsPermissions.some((permission) => held.includes(permission));
   const usersAndTeams = usersPermissions.some((permission) => held.includes(permission));
   const principals = held.includes('administerPrincipals');
+  const parties = (['managePrincipalParties', 'mergeEndCustomers', 'anonymizeEndCustomers'] as const).some(
+    (permission) => held.includes(permission),
+  );
   const place: ScreenPlace =
     useMatches().findLast((match) => match.staticData.place !== undefined)?.staticData.place ?? 'home';
 
@@ -89,6 +93,11 @@ export function Shell() {
             <NavigationItem href="/receptions" isCurrent={place === 'receptions'}>
               {t('navigation.receptions')}
             </NavigationItem>
+            {parties ? (
+              <NavigationItem href="/parties" isCurrent={place === 'parties'}>
+                {t('party.menu')}
+              </NavigationItem>
+            ) : null}
           </NavigationGroup>
           {/* L'administration n'apparaît qu'à qui en détient une permission (0.1 § 4). */}
           {settings || usersAndTeams || principals ? (

@@ -38,7 +38,18 @@ export const DATASET_WORKSTATIONS = [
  * scénario fait faire à son titulaire ; le reste attend la réponse de #73.
  */
 const DATASET_ROLES = [
-  { name: 'Gestionnaire', holders: ['anna'], permissions: ['createExpectedReceipt'] },
+  // Les parcours de 0.5 — consulter un client final, fusionner deux fiches, suivre les échéances
+  // d'anonymisation — sont ceux du gestionnaire.
+  {
+    name: 'Gestionnaire',
+    holders: ['anna'],
+    permissions: [
+      'createExpectedReceipt',
+      'managePrincipalParties',
+      'mergeEndCustomers',
+      'anonymizeEndCustomers',
+    ],
+  },
   { name: 'Cheffe de quai', holders: ['chloe'], permissions: ['openInboundArrival'] },
 ] as const;
 

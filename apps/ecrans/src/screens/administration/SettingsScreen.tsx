@@ -1,6 +1,7 @@
 import { useHasPermission } from '../../shell/site.js';
 import { Tabs } from '@cairn/ui';
 import { useTranslation } from 'react-i18next';
+import { PartyListPanel } from '../parties/PartyListPanel.js';
 import { NumberingTab } from './NumberingTab.js';
 import { ProviderTab } from './ProviderTab.js';
 import { SitesTab } from './SitesTab.js';
@@ -13,6 +14,7 @@ export function SettingsScreen() {
   const numbering = useHasPermission('administerNumbering');
   const provider = useHasPermission('administerProvider');
   const workstations = useHasPermission('declareWorkstation');
+  const providerParties = useHasPermission('administerProviderParties');
   return (
     <Tabs
       label={t('administration.settings')}
@@ -20,6 +22,29 @@ export function SettingsScreen() {
         ...(sites ? [{ id: 'sites', label: t('administration.sites'), content: <SitesTab /> }] : []),
         ...(numbering
           ? [{ id: 'numbering', label: t('administration.numbering'), content: <NumberingTab /> }]
+          : []),
+        ...(providerParties
+          ? [
+              {
+                id: 'carriers',
+                label: t('party.carriers'),
+                content: (
+                  <PartyListPanel family="carrier" principalId={null} title={t('party.carriers')} canCreate />
+                ),
+              },
+              {
+                id: 'subcontractors',
+                label: t('party.subcontractors'),
+                content: (
+                  <PartyListPanel
+                    family="subcontractor"
+                    principalId={null}
+                    title={t('party.subcontractors')}
+                    canCreate
+                  />
+                ),
+              },
+            ]
           : []),
         ...(provider
           ? [{ id: 'provider', label: t('administration.provider'), content: <ProviderTab /> }]

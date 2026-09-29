@@ -2,9 +2,10 @@ import {
   getPrincipal,
   listPrincipalsForAdministration,
   savePrincipal,
+  setEndCustomerRetention,
   setPrincipalActive,
 } from '@cairn/contrat';
-import { Button, DataTable, Panel, StatusBadge, TextField } from '@cairn/ui';
+import { Button, DataTable, NumberField, Panel, StatusBadge, TextField } from '@cairn/ui';
 import { useQuery } from '@tanstack/react-query';
 import { Link, useNavigate, useParams } from '@tanstack/react-router';
 import { useState } from 'react';
@@ -87,7 +88,14 @@ export function PrincipalScreen() {
     enabled: principalId !== NEW,
   });
   if (principalId !== NEW && data === undefined) return null;
-  return <PrincipalForm key={principalId} principal={data?.principal} />;
+  return (
+    <>
+      <PrincipalForm key={principalId} principal={data?.principal} />
+      {data === undefined || data.principal.internal ? null : (
+        <RetentionPanel principalId={data.principal.id} />
+      )}
+    </>
+  );
 }
 
 function PrincipalForm({ principal }: { principal: PrincipalDetail | undefined }) {
@@ -169,6 +177,31 @@ function PrincipalForm({ principal }: { principal: PrincipalDetail | undefined }
             onPress={() => void save()}
           >
             {principal === undefined ? t('principalAdmin.create') : t('common.save')}
+          </Button>
+        </div>
+      </Panel>
+    </>
+  );
+}
+
+/** Durée de conservation des données identifiantes des clients finaux (RG-TRS-017). */
+function RetentionPanel({ principalId }: { principalId: string }) {
+  const { t } = useTranslation();
+  const gesture = useGesture();
+  const [months, setMonths] = useState<number | null>(null);
+  return (
+    <>
+      <RefusalBanner refusal={gesture.refusal} onDismiss={gesture.dismiss} />
+      <Panel title={t('retention.title')} meta={t('retention.hint')}>
+        <div className="grid grid-cols-(--cairn-line-columns) items-end gap-3">
+          <NumberField label={t('retention.months')} value={months} minValue={1} onChange={setMonths} />
+          <span />
+          <Button
+            variant="primary"
+            isDisabled={gesture.sending}
+            onPress={() => void gesture.run(setEndCustomerRetention, { principalId, months })}
+          >
+            {t('common.save')}
           </Button>
         </div>
       </Panel>

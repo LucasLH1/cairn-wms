@@ -15,6 +15,9 @@ import { TeamScreen } from './screens/administration/TeamScreen.js';
 import { UserScreen } from './screens/administration/UserScreen.js';
 import { UsersAndTeamsScreen } from './screens/administration/UsersAndTeamsScreen.js';
 import { ExpectedReceiptScreen } from './screens/ExpectedReceiptScreen.js';
+import { MergeScreen } from './screens/parties/MergeScreen.js';
+import { PartiesScreen } from './screens/parties/PartiesScreen.js';
+import { PartyScreen } from './screens/parties/PartyScreen.js';
 import { HomeScreen } from './screens/HomeScreen.js';
 import { NewExpectedReceiptScreen } from './screens/NewExpectedReceiptScreen.js';
 import { OpenArrivalScreen } from './screens/OpenArrivalScreen.js';
@@ -139,6 +142,28 @@ const principalRoute = createRoute({
   staticData: { place: 'principals' },
 });
 
+const partiesRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/parties',
+  component: PartiesScreen,
+  staticData: { place: 'parties' },
+});
+const partyRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/parties/$partyId',
+  component: PartyScreen,
+  staticData: { place: 'parties' },
+});
+const mergeRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/parties/$partyId/merge',
+  component: MergeScreen,
+  staticData: { place: 'parties' },
+  validateSearch: (search: Record<string, unknown>) => ({
+    other: typeof search['other'] === 'string' ? search['other'] : '',
+  }),
+});
+
 const routeTree = rootRoute.addChildren([
   sessionRoute,
   shellRoute.addChildren([
@@ -155,6 +180,9 @@ const routeTree = rootRoute.addChildren([
     teamRoute,
     principalsRoute,
     principalRoute,
+    partiesRoute,
+    partyRoute,
+    mergeRoute,
   ]),
 ]);
 
