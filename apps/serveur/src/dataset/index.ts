@@ -50,11 +50,19 @@ const DATASET_ROLES = [
 export async function loadScenarioDataset(db: Database): Promise<DatasetReport> {
   const passwordHash = await hashPassword(DATASET_PASSWORD);
   return db.transaction().execute(async (transaction) => {
+    // Prestataire et site A (§ 4) : ouvert du lundi au vendredi de 7 h à 19 h, fuseau Europe/Paris.
+    await transaction.updateTable('foundation.provider').set({ name: 'Logistique Démo' }).execute();
     const site = await transaction
       .insertInto('foundation.site')
-      .values({ code: 'A', name: 'Site A', timeZone: 'Europe/Paris' })
+      .values({ code: 'A', name: 'Site A', timeZone: 'Europe/Paris', active: true })
       .returning('id')
       .executeTakeFirstOrThrow();
+    await transaction
+      .insertInto('foundation.siteOpeningRange')
+      .values(
+        [1, 2, 3, 4, 5].map((weekday) => ({ siteId: site.id, weekday, opensAt: '07:00', closesAt: '19:00' })),
+      )
+      .execute();
     const users = await transaction
       .insertInto('foundation.user')
       .values(DATASET_USERS.map((user) => ({ ...user, passwordHash })))
@@ -70,6 +78,19 @@ export async function loadScenarioDataset(db: Database): Promise<DatasetReport> 
       .values(DATASET_WORKSTATIONS.map((workstation) => ({ ...workstation, siteId: site.id })))
       .execute();
     const userIds = new Map(DATASET_USERS.map((user, index) => [user.loginName, users[index]?.id]));
+    // Dans la maquette, Anna ouvre aussi les écrans d'administration : elle porte le rôle modèle
+    // Administrateur, qui déclare aussi les postes.
+    const administrator = await transaction
+      .selectFrom('foundation.role')
+      .select('id')
+      .where('template', '=', 'administrator')
+      .executeTakeFirstOrThrow();
+    const anna = userIds.get('anna');
+    if (anna === undefined) throw new Error('dataset: anna missing');
+    await transaction
+      .insertInto('foundation.userRole')
+      .values({ userId: anna, roleId: administrator.id })
+      .execute();
     for (const definition of DATASET_ROLES) {
       const role = await transaction
         .insertInto('foundation.role')

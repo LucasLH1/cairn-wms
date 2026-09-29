@@ -44,13 +44,14 @@ Le `.env` n'est jamais suivi. Les mots de passe y sont ceux de la base jetable d
 | `pnpm e2e` | Les tests de bout en bout : compile, construit les écrans, lance une instance à part (base `cairn_e2e`, port 3100) chargée du jeu de données, et déroule les tests Playwright dans Chromium. N'interfère pas avec `pnpm dev`. |
 | `pnpm test` | Les tests seuls. La base `cairn_test` est recréée à chaque lancement. |
 | `pnpm db:migrate` | Compile, puis applique les migrations en attente à la base locale. |
+| `pnpm instance:administrator` | Crée le premier administrateur d'une instance neuve (`CAIRN_ADMINISTRATOR_LOGIN`, `CAIRN_ADMINISTRATOR_NAME`) ; son mot de passe, tiré au hasard, s'affiche une seule fois. Refusé si un administrateur des rôles existe. |
 | `pnpm db:types` | Régénère les types de la base depuis la base migrée, après une nouvelle migration. |
 | `docker compose down` | Arrête la base ; `docker compose down --volumes` l'efface. |
 
 Après `pnpm db:reset`, les utilisateurs du scénario 1 — `anna`, `chloe`, `remi`, `bruno` — ouvrent
 une session avec le mot de passe fictif `demo-fictif`, commun au jeu de données et sans valeur ailleurs.
-Anna porte le rôle « Gestionnaire », qui saisit les attendus ; les autres rôles viennent avec les
-étapes suivantes du scénario 1. Le site A compte un poste déclaré, « Poste bureau 1 » ; aucun geste
+Anna porte le rôle « Gestionnaire », qui saisit les attendus, et le rôle modèle « Administrateur » :
+dans la maquette, elle ouvre aussi les écrans d'administration. Le site A compte un poste déclaré, « Poste bureau 1 » ; aucun geste
 n'est possible sans poste. En attendant qu'un utilisateur du jeu de données déclare les postes (#73),
 `pnpm dev:workstation` donne le cookie de ce poste, à poser dans le navigateur (outils de
 développement > Application > Cookies).
