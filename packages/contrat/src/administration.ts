@@ -233,6 +233,8 @@ export const principalDetailSchema = principalRowSchema.extend({
   address: postalAddressSchema.nullable(),
   email: z.string().nullable(),
   phone: z.string().nullable(),
+  /** Devise unique du donneur d'ordre (RG-REF-049). */
+  currency: z.string().nullable(),
 });
 
 export const getPrincipal = defineQuery({

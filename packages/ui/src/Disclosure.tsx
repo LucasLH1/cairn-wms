@@ -5,12 +5,14 @@ import { focusRing } from './focus.js';
 export interface DisclosureProps {
   readonly title: string;
   readonly children: ReactNode;
+  /** Ouverte d'emblée : quand l'exception est le cas de l'objet affiché. */
+  readonly defaultExpanded?: boolean;
 }
 
 /** Section repliée par défaut : ce qui est une exception, pas une étape normale (0.1, restrictions). */
-export function Disclosure({ title, children }: DisclosureProps) {
+export function Disclosure({ title, children, defaultExpanded = false }: DisclosureProps) {
   return (
-    <AriaDisclosure className="group grid gap-3">
+    <AriaDisclosure className="group grid gap-3" defaultExpanded={defaultExpanded}>
       <Heading className="m-0">
         <Button
           slot="trigger"

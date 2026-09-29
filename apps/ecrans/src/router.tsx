@@ -19,6 +19,8 @@ import { MergeScreen } from './screens/parties/MergeScreen.js';
 import { PartiesScreen } from './screens/parties/PartiesScreen.js';
 import { PartyScreen } from './screens/parties/PartyScreen.js';
 import { HomeScreen } from './screens/HomeScreen.js';
+import { ItemScreen, NewItemScreen } from './screens/items/ItemScreen.js';
+import { ItemsScreen } from './screens/items/ItemsScreen.js';
 import { NewExpectedReceiptScreen } from './screens/NewExpectedReceiptScreen.js';
 import { OpenArrivalScreen } from './screens/OpenArrivalScreen.js';
 import { ReceptionsScreen } from './screens/ReceptionsScreen.js';
@@ -91,6 +93,30 @@ const openArrivalRoute = createRoute({
   path: '/docks/$dockId/arrival',
   component: OpenArrivalScreen,
   staticData: { place: 'receptions' },
+});
+
+const itemsRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/items',
+  component: ItemsScreen,
+  staticData: { place: 'items' },
+});
+
+const newItemRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/items/new',
+  component: NewItemScreen,
+  staticData: { place: 'items' },
+  validateSearch: (search: Record<string, unknown>) => ({
+    principalId: typeof search['principalId'] === 'string' ? search['principalId'] : '',
+  }),
+});
+
+const itemRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/items/$itemId',
+  component: ItemScreen,
+  staticData: { place: 'items' },
 });
 
 const settingsRoute = createRoute({
@@ -172,6 +198,9 @@ const routeTree = rootRoute.addChildren([
     newExpectedReceiptRoute,
     expectedReceiptRoute,
     openArrivalRoute,
+    itemsRoute,
+    newItemRoute,
+    itemRoute,
     settingsRoute,
     siteRoute,
     usersRoute,

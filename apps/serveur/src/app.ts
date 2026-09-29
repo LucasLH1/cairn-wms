@@ -1,5 +1,14 @@
 import Fastify, { type FastifyInstance } from 'fastify';
-import { listItemsHandler } from './logistique/item/index.js';
+import {
+  itemCatalog,
+  listCustomFieldsHandler,
+  listItemFamiliesHandler,
+  listItemsHandler,
+  removeCustomFieldHandler,
+  saveCustomFieldHandler,
+  saveItemFamilyHandler,
+  setPrincipalCurrencyHandler,
+} from './logistique/item/index.js';
 import { listDocksHandler } from './logistique/location/index.js';
 import { listPrincipalsHandler, organizationAdministration } from './logistique/organization/index.js';
 import { listCarriersHandler, listSuppliersHandler, partyAdministration } from './logistique/party/index.js';
@@ -88,6 +97,12 @@ export function buildApp(options: AppOptions): FastifyInstance {
       openFlowsOfEndCustomer: () => Promise.resolve(0),
       stockAtSubcontractor: () => Promise.resolve({}),
     });
+    // Le stock des références et leurs mouvements viendront avec leur module (0.4) : d'ici là, aucune
+    // référence n'immobilise de stock ni n'a bougé.
+    const items = itemCatalog({
+      stockOfItems: () => Promise.resolve(new Map()),
+      hasStockMovement: () => Promise.resolve(false),
+    });
     registerSessionRoutes(app, { db, config: access });
     registerSignalRoute(app, { relay, authenticate: hasSession({ db, config: access }) });
     registerGestures(app, {
@@ -114,6 +129,11 @@ export function buildApp(options: AppOptions): FastifyInstance {
         saveNumberingSchemeHandler,
         ...organization.gestures,
         ...parties.gestures,
+        ...items.gestures,
+        saveItemFamilyHandler,
+        saveCustomFieldHandler,
+        removeCustomFieldHandler,
+        setPrincipalCurrencyHandler,
         createExpectedReceiptHandler,
         openInboundArrivalHandler,
       ],
@@ -139,6 +159,9 @@ export function buildApp(options: AppOptions): FastifyInstance {
         listNumberingSchemesHandler,
         ...organization.queries,
         ...parties.queries,
+        ...items.queries,
+        listItemFamiliesHandler,
+        listCustomFieldsHandler,
       ],
     });
   }

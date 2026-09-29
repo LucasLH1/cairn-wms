@@ -9,5 +9,7 @@ export type PrincipalSummary = z.infer<typeof principalSummarySchema>;
 export const listPrincipals = defineQuery({
   name: 'listPrincipals',
   input: z.object({}),
-  output: z.object({ principals: z.array(principalSummarySchema) }),
+  // Le donneur d'ordre interne porte le matériel du prestataire (RG-ORG-007) : les écrans ne le
+  // proposent pas d'office.
+  output: z.object({ principals: z.array(principalSummarySchema.extend({ internal: z.boolean() })) }),
 });

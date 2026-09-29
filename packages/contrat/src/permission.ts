@@ -6,6 +6,7 @@ import { z } from 'zod';
  * ni un module. Il s'étend avec les gestes que chaque module livre.
  */
 export const permissionCatalog = {
+  catalog: ['manageItems', 'manageCustomFields', 'createDraftItem'],
   reception: ['createExpectedReceipt', 'openInboundArrival'],
   partners: ['managePrincipalParties', 'mergeEndCustomers', 'anonymizeEndCustomers'],
   settings: [
@@ -26,11 +27,13 @@ export type PermissionDomain = keyof typeof permissionCatalog;
 export type Permission = (typeof permissionCatalog)[PermissionDomain][number];
 
 export const permissionDomains = [
+  'catalog',
   'reception',
   'partners',
   'settings',
 ] as const satisfies readonly PermissionDomain[];
 const allPermissions = [
+  ...permissionCatalog.catalog,
   ...permissionCatalog.reception,
   ...permissionCatalog.partners,
   ...permissionCatalog.settings,

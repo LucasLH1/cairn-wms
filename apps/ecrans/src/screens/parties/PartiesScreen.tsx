@@ -20,8 +20,7 @@ export function PartiesScreen() {
   const { t } = useTranslation();
   const { data: principals } = useQuery(contractQuery(listPrincipals, {}));
   const [chosen, setChosen] = useState<string | null>(null);
-  const principalId =
-    chosen ?? principals?.principals.find((principal) => principal.code !== 'INTERNE')?.id ?? null;
+  const principalId = chosen ?? principals?.principals.find((principal) => !principal.internal)?.id ?? null;
   const canManage = useHasPermission('managePrincipalParties');
   return (
     <>

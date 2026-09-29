@@ -187,6 +187,17 @@ export interface LogisticsCarrierService {
   name: string;
 }
 
+export interface LogisticsCustomField {
+  active: Generated<boolean>;
+  fieldType: string;
+  id: Generated<string>;
+  label: string;
+  listValues: Generated<Json>;
+  principalId: string;
+  rank: Generated<number>;
+  required: Generated<boolean>;
+}
+
 export interface LogisticsDock {
   active: Generated<boolean>;
   code: string;
@@ -226,14 +237,24 @@ export interface LogisticsInboundArrival {
 }
 
 export interface LogisticsItem {
+  adrClass: string | null;
+  adrPackingGroup: string | null;
+  adrUnNumber: string | null;
   code: string;
-  family: string | null;
+  createdAt: Generated<Timestamp>;
+  declaredValueCents: Int8 | null;
+  familyId: string | null;
   id: Generated<string>;
+  isKit: Generated<boolean>;
   longLabel: string | null;
   principalId: string;
+  serialBatchTracking: Generated<boolean>;
   shortLabel: string;
   state: Generated<string>;
   trackingMode: string;
+  tracksExpiryDate: Generated<boolean>;
+  tracksManufacturingDate: Generated<boolean>;
+  version: Generated<number>;
 }
 
 export interface LogisticsItemBarcode {
@@ -241,7 +262,42 @@ export interface LogisticsItemBarcode {
   code: string;
   itemId: string;
   nature: string;
+  packagingRank: number | null;
   principalId: string;
+}
+
+export interface LogisticsItemCustomValue {
+  customFieldId: string;
+  itemId: string;
+  value: Json;
+}
+
+export interface LogisticsItemDeclaredValue {
+  currency: string | null;
+  id: Generated<string>;
+  itemId: string;
+  setAt: Generated<Timestamp>;
+  valueCents: Int8 | null;
+}
+
+export interface LogisticsItemFamily {
+  active: Generated<boolean>;
+  code: string;
+  id: Generated<string>;
+  name: string;
+  parentId: string | null;
+  principalId: string;
+}
+
+export interface LogisticsItemSubstitution {
+  replacedItemId: string;
+  replacingItemId: string;
+}
+
+export interface LogisticsKitComponent {
+  componentItemId: string;
+  kitItemId: string;
+  quantity: number;
 }
 
 export interface LogisticsLocation {
@@ -259,10 +315,14 @@ export interface LogisticsLocation {
 }
 
 export interface LogisticsPackagingLevel {
+  grossWeightGrams: number | null;
+  heightMm: number | null;
   itemId: string;
+  lengthMm: number | null;
   name: string;
   rank: number;
   unitsOfLowerLevel: number | null;
+  widthMm: number | null;
 }
 
 export interface LogisticsParty {
@@ -304,6 +364,7 @@ export interface LogisticsPrincipal {
   city: string | null;
   code: string;
   countryCode: string | null;
+  currency: string | null;
   email: string | null;
   endCustomerRetentionMonths: number | null;
   id: Generated<string>;
@@ -312,6 +373,12 @@ export interface LogisticsPrincipal {
   phone: string | null;
   postalCode: string | null;
   principalGroup: string | null;
+}
+
+export interface LogisticsRepairBomComponent {
+  componentItemId: string;
+  itemId: string;
+  quantity: number;
 }
 
 export interface LogisticsUserPrincipalRestriction {
@@ -354,17 +421,24 @@ export interface DB {
   "foundation.workstation": FoundationWorkstation;
   "logistics.carrierAccount": LogisticsCarrierAccount;
   "logistics.carrierService": LogisticsCarrierService;
+  "logistics.customField": LogisticsCustomField;
   "logistics.dock": LogisticsDock;
   "logistics.expectedReceipt": LogisticsExpectedReceipt;
   "logistics.expectedReceiptLine": LogisticsExpectedReceiptLine;
   "logistics.inboundArrival": LogisticsInboundArrival;
   "logistics.item": LogisticsItem;
   "logistics.itemBarcode": LogisticsItemBarcode;
+  "logistics.itemCustomValue": LogisticsItemCustomValue;
+  "logistics.itemDeclaredValue": LogisticsItemDeclaredValue;
+  "logistics.itemFamily": LogisticsItemFamily;
+  "logistics.itemSubstitution": LogisticsItemSubstitution;
+  "logistics.kitComponent": LogisticsKitComponent;
   "logistics.location": LogisticsLocation;
   "logistics.packagingLevel": LogisticsPackagingLevel;
   "logistics.party": LogisticsParty;
   "logistics.partyAddress": LogisticsPartyAddress;
   "logistics.principal": LogisticsPrincipal;
+  "logistics.repairBomComponent": LogisticsRepairBomComponent;
   "logistics.userPrincipalRestriction": LogisticsUserPrincipalRestriction;
   "logistics.zone": LogisticsZone;
 }

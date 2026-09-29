@@ -22,10 +22,22 @@ export type RefusalDetails = Readonly<Record<string, string | number | boolean>>
  * Valeurs d'interpolation d'un libellé de refus : chaque variable des libellés de refus, tirée des
  * détails du refus, vide si le refus ne la porte pas.
  */
-export function refusalValues(details: RefusalDetails): { holder: string; name: string; dock: string } {
+export function refusalValues(details: RefusalDetails): {
+  holder: string;
+  name: string;
+  dock: string;
+  item: string;
+  cycle: string;
+} {
   const text = (key: string) => {
     const value = details?.[key];
     return value === undefined ? '' : String(value);
   };
-  return { holder: text('holder'), name: text('name'), dock: text('dock') };
+  return {
+    holder: text('holder'),
+    name: text('name'),
+    dock: text('dock'),
+    item: text('item'),
+    cycle: text('cycle'),
+  };
 }

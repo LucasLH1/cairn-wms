@@ -12,6 +12,7 @@ import { defaultSite, WorkingSiteContext } from './site.js';
 const titles = {
   home: 'shell.home',
   receptions: 'navigation.receptions',
+  items: 'navigation.items',
   parties: 'party.menu',
   settings: 'administration.settings',
   usersAndTeams: 'administration.usersAndTeams',
@@ -68,6 +69,9 @@ export function Shell() {
   const parties = (['managePrincipalParties', 'mergeEndCustomers', 'anonymizeEndCustomers'] as const).some(
     (permission) => held.includes(permission),
   );
+  const items = (['manageItems', 'manageCustomFields'] as const).some((permission) =>
+    held.includes(permission),
+  );
   const place: ScreenPlace =
     useMatches().findLast((match) => match.staticData.place !== undefined)?.staticData.place ?? 'home';
 
@@ -93,6 +97,11 @@ export function Shell() {
             <NavigationItem href="/receptions" isCurrent={place === 'receptions'}>
               {t('navigation.receptions')}
             </NavigationItem>
+            {items ? (
+              <NavigationItem href="/items" isCurrent={place === 'items'}>
+                {t('navigation.items')}
+              </NavigationItem>
+            ) : null}
             {parties ? (
               <NavigationItem href="/parties" isCurrent={place === 'parties'}>
                 {t('party.menu')}

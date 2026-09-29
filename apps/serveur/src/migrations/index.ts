@@ -6,6 +6,7 @@ import * as locationsAndArrivals from './0004-locations-and-arrivals.js';
 import * as organization from './0005-organization.js';
 import * as roleTemplates from './0006-role-templates.js';
 import * as parties from './0007-parties.js';
+import * as itemCatalog from './0008-item-catalog.js';
 
 /**
  * Migrations dans leur ordre d'application (fiche 0021). Une migration publiée ne se modifie plus :
@@ -19,4 +20,5 @@ export const migrations: Readonly<Record<string, Migration>> = {
   '0005-organization': organization,
   '0006-role-templates': roleTemplates,
   '0007-parties': parties,
+  '0008-item-catalog': itemCatalog,
 };

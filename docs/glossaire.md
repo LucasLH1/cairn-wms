@@ -48,6 +48,11 @@ Règles d'usage :
 | Équivalence | `ItemSubstitution` | Lien déclarant qu'une référence peut en remplacer une autre, avec son sens et sa portée. |
 | Champ personnalisé | `CustomField` | Attribut supplémentaire déclaré par un donneur d'ordre sur ses propres références. |
 | Classement ADR | `AdrClassification` | Classe, numéro ONU et groupe d'emballage d'une référence relevant des matières dangereuses. Déclaratif. |
+| État de référence | `ItemState` | Étape du cycle de vie d'une référence : **brouillon**, **active**, **en sommeil**, **obsolète** (`RG-REF-005`). Une référence ne se supprime jamais. |
+| Niveau de base | `BasePackagingLevel` | Le plus bas niveau de conditionnement d'une référence (`RG-REF-018`). Le stock s'exprime en **unités de base**, les unités de ce niveau. |
+| Nature d'identifiant | `BarcodeNature` | Qualification d'un identifiant scannable : code interne, GTIN/EAN, code fournisseur, code donneur d'ordre, code libre. Liste fournie par le produit, non extensible. |
+| Composant | `Component` | Référence entrant, avec sa quantité, dans la composition d'un kit ou dans une nomenclature de réparation. |
+| Devise | `Currency` | Monnaie unique d'un donneur d'ordre, en code ISO 4217, dans laquelle s'expriment les valeurs déclarées de ses références (`RG-REF-049`). |
 
 ## Emplacements
 

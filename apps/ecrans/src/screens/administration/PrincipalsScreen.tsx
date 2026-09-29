@@ -3,6 +3,7 @@ import {
   listPrincipalsForAdministration,
   savePrincipal,
   setEndCustomerRetention,
+  setPrincipalCurrency,
   setPrincipalActive,
 } from '@cairn/contrat';
 import { Button, DataTable, NumberField, Panel, StatusBadge, TextField } from '@cairn/ui';
@@ -94,6 +95,13 @@ export function PrincipalScreen() {
       {data === undefined || data.principal.internal ? null : (
         <RetentionPanel principalId={data.principal.id} />
       )}
+      {data === undefined ? null : (
+        <CurrencyPanel
+          key={data.principal.currency ?? ''}
+          principalId={data.principal.id}
+          current={data.principal.currency}
+        />
+      )}
     </>
   );
 }
@@ -177,6 +185,34 @@ function PrincipalForm({ principal }: { principal: PrincipalDetail | undefined }
             onPress={() => void save()}
           >
             {principal === undefined ? t('principalAdmin.create') : t('common.save')}
+          </Button>
+        </div>
+      </Panel>
+    </>
+  );
+}
+
+/** Devise unique du donneur d'ordre, dans laquelle s'expriment ses valeurs déclarées (RG-REF-049). */
+function CurrencyPanel({ principalId, current }: { principalId: string; current: string | null }) {
+  const { t } = useTranslation();
+  const gesture = useGesture();
+  const [currency, setCurrency] = useState(current ?? '');
+  const code = currency.trim().toUpperCase();
+  return (
+    <>
+      <RefusalBanner refusal={gesture.refusal} onDismiss={gesture.dismiss} />
+      <Panel title={t('principalAdmin.currencyTitle')} meta={t('principalAdmin.currencyHint')}>
+        <div className="grid grid-cols-(--cairn-line-columns) items-end gap-3">
+          <TextField label={t('principalAdmin.currency')} value={currency} onChange={setCurrency} code />
+          <span />
+          <Button
+            variant="primary"
+            isDisabled={(code !== '' && !/^[A-Z]{3}$/u.test(code)) || gesture.sending}
+            onPress={() =>
+              void gesture.run(setPrincipalCurrency, { principalId, currency: code === '' ? null : code })
+            }
+          >
+            {t('common.save')}
           </Button>
         </div>
       </Panel>

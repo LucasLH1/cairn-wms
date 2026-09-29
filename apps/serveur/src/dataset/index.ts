@@ -24,6 +24,10 @@ export const DATASET_ITEMS = [
   { code: 'MD-004', shortLabel: 'Station de charge double', unitsPerCarton: 10 },
 ] as const;
 
+/** Caractéristiques fictives d'une unité et d'un carton, en grammes et millimètres. */
+const FICTIONAL_UNIT = { grossWeightGrams: 100, lengthMm: 100, widthMm: 100, heightMm: 100 } as const;
+const FICTIONAL_CARTON = { grossWeightGrams: 5000, lengthMm: 600, widthMm: 400, heightMm: 400 } as const;
+
 /**
  * Postes du jeu de données, à identifiant fixe : les tests de bout en bout en signent le cookie comme
  * le ferait la déclaration du poste. Le nom vient de la maquette.
@@ -45,6 +49,9 @@ const DATASET_ROLES = [
     holders: ['anna'],
     permissions: [
       'createExpectedReceipt',
+      // Le référentiel produit est un geste du gestionnaire (RG-SUR-127).
+      'manageItems',
+      'manageCustomFields',
       'managePrincipalParties',
       'mergeEndCustomers',
       'anonymizeEndCustomers',
@@ -137,7 +144,7 @@ export async function loadScenarioDataset(
     // Donneur d'ordre et tiers (§ 4) : Maison Démo, son fournisseur.
     const principal = await transaction
       .insertInto('logistics.principal')
-      .values({ code: 'MD', name: 'Maison Démo' })
+      .values({ code: 'MD', name: 'Maison Démo', currency: 'EUR' })
       .returning('id')
       .executeTakeFirstOrThrow();
     await transaction
@@ -153,7 +160,9 @@ export async function loadScenarioDataset(
 
     const locations = await loadWarehouse(transaction, site.id);
 
-    // Références, gestion quantitative, conditionnées en cartons (§ 4).
+    // Références, gestion quantitative, conditionnées en cartons (§ 4). Le scénario ne donne pas leurs
+    // caractéristiques physiques : les valeurs posées ici sont rondes et fictives, pour que chaque
+    // référence active ait un niveau complet (RG-REF-040).
     for (const definition of DATASET_ITEMS) {
       const item = await transaction
         .insertInto('logistics.item')
@@ -168,8 +177,14 @@ export async function loadScenarioDataset(
       await transaction
         .insertInto('logistics.packagingLevel')
         .values([
-          { itemId: item.id, rank: 0, name: 'Unité', unitsOfLowerLevel: null },
-          { itemId: item.id, rank: 1, name: 'Carton', unitsOfLowerLevel: definition.unitsPerCarton },
+          { itemId: item.id, rank: 0, name: 'Unité', unitsOfLowerLevel: null, ...FICTIONAL_UNIT },
+          {
+            itemId: item.id,
+            rank: 1,
+            name: 'Carton',
+            unitsOfLowerLevel: definition.unitsPerCarton,
+            ...FICTIONAL_CARTON,
+          },
         ])
         .execute();
       await transaction

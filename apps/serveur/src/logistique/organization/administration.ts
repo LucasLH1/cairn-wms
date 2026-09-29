@@ -464,6 +464,7 @@ export function organizationAdministration(activity: OrganizationActivity) {
           address: addressOf(principal),
           email: principal.email,
           phone: principal.phone,
+          currency: principal.currency,
         },
       };
     },

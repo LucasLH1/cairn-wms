@@ -20,7 +20,7 @@ export const listPrincipalsHandler = defineQueryHandler({
     const visible = await visiblePrincipalIds(db, userId);
     const principals = await db
       .selectFrom('logistics.principal')
-      .select(['id', 'code', 'name'])
+      .select(['id', 'code', 'name', 'internal'])
       .where('active', '=', true)
       .$if(visible !== null, (query) => query.where('id', 'in', visible ?? []))
       .orderBy('name')
