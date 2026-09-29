@@ -2,7 +2,7 @@ import Fastify, { type FastifyInstance } from 'fastify';
 import { listItemsHandler } from './logistique/item/index.js';
 import { listDocksHandler } from './logistique/location/index.js';
 import { listPrincipalsHandler, organizationAdministration } from './logistique/organization/index.js';
-import { listCarriersHandler, listSuppliersHandler } from './logistique/party/index.js';
+import { listCarriersHandler, listSuppliersHandler, partyAdministration } from './logistique/party/index.js';
 import {
   createExpectedReceiptHandler,
   getExpectedReceiptHandler,
@@ -83,6 +83,11 @@ export function buildApp(options: AppOptions): FastifyInstance {
       stockInZone: () => Promise.resolve({}),
       foreignStockInZone: () => Promise.resolve({}),
     });
+    // Flux en cours des clients finaux (commandes, 3.1) et stock chez les sous-traitants (0.4) : à venir.
+    const parties = partyAdministration({
+      openFlowsOfEndCustomer: () => Promise.resolve(0),
+      stockAtSubcontractor: () => Promise.resolve({}),
+    });
     registerSessionRoutes(app, { db, config: access });
     registerSignalRoute(app, { relay, authenticate: hasSession({ db, config: access }) });
     registerGestures(app, {
@@ -108,6 +113,7 @@ export function buildApp(options: AppOptions): FastifyInstance {
         setTeamActiveHandler,
         saveNumberingSchemeHandler,
         ...organization.gestures,
+        ...parties.gestures,
         createExpectedReceiptHandler,
         openInboundArrivalHandler,
       ],
@@ -132,6 +138,7 @@ export function buildApp(options: AppOptions): FastifyInstance {
         listTeamsHandler,
         listNumberingSchemesHandler,
         ...organization.queries,
+        ...parties.queries,
       ],
     });
   }

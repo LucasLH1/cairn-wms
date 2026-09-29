@@ -13,6 +13,8 @@ export class GestureRefusal extends Error {
     readonly details?: RefusalDetails,
     /** Objets visés par le geste refusé (RG-ORG-022). */
     readonly objects: readonly TraceObject[] = [],
+    /** La permission manquante, quand le geste l'a résolue lui-même (RG-ORG-022). */
+    readonly permission?: string,
   ) {
     super(`gesture refused: ${reason}`);
     this.name = 'GestureRefusal';

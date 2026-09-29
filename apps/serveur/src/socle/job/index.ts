@@ -8,4 +8,5 @@ export {
   type AddJobOptions,
   type JobDefinition,
   type JobRunnerOptions,
+  type RecurringJob,
 } from './job.js';

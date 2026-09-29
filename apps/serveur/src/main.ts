@@ -1,4 +1,5 @@
 import { buildApp } from './app.js';
+import { anonymizeDueEndCustomersJob } from './logistique/party/index.js';
 import { readConfig } from './config.js';
 import { createDatabase, readApplicationConnection } from './socle/database/index.js';
 import { databaseHealthCheck } from './socle/health/index.js';
@@ -31,7 +32,14 @@ if (config.role === 'gestures') {
 if (config.role === 'jobs') {
   // Rôle « traitements » (fiches 0017, 0028) : la file seule, sans route HTTP. Les traitements du
   // produit s'inscrivent ici à mesure que les modules en déclarent.
-  const runner = await startJobRunner({ connection, db, jobs: [] });
+  // Les flux des clients finaux arriveront avec les commandes (3.1) : aucun n'est en cours d'ici là.
+  const anonymizeDue = anonymizeDueEndCustomersJob(() => Promise.resolve(0));
+  const runner = await startJobRunner({
+    connection,
+    db,
+    jobs: [anonymizeDue],
+    recurring: [{ job: anonymizeDue, cron: '17 * * * *' }],
+  });
   await runner.promise;
   await db.destroy();
 }

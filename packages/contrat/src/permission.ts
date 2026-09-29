@@ -7,6 +7,7 @@ import { z } from 'zod';
  */
 export const permissionCatalog = {
   reception: ['createExpectedReceipt', 'openInboundArrival'],
+  partners: ['managePrincipalParties', 'mergeEndCustomers', 'anonymizeEndCustomers'],
   settings: [
     'administerProvider',
     'administerSites',
@@ -16,6 +17,7 @@ export const permissionCatalog = {
     'administerExecutionSites',
     'administerTeams',
     'administerNumbering',
+    'administerProviderParties',
     'declareWorkstation',
   ],
 } as const;
@@ -23,8 +25,16 @@ export const permissionCatalog = {
 export type PermissionDomain = keyof typeof permissionCatalog;
 export type Permission = (typeof permissionCatalog)[PermissionDomain][number];
 
-export const permissionDomains = ['reception', 'settings'] as const satisfies readonly PermissionDomain[];
-const allPermissions = [...permissionCatalog.reception, ...permissionCatalog.settings] as const;
+export const permissionDomains = [
+  'reception',
+  'partners',
+  'settings',
+] as const satisfies readonly PermissionDomain[];
+const allPermissions = [
+  ...permissionCatalog.reception,
+  ...permissionCatalog.partners,
+  ...permissionCatalog.settings,
+] as const;
 // Un domaine ajouté au catalogue sans être repris ici rend cette ligne fausse à la compilation.
 export const permissionCatalogIsComplete: Exclude<Permission, (typeof allPermissions)[number]> extends never
   ? true

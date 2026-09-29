@@ -72,6 +72,14 @@ export interface GestureHandler<Definition extends AnyGestureDefinition> {
   readonly allowUndeclaredWorkstation?: boolean;
   /** Complète la réponse acceptée, première comme rejouée ; ne dépend que du résultat. */
   respond?(reply: FastifyReply, result: z.infer<Definition['output']>): void;
+  /**
+   * La permission qu'exige ce geste-ci, quand elle dépend de ce qu'il touche (un tiers selon sa
+   * famille, par exemple) ; par défaut, celle que le contrat déclare.
+   */
+  permission?(
+    input: z.infer<Definition['input']>,
+    transaction: DatabaseTransaction,
+  ): Promise<Permission | null>;
   /** Le périmètre engagé, lu au besoin dans la base ; par défaut, aucun site. */
   scope?(input: z.infer<Definition['input']>, transaction: DatabaseTransaction): Promise<GestureScope>;
   execute(context: GestureContext<z.infer<Definition['input']>>): Promise<z.infer<Definition['output']>>;
@@ -182,8 +190,8 @@ export function registerGestures(app: FastifyInstance, options: GesturesOptions)
         await appendTraceEvent(transaction, {
           eventType: gestureRefusedEvent,
           data:
-            refusal.reason === 'permissionDenied' && permission !== null
-              ? { gesture: name, reason: refusal.reason, permission }
+            refusal.reason === 'permissionDenied' && (refusal.permission ?? permission) !== null
+              ? { gesture: name, reason: refusal.reason, permission: refusal.permission ?? permission ?? '' }
               : { gesture: name, reason: refusal.reason },
           author: { userId },
           objects,
@@ -266,9 +274,13 @@ export function registerGestures(app: FastifyInstance, options: GesturesOptions)
       try {
         const body = await db.transaction().execute(async (transaction) => {
           const scope = handler.scope === undefined ? {} : await handler.scope(input.data, transaction);
-          const denied = await rights.authorize(transaction, author, definition.permission, scope);
+          const permission =
+            handler.permission === undefined
+              ? definition.permission
+              : await handler.permission(input.data, transaction);
+          const denied = await rights.authorize(transaction, author, permission, scope);
           if (denied !== undefined) {
-            throw new GestureRefusal(denied);
+            throw new GestureRefusal(denied, undefined, [], permission ?? undefined);
           }
           const result: unknown = await handler.execute({
             transaction,

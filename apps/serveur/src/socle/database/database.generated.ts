@@ -160,6 +160,33 @@ export interface FoundationWorkstation {
   siteId: string;
 }
 
+export interface LogisticsCarrierAccount {
+  accountNumber: string;
+  active: Generated<boolean>;
+  carrierId: string;
+  contractReference: string | null;
+  id: Generated<string>;
+  principalId: string | null;
+}
+
+export interface LogisticsCarrierService {
+  acceptsDangerousGoods: Generated<boolean>;
+  active: Generated<boolean>;
+  carrierId: string;
+  code: string;
+  direction: string;
+  id: Generated<string>;
+  label: string;
+  leadTimeDays: number;
+  maxDimensionSumMm: number | null;
+  maxHeightMm: number | null;
+  maxInsuredValueCents: Int8 | null;
+  maxLengthMm: number | null;
+  maxWeightGrams: number | null;
+  maxWidthMm: number | null;
+  name: string;
+}
+
 export interface LogisticsDock {
   active: Generated<boolean>;
   code: string;
@@ -240,11 +267,34 @@ export interface LogisticsPackagingLevel {
 
 export interface LogisticsParty {
   active: Generated<boolean>;
+  anonymizedAt: Timestamp | null;
   code: string;
+  createdAt: Generated<Timestamp>;
+  email: string | null;
   family: string;
   id: Generated<string>;
+  issuesDestructionCertificate: Generated<boolean>;
+  lastFlowAt: Timestamp | null;
+  mergedIntoPartyId: string | null;
   name: string;
+  phone: string | null;
   principalId: string | null;
+  subcontractingNature: string | null;
+  toComplete: Generated<boolean>;
+}
+
+export interface LogisticsPartyAddress {
+  active: Generated<boolean>;
+  city: string | null;
+  countryCode: string;
+  id: Generated<string>;
+  isDefault: Generated<boolean>;
+  line1: string | null;
+  line2: string | null;
+  partyId: string;
+  postalCode: string | null;
+  recipient: string | null;
+  usage: string;
 }
 
 export interface LogisticsPrincipal {
@@ -255,6 +305,7 @@ export interface LogisticsPrincipal {
   code: string;
   countryCode: string | null;
   email: string | null;
+  endCustomerRetentionMonths: number | null;
   id: Generated<string>;
   internal: Generated<boolean>;
   name: string;
@@ -301,6 +352,8 @@ export interface DB {
   "foundation.userRole": FoundationUserRole;
   "foundation.userSite": FoundationUserSite;
   "foundation.workstation": FoundationWorkstation;
+  "logistics.carrierAccount": LogisticsCarrierAccount;
+  "logistics.carrierService": LogisticsCarrierService;
   "logistics.dock": LogisticsDock;
   "logistics.expectedReceipt": LogisticsExpectedReceipt;
   "logistics.expectedReceiptLine": LogisticsExpectedReceiptLine;
@@ -310,6 +363,7 @@ export interface DB {
   "logistics.location": LogisticsLocation;
   "logistics.packagingLevel": LogisticsPackagingLevel;
   "logistics.party": LogisticsParty;
+  "logistics.partyAddress": LogisticsPartyAddress;
   "logistics.principal": LogisticsPrincipal;
   "logistics.userPrincipalRestriction": LogisticsUserPrincipalRestriction;
   "logistics.zone": LogisticsZone;

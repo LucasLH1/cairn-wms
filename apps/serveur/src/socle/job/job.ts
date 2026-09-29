@@ -1,4 +1,12 @@
-import { run, runMigrations, runOnce, type Runner, type Task, type TaskList } from 'graphile-worker';
+import {
+  parseCronItems,
+  run,
+  runMigrations,
+  runOnce,
+  type Runner,
+  type Task,
+  type TaskList,
+} from 'graphile-worker';
 import { sql, type Kysely } from 'kysely';
 import pg from 'pg';
 import type { z } from 'zod';
@@ -69,10 +77,17 @@ function taskList(jobs: readonly JobDefinition<unknown>[], db: Database): TaskLi
   return list;
 }
 
+/** Travail récurrent, déclaré en code : le traitement et sa récurrence au format cron. */
+export interface RecurringJob {
+  readonly job: JobDefinition<unknown>;
+  readonly cron: string;
+}
+
 export interface JobRunnerOptions {
   readonly connection: ConnectionSettings;
   readonly db: Database;
   readonly jobs: readonly JobDefinition<unknown>[];
+  readonly recurring?: readonly RecurringJob[];
   readonly concurrency?: number;
 }
 
@@ -102,7 +117,7 @@ export async function startJobRunner(options: JobRunnerOptions): Promise<Runner>
       taskList: taskList(options.jobs, options.db),
     },
     undefined,
-    [],
+    parseCronItems((options.recurring ?? []).map(({ job, cron }) => ({ task: job.name, match: cron }))),
   );
 }
 
