@@ -1,13 +1,13 @@
 import type { Permission } from '@cairn/contrat';
-import { AppShell, Button, NavigationGroup, NavigationItem } from '@cairn/ui';
+import { AppShell, Button, NavigationGroup, NavigationItem, Select } from '@cairn/ui';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { Outlet, useMatches, useNavigate } from '@tanstack/react-router';
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { closeSession, currentSessionQuery } from '../contract/session.js';
 import { SignalChannelContext } from '../signals/useChangeSignal.js';
 import type { ScreenPlace } from './place.js';
-import { useWorkingSite } from './site.js';
+import { defaultSite, WorkingSiteContext } from './site.js';
 
 const titles = {
   home: 'shell.home',
@@ -41,7 +41,25 @@ export function Shell() {
   const navigate = useNavigate();
   const signals = useContext(SignalChannelContext);
   const { data: session } = useQuery(currentSessionQuery);
-  const site = useWorkingSite();
+  const storageKey = `cairn.site.${session?.user.id ?? ''}`;
+  const [chosen, setChosen] = useState<string | null>(() => {
+    // Préférence de ce navigateur : son absence ne gêne rien.
+    try {
+      return localStorage.getItem(storageKey);
+    } catch {
+      return null;
+    }
+  });
+  const sites = session?.sites ?? [];
+  const site = defaultSite(sites, chosen);
+  const choose = (siteId: string | null) => {
+    setChosen(siteId);
+    try {
+      if (siteId !== null) localStorage.setItem(storageKey, siteId);
+    } catch {
+      // Stockage refusé : le choix vaut pour la page ouverte.
+    }
+  };
   const held = session?.permissions ?? [];
   const settings = settingsPermissions.some((permission) => held.includes(permission));
   const usersAndTeams = usersPermissions.some((permission) => held.includes(permission));
@@ -105,8 +123,23 @@ export function Shell() {
             : t('navigation.office')
       }
       title={t(titles[place])}
+      tools={
+        // Un seul site : une indication sous la marque, pas un choix (0.1, « Contexte de travail »).
+        sites.length > 1 ? (
+          <Select
+            label={t('siteSelector.label')}
+            hideLabel
+            placeholder={t('siteSelector.label')}
+            options={sites.map((option) => ({ id: option.id, label: `${option.code} · ${option.name}` }))}
+            value={site?.id ?? null}
+            onChange={choose}
+          />
+        ) : undefined
+      }
     >
-      <Outlet />
+      <WorkingSiteContext value={site}>
+        <Outlet />
+      </WorkingSiteContext>
     </AppShell>
   );
 }

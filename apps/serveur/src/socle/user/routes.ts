@@ -7,9 +7,10 @@ import {
   type CurrentSession,
 } from '@cairn/contrat';
 import type { FastifyInstance, FastifyRequest } from 'fastify';
+import { sql } from 'kysely';
 import type { Database } from '../database/index.js';
 import type { GestureRights } from '../gesture/index.js';
-import { effectivePermissions } from '../permission/index.js';
+import { effectivePermissions, visibleSiteIds } from '../permission/index.js';
 import { LoginAttempts } from './attempts.js';
 import type { AccessConfig } from './config.js';
 import { readCookie, serializeCookie, SESSION_COOKIE, WORKSTATION_COOKIE } from './cookie.js';
@@ -30,11 +31,22 @@ async function permissionsOf(db: Database, userId: string): Promise<CurrentSessi
 
 /** Sites de rattachement de l'utilisateur, et si son périmètre d'exécution les couvre. */
 async function sitesOf(db: Database, userId: string): Promise<CurrentSession['sites']> {
+  // Les sites visibles : rattachement et position hiérarchique (RG-SUR-020) ; l'exécution, elle, ne
+  // vaut que sur les sites déclarés du compte (RG-SUR-026).
+  const visible = await visibleSiteIds(db, userId);
+  if (visible.length === 0) return [];
   return db
-    .selectFrom('foundation.userSite as userSite')
-    .innerJoin('foundation.site as site', 'site.id', 'userSite.siteId')
-    .select(['site.id', 'site.code', 'site.name', 'userSite.execution'])
-    .where('userSite.userId', '=', userId)
+    .selectFrom('foundation.site as site')
+    .leftJoin('foundation.userSite as userSite', (join) =>
+      join.onRef('userSite.siteId', '=', 'site.id').on('userSite.userId', '=', userId),
+    )
+    .select([
+      'site.id',
+      'site.code',
+      'site.name',
+      sql<boolean>`coalesce(${sql.ref('userSite.execution')}, false)`.as('execution'),
+    ])
+    .where('site.id', 'in', visible)
     .orderBy('site.code')
     .execute();
 }
