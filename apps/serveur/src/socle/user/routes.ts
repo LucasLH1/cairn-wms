@@ -97,7 +97,7 @@ export function registerSessionRoutes(app: FastifyInstance, options: AccessOptio
       workstation = await resolveWorkstation(
         db,
         config.cookieSecret,
-        workstationCookieValue(config.cookieSecret, auto?.workstationId ?? ''),
+        workstationCookieValue(config.cookieSecret, auto.workstationId),
       );
     }
     if (workstation !== undefined) {
