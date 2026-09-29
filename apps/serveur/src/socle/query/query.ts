@@ -3,11 +3,13 @@ import {
   APPLICATION_HEADER_VALUE,
   QUERY_INPUT_PARAMETER,
   queryPath,
+  type Permission,
   type QueryDefinition,
 } from '@cairn/contrat';
 import type { FastifyInstance, FastifyRequest } from 'fastify';
 import { z } from 'zod';
 import type { Database } from '../database/index.js';
+import { effectivePermissions } from '../permission/index.js';
 
 /** Définition de consultation quelconque, pour un registre qui en tient plusieurs. */
 type AnyQueryDefinition = QueryDefinition<string, z.ZodType, z.ZodType>;
@@ -21,6 +23,8 @@ export interface QueryContext<Input> {
 
 export interface QueryHandler<Definition extends AnyQueryDefinition> {
   readonly definition: Definition;
+  /** Réservée aux détenteurs de l'une de ces permissions (écrans de paramétrage, 0.1 § 4). */
+  readonly permissions?: readonly Permission[];
   /** Méthode, donc bivariante : un registre de consultations hétérogènes les accepte toutes. */
   execute(context: QueryContext<z.infer<Definition['input']>>): Promise<z.infer<Definition['output']>>;
 }
@@ -75,6 +79,12 @@ export function registerQueries(app: FastifyInstance, options: QueriesOptions): 
       const userId = await options.resolveUser(request);
       if (userId === null) {
         return refused(401, 'notAuthenticated');
+      }
+      if (handler.permissions !== undefined) {
+        const held = await effectivePermissions(options.db, userId);
+        if (!handler.permissions.some((permission) => held.has(permission))) {
+          return refused(403, 'permissionDenied');
+        }
       }
       const input = definition.input.safeParse(parseInput(request));
       if (!input.success) {

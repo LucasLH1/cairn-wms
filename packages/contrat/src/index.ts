@@ -1,3 +1,4 @@
+export * from './administration.js';
 export * from './dock.js';
 export * from './gesture.js';
 export * from './item.js';

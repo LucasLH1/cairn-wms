@@ -14,7 +14,7 @@ import { defineQueryHandler, QueryRefusal } from '../../socle/query/index.js';
 import { signalChange } from '../../socle/signal/index.js';
 import { defineTraceEventType } from '../../socle/trace-event/index.js';
 import { findReceivableItemIds } from '../item/index.js';
-import { findActivePrincipal } from '../organization/index.js';
+import { canSeePrincipal, findActivePrincipal, visiblePrincipalIds } from '../organization/index.js';
 import { findActiveSupplier } from '../party/index.js';
 
 export const EXPECTED_RECEIPT = 'ExpectedReceipt';
@@ -35,9 +35,12 @@ export const expectedReceiptCreatedEvent = defineTraceEventType(
 export const createExpectedReceiptHandler = defineGestureHandler({
   definition: createExpectedReceipt,
   scope: (input) => Promise.resolve({ siteId: input.siteId }),
-  async execute({ transaction, input, appendEvent }) {
+  async execute({ transaction, author, input, appendEvent }) {
     const principal = await findActivePrincipal(transaction, input.principalId);
-    if (principal === undefined) throw new GestureRefusal('unknownPrincipal');
+    // Un donneur d'ordre hors de la restriction de l'utilisateur lui est inconnu (RG-ORG-017).
+    if (principal === undefined || !(await canSeePrincipal(transaction, author.userId, principal.id))) {
+      throw new GestureRefusal('unknownPrincipal');
+    }
     const supplier = await findActiveSupplier(transaction, input.principalId, input.supplierId);
     if (supplier === undefined) throw new GestureRefusal('unknownSupplier');
 
@@ -140,7 +143,9 @@ export const listOpenExpectedReceiptsHandler = defineQueryHandler({
   definition: listOpenExpectedReceipts,
   async execute({ db, userId, input }) {
     if (!(await canSeeSite(db, userId, input.siteId))) throw new QueryRefusal('outOfScope');
+    const visible = await visiblePrincipalIds(db, userId);
     const rows = await summaries(db)
+      .$if(visible !== null, (query) => query.where('receipt.principalId', 'in', visible ?? []))
       .where('receipt.siteId', '=', input.siteId)
       .where('receipt.state', '=', 'open')
       .orderBy('receipt.expectedArrivalDate')
@@ -159,8 +164,13 @@ export const getExpectedReceiptHandler = defineQueryHandler({
       .select(['site.name as siteName'])
       .where('receipt.id', '=', input.expectedReceiptId)
       .executeTakeFirst();
-    if (row === undefined || !(await canSeeSite(db, userId, row.siteId)))
+    if (
+      row === undefined ||
+      !(await canSeeSite(db, userId, row.siteId)) ||
+      !(await canSeePrincipal(db, userId, row.principalId))
+    ) {
       throw new QueryRefusal('outOfScope');
+    }
     const lines = await db
       .selectFrom('logistics.expectedReceiptLine as line')
       .innerJoin('logistics.item as item', 'item.id', 'line.itemId')

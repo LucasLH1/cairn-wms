@@ -1,26 +1,44 @@
 import Fastify, { type FastifyInstance } from 'fastify';
 import { listItemsHandler } from './logistique/item/index.js';
 import { listDocksHandler } from './logistique/location/index.js';
-import { listPrincipalsHandler } from './logistique/organization/index.js';
+import { listPrincipalsHandler, organizationAdministration } from './logistique/organization/index.js';
 import { listCarriersHandler, listSuppliersHandler } from './logistique/party/index.js';
 import {
   createExpectedReceiptHandler,
   getExpectedReceiptHandler,
   listOpenExpectedReceiptsHandler,
   openInboundArrivalHandler,
+  openReceptionFlowsForPrincipal,
+  openReceptionFlowsOnSite,
+  receptionHistoryOnSite,
 } from './logistique/reception/index.js';
 import type { Database } from './socle/database/index.js';
 import { registerGestures } from './socle/gesture/index.js';
 import { runHealthChecks, type HealthCheck } from './socle/health/index.js';
 import { authorize } from './socle/permission/index.js';
+import { listNumberingSchemesHandler, saveNumberingSchemeHandler } from './socle/numbering/index.js';
+import { getProviderHandler, saveProviderHandler } from './socle/provider/index.js';
 import { registerQueries } from './socle/query/index.js';
+import { deleteRoleHandler, listRolesHandler, saveRoleHandler } from './socle/role/index.js';
 import { registerSignalRoute, type SignalRelay } from './socle/signal/index.js';
 import {
+  addSiteClosuresHandler,
+  listPublicHolidaysHandler,
+  removeSiteClosureHandler,
+  saveSiteCalendarHandler,
+} from './socle/site/index.js';
+import { listTeamsHandler, saveTeamHandler, setTeamActiveHandler } from './socle/team/index.js';
+import {
   declareWorkstationHandler,
+  getUserHandler,
   hasSession,
+  listUsersHandler,
   registerSessionRoutes,
   sessionAuthor,
+  saveUserHandler,
   sessionUserId,
+  setExecutionSitesHandler,
+  setUserActiveHandler,
   type AccessConfig,
 } from './socle/user/index.js';
 
@@ -50,6 +68,19 @@ export function buildApp(options: AppOptions): FastifyInstance {
 
   if (options.services !== undefined) {
     const { db, access, relay } = options.services;
+    // L'organisation apprend des autres modules ce qui reste à solder sur un site, un donneur d'ordre,
+    // une zone (RG-ORG-009, 013). Le stock s'y ajoutera avec son module (0.4).
+    const organization = organizationAdministration({
+      openOnSite: async (transaction, siteId) => ({
+        ...(await openReceptionFlowsOnSite(transaction, siteId)),
+      }),
+      siteHasHistory: receptionHistoryOnSite,
+      openForPrincipal: async (transaction, principalId) => ({
+        ...(await openReceptionFlowsForPrincipal(transaction, principalId)),
+      }),
+      stockInZone: () => Promise.resolve({}),
+      foreignStockInZone: () => Promise.resolve({}),
+    });
     registerSessionRoutes(app, { db, config: access });
     registerSignalRoute(app, { relay, authenticate: hasSession({ db, config: access }) });
     registerGestures(app, {
@@ -61,6 +92,19 @@ export function buildApp(options: AppOptions): FastifyInstance {
       },
       handlers: [
         declareWorkstationHandler(access.cookieSecret),
+        saveProviderHandler,
+        saveSiteCalendarHandler,
+        addSiteClosuresHandler,
+        removeSiteClosureHandler,
+        saveRoleHandler,
+        deleteRoleHandler,
+        saveUserHandler,
+        setUserActiveHandler,
+        setExecutionSitesHandler,
+        saveTeamHandler,
+        setTeamActiveHandler,
+        saveNumberingSchemeHandler,
+        ...organization.gestures,
         createExpectedReceiptHandler,
         openInboundArrivalHandler,
       ],
@@ -76,6 +120,14 @@ export function buildApp(options: AppOptions): FastifyInstance {
         getExpectedReceiptHandler,
         listCarriersHandler,
         listDocksHandler,
+        getProviderHandler,
+        listPublicHolidaysHandler,
+        listRolesHandler,
+        listUsersHandler,
+        getUserHandler,
+        listTeamsHandler,
+        listNumberingSchemesHandler,
+        ...organization.queries,
       ],
     });
   }
