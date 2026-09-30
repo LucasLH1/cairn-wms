@@ -7,8 +7,9 @@ import {
 import { fr } from '@cairn/libelles';
 import { Banner, Button, NumberField, Panel, Select, TextField } from '@cairn/ui';
 import { useQuery } from '@tanstack/react-query';
-import { useState } from 'react';
+import { Controller, useFieldArray } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { textField, useGestureForm } from '../../contract/form.js';
 import { contractQuery } from '../../contract/query.js';
 import { RefusalBanner } from '../../contract/RefusalBanner.js';
 import { useGesture } from '../../contract/useGesture.js';
@@ -88,85 +89,93 @@ function SchemeEditor(props: {
   title: string;
 }) {
   const { t } = useTranslation();
-  const [segments, setSegments] = useState<readonly NumberingSegment[]>(props.initial);
   const gesture = useGesture();
+  const form = useGestureForm(saveNumberingScheme, {
+    objectType: props.objectType,
+    segments: [...props.initial],
+  });
+  const { fields, append, remove, update } = useFieldArray({ control: form.control, name: 'segments' });
+  const segments = form.watch('segments');
   const problems = numberingProblems(segments, props.others);
-  const replace = (index: number, segment: NumberingSegment) => {
-    setSegments(segments.map((current, position) => (position === index ? segment : current)));
-  };
+  const submit = form.handleSubmit((input) => gesture.run(saveNumberingScheme, input));
   return (
     <>
       <RefusalBanner refusal={gesture.refusal} onDismiss={gesture.dismiss} />
       <Panel title={props.title} meta={`${t('numbering.example')} : ${example(segments)}`}>
-        {segments.map((segment, index) => (
-          <div key={index} className="grid grid-cols-(--cairn-line-columns) items-end gap-3">
-            <div className="grid grid-cols-2 gap-3">
-              <Select
-                label={`${t('numbering.segment')} ${String(index + 1)}`}
-                placeholder={t('expectedReceipt.choose')}
-                options={kinds.map((kind) => ({ id: kind, label: t(`numbering.kinds.${kind}`) }))}
-                value={segment.kind}
-                onChange={(kind) => {
-                  const next = kinds.find((candidate) => candidate === kind);
-                  if (next !== undefined) replace(index, segmentOf(next));
-                }}
-              />
-              {segment.kind === 'literal' ? (
-                <TextField
-                  label={t('numbering.value')}
-                  value={segment.value}
-                  onChange={(value) => {
-                    replace(index, { kind: 'literal', value });
+        <form className="grid gap-4" onSubmit={(event) => void submit(event)}>
+          {fields.map((segment, index) => (
+            <div key={segment.id} className="grid grid-cols-(--cairn-line-columns) items-end gap-3">
+              <div className="grid grid-cols-2 gap-3">
+                <Select
+                  label={`${t('numbering.segment')} ${String(index + 1)}`}
+                  placeholder={t('expectedReceipt.choose')}
+                  options={kinds.map((kind) => ({ id: kind, label: t(`numbering.kinds.${kind}`) }))}
+                  value={segment.kind}
+                  onChange={(kind) => {
+                    const next = kinds.find((candidate) => candidate === kind);
+                    if (next !== undefined) update(index, segmentOf(next));
                   }}
-                  code
                 />
-              ) : null}
-            </div>
-            {segment.kind === 'counter' ? (
-              <NumberField
-                label={t('numbering.width')}
-                value={segment.width}
-                minValue={1}
-                onChange={(width) => {
-                  replace(index, { kind: 'counter', width: Math.min(Math.max(width ?? 1, 1), 12) });
+                {segment.kind === 'literal' ? (
+                  <Controller
+                    control={form.control}
+                    name={`segments.${index}.value`}
+                    render={({ field }) => (
+                      <TextField label={t('numbering.value')} {...textField(field)} code />
+                    )}
+                  />
+                ) : null}
+              </div>
+              {segment.kind === 'counter' ? (
+                <Controller
+                  control={form.control}
+                  name={`segments.${index}.width`}
+                  render={({ field }) => (
+                    <NumberField
+                      label={t('numbering.width')}
+                      value={field.value}
+                      minValue={1}
+                      onChange={(width) => {
+                        field.onChange(Math.min(Math.max(width ?? 1, 1), 12));
+                      }}
+                    />
+                  )}
+                />
+              ) : (
+                <span />
+              )}
+              <Button
+                isDisabled={fields.length <= 2}
+                onPress={() => {
+                  remove(index);
                 }}
-              />
-            ) : (
-              <span />
-            )}
+              >
+                {t('common.remove')}
+              </Button>
+            </div>
+          ))}
+          {problems.length === 0 ? null : (
+            <Banner tone="warn">
+              {problems.map((problem) => t(`numbering.problems.${problem}`)).join(' ')}
+            </Banner>
+          )}
+          <div className="flex justify-end gap-2">
             <Button
-              isDisabled={segments.length <= 2}
               onPress={() => {
-                setSegments(segments.filter((_, position) => position !== index));
+                append(segmentOf('literal'));
               }}
             >
-              {t('common.remove')}
+              {t('numbering.addSegment')}
+            </Button>
+            <Button
+              type="submit"
+              variant="primary"
+              isDisabled={!form.formState.isValid || problems.length > 0 || gesture.sending}
+            >
+              {t('common.save')}
             </Button>
           </div>
-        ))}
-        {problems.length === 0 ? null : (
-          <Banner tone="warn">
-            {problems.map((problem) => t(`numbering.problems.${problem}`)).join(' ')}
-          </Banner>
-        )}
-        <div className="flex justify-end gap-2">
-          <Button
-            onPress={() => {
-              setSegments([...segments, segmentOf('literal')]);
-            }}
-          >
-            {t('numbering.addSegment')}
-          </Button>
-          <Button
-            variant="primary"
-            isDisabled={problems.length > 0 || gesture.sending}
-            onPress={() =>
-              void gesture.run(saveNumberingScheme, { objectType: props.objectType, segments: [...segments] })
-            }
-          >
-            {t('common.save')}
-          </Button>
-        </div>
+        </form>
       </Panel>
     </>
   );

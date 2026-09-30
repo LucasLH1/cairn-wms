@@ -11,7 +11,6 @@ import {
   trackingModeSchema,
   changeItemState,
   type CustomField,
-  type CustomFieldType,
   type ItemFamily,
   type ItemRow,
 } from '@cairn/contrat';
@@ -19,7 +18,9 @@ import { Banner, Button, ChipGroup, DataTable, Panel, Select, Tabs, TextField } 
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
 import { useState } from 'react';
+import { Controller, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { textField, useGestureForm } from '../../contract/form.js';
 import { contractQuery } from '../../contract/query.js';
 import { RefusalBanner } from '../../contract/RefusalBanner.js';
 import { useGesture } from '../../contract/useGesture.js';
@@ -284,9 +285,21 @@ function FamiliesPanel({ principalId }: { principalId: string }) {
   const query = contractQuery(listItemFamilies, { principalId });
   const { data } = useQuery(query);
   useChangeSignal('ItemFamily', undefined, query.queryKey);
-  const [code, setCode] = useState('');
-  const [name, setName] = useState('');
-  const [parentId, setParentId] = useState<string | null>(null);
+  const form = useGestureForm(saveItemFamily, {
+    familyId: null,
+    principalId,
+    parentId: null,
+    code: '',
+    name: '',
+    active: true,
+  });
+  const submit = form.handleSubmit(async (input) => {
+    const saved = await gesture.run(saveItemFamily, input);
+    if (saved === undefined) return;
+    // La famille créée, code et nom se vident pour la suivante ; le parent reste choisi.
+    form.setValue('code', '', { shouldValidate: true });
+    form.setValue('name', '', { shouldValidate: true });
+  });
   const families = data?.families ?? [];
   const nameOf = (id: string | null) => families.find((family) => family.id === id)?.name ?? '—';
   return (
@@ -343,37 +356,42 @@ function FamiliesPanel({ principalId }: { principalId: string }) {
             },
           ]}
         />
-        <div className="grid grid-cols-(--cairn-line-columns) items-end gap-3">
-          <TextField label={t('itemFamily.code')} value={code} onChange={setCode} code />
-          <TextField label={t('itemFamily.name')} value={name} onChange={setName} />
-          <Select
-            label={t('itemFamily.parent')}
-            placeholder={t('itemFamily.root')}
-            options={[
-              { id: ALL, label: t('itemFamily.root') },
-              ...families.map((family) => ({ id: family.id, label: `${family.code} · ${family.name}` })),
-            ]}
-            value={parentId ?? ALL}
-            onChange={(value) => {
-              setParentId(value === ALL ? null : value);
-            }}
+        <form
+          className="grid grid-cols-(--cairn-line-columns) items-end gap-3"
+          onSubmit={(event) => void submit(event)}
+        >
+          <Controller
+            control={form.control}
+            name="code"
+            render={({ field }) => <TextField label={t('itemFamily.code')} {...textField(field)} code />}
           />
-          <Button
-            variant="primary"
-            isDisabled={code.trim() === '' || name.trim() === '' || gesture.sending}
-            onPress={() =>
-              void gesture
-                .run(saveItemFamily, { familyId: null, principalId, parentId, code, name, active: true })
-                .then((saved) => {
-                  if (saved === undefined) return;
-                  setCode('');
-                  setName('');
-                })
-            }
-          >
+          <Controller
+            control={form.control}
+            name="name"
+            render={({ field }) => <TextField label={t('itemFamily.name')} {...textField(field)} />}
+          />
+          <Controller
+            control={form.control}
+            name="parentId"
+            render={({ field }) => (
+              <Select
+                label={t('itemFamily.parent')}
+                placeholder={t('itemFamily.root')}
+                options={[
+                  { id: ALL, label: t('itemFamily.root') },
+                  ...families.map((family) => ({ id: family.id, label: `${family.code} · ${family.name}` })),
+                ]}
+                value={field.value ?? ALL}
+                onChange={(value) => {
+                  field.onChange(value === ALL ? null : value);
+                }}
+              />
+            )}
+          />
+          <Button type="submit" variant="primary" isDisabled={!form.formState.isValid || gesture.sending}>
             {t('itemFamily.create')}
           </Button>
-        </div>
+        </form>
       </Panel>
     </>
   );
@@ -386,15 +404,40 @@ function CustomFieldsPanel({ principalId }: { principalId: string }) {
   const query = contractQuery(listCustomFields, { principalId });
   const { data } = useQuery(query);
   useChangeSignal('CustomField', undefined, query.queryKey);
-  const [label, setLabel] = useState('');
-  const [fieldType, setFieldType] = useState<CustomFieldType>('text');
-  const [listValues, setListValues] = useState('');
-  const [required, setRequired] = useState(false);
   const [removal, setRemoval] = useState<{ removal: 'deleted' | 'deactivated'; itemCount: number }>();
-  const values = listValues
-    .split(',')
-    .map((value) => value.trim())
-    .filter((value) => value !== '');
+  const form = useGestureForm(saveCustomField, {
+    customFieldId: null,
+    principalId,
+    label: '',
+    fieldType: 'text',
+    listValues: [],
+    required: false,
+    active: true,
+  });
+  const [fieldType, listValues] = useWatch({ control: form.control, name: ['fieldType', 'listValues'] });
+  // Les valeurs d'une liste se saisissent en un texte, séparées par des virgules ; le formulaire en
+  // garde la liste.
+  const [listText, setListText] = useState('');
+  const changeListText = (text: string) => {
+    setListText(text);
+    form.setValue(
+      'listValues',
+      text
+        .split(',')
+        .map((value) => value.trim())
+        .filter((value) => value !== ''),
+      { shouldValidate: true },
+    );
+  };
+  const submit = form.handleSubmit(async (input) => {
+    const saved = await gesture.run(saveCustomField, {
+      ...input,
+      listValues: input.fieldType === 'list' ? input.listValues : [],
+    });
+    if (saved === undefined) return;
+    form.setValue('label', '', { shouldValidate: true });
+    changeListText('');
+  });
   const save = (field: CustomField, changes: Partial<Pick<CustomField, 'required' | 'active'>>) =>
     void gesture.run(saveCustomField, {
       customFieldId: field.id,
@@ -486,59 +529,64 @@ function CustomFieldsPanel({ principalId }: { principalId: string }) {
             },
           ]}
         />
-        <div className="grid grid-cols-(--cairn-line-columns) items-end gap-3">
-          <TextField label={t('customField.label')} value={label} onChange={setLabel} />
-          <Select
-            label={t('customField.type')}
-            placeholder={t('item.choose')}
-            options={customFieldTypeSchema.options.map((option) => ({
-              id: option,
-              label: t(`customField.types.${option}`),
-            }))}
-            value={fieldType}
-            onChange={(value) => {
-              setFieldType(customFieldTypeSchema.safeParse(value).data ?? 'text');
-            }}
-          />
-          <Button
-            variant="primary"
-            isDisabled={
-              label.trim() === '' || (fieldType === 'list' && values.length === 0) || gesture.sending
-            }
-            onPress={() =>
-              void gesture
-                .run(saveCustomField, {
-                  customFieldId: null,
-                  principalId,
-                  label,
-                  fieldType,
-                  listValues: fieldType === 'list' ? values : [],
-                  required,
-                  active: true,
-                })
-                .then((saved) => {
-                  if (saved === undefined) return;
-                  setLabel('');
-                  setListValues('');
-                })
-            }
-          >
-            {t('customField.create')}
-          </Button>
-        </div>
-        <div className="grid grid-cols-2 gap-4">
-          {fieldType === 'list' ? (
-            <TextField label={t('customField.listValues')} value={listValues} onChange={setListValues} />
-          ) : null}
-          <ChipGroup
-            label={t('customField.required')}
-            options={[{ id: 'required', label: t('customField.required') }]}
-            value={required ? ['required'] : []}
-            onChange={(value) => {
-              setRequired(value.includes('required'));
-            }}
-          />
-        </div>
+        <form className="grid gap-4" onSubmit={(event) => void submit(event)}>
+          <div className="grid grid-cols-(--cairn-line-columns) items-end gap-3">
+            <Controller
+              control={form.control}
+              name="label"
+              render={({ field }) => <TextField label={t('customField.label')} {...textField(field)} />}
+            />
+            <Controller
+              control={form.control}
+              name="fieldType"
+              render={({ field }) => (
+                <Select
+                  label={t('customField.type')}
+                  placeholder={t('item.choose')}
+                  options={customFieldTypeSchema.options.map((option) => ({
+                    id: option,
+                    label: t(`customField.types.${option}`),
+                  }))}
+                  value={field.value}
+                  onChange={(value) => {
+                    field.onChange(customFieldTypeSchema.safeParse(value).data ?? 'text');
+                  }}
+                />
+              )}
+            />
+            <Button
+              type="submit"
+              variant="primary"
+              isDisabled={
+                !form.formState.isValid ||
+                // Une liste porte au moins une valeur (RG-REF-034) : le schéma l'admet vide pour les autres types.
+                (fieldType === 'list' && listValues.length === 0) ||
+                gesture.sending
+              }
+            >
+              {t('customField.create')}
+            </Button>
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            {fieldType === 'list' ? (
+              <TextField label={t('customField.listValues')} value={listText} onChange={changeListText} />
+            ) : null}
+            <Controller
+              control={form.control}
+              name="required"
+              render={({ field }) => (
+                <ChipGroup
+                  label={t('customField.required')}
+                  options={[{ id: 'required', label: t('customField.required') }]}
+                  value={field.value ? ['required'] : []}
+                  onChange={(value) => {
+                    field.onChange(value.includes('required'));
+                  }}
+                />
+              )}
+            />
+          </div>
+        </form>
       </Panel>
     </>
   );

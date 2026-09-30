@@ -1,9 +1,10 @@
 import { declareWorkstation, listWorkstations, revokeWorkstation } from '@cairn/contrat';
 import { Button, DataTable, Panel, Select, StatusBadge, TextField } from '@cairn/ui';
 import { useQuery } from '@tanstack/react-query';
-import { useState } from 'react';
+import { Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import type { z } from 'zod';
+import { textField, useGestureForm } from '../../contract/form.js';
 import { contractQuery } from '../../contract/query.js';
 import { RefusalBanner } from '../../contract/RefusalBanner.js';
 import { currentSessionQuery } from '../../contract/session.js';
@@ -19,9 +20,14 @@ export function WorkstationsTab() {
   const { t } = useTranslation();
   const { data } = useQuery(contractQuery(listWorkstations, {}));
   const { data: session } = useQuery(currentSessionQuery);
-  const [name, setName] = useState('');
-  const [siteId, setSiteId] = useState<string | null>(null);
   const gesture = useGesture();
+  const form = useGestureForm(declareWorkstation, { name: '', siteId: '' });
+  // Aucun site choisi vaut '' dans le formulaire : le schéma du geste le refuse.
+  // Le poste déclaré, le nom se vide pour le suivant ; le site reste choisi.
+  const submit = form.handleSubmit(async (input) => {
+    const declared = await gesture.run(declareWorkstation, input);
+    if (declared !== undefined) form.resetField('name');
+  });
   const executionSites = (session?.sites ?? []).filter((site) => site.execution);
   return (
     <>
@@ -34,29 +40,35 @@ export function WorkstationsTab() {
             : t('workstationAdmin.current', { name: session.workstation.name })
         }
       >
-        <div className="grid grid-cols-2 gap-4">
-          <TextField label={t('workstationAdmin.name')} value={name} onChange={setName} />
-          <Select
-            label={t('workstationAdmin.site')}
-            placeholder={t('expectedReceipt.choose')}
-            options={executionSites.map((site) => ({ id: site.id, label: site.name }))}
-            value={siteId}
-            onChange={setSiteId}
-          />
-        </div>
-        <div className="flex justify-end">
-          <Button
-            variant="primary"
-            isDisabled={name.trim() === '' || siteId === null || gesture.sending}
-            onPress={() =>
-              void gesture.run(declareWorkstation, { name, siteId: siteId ?? '' }).then(() => {
-                setName('');
-              })
-            }
-          >
-            {t('workstationAdmin.declare')}
-          </Button>
-        </div>
+        <form className="grid gap-4" onSubmit={(event) => void submit(event)}>
+          <div className="grid grid-cols-2 gap-4">
+            <Controller
+              control={form.control}
+              name="name"
+              render={({ field }) => <TextField label={t('workstationAdmin.name')} {...textField(field)} />}
+            />
+            <Controller
+              control={form.control}
+              name="siteId"
+              render={({ field }) => (
+                <Select
+                  label={t('workstationAdmin.site')}
+                  placeholder={t('expectedReceipt.choose')}
+                  options={executionSites.map((site) => ({ id: site.id, label: site.name }))}
+                  value={field.value === '' ? null : field.value}
+                  onChange={(value) => {
+                    field.onChange(value ?? '');
+                  }}
+                />
+              )}
+            />
+          </div>
+          <div className="flex justify-end">
+            <Button type="submit" variant="primary" isDisabled={!form.formState.isValid || gesture.sending}>
+              {t('workstationAdmin.declare')}
+            </Button>
+          </div>
+        </form>
       </Panel>
       <Panel title={t('workstationAdmin.list')}>
         <DataTable<WorkstationRow>

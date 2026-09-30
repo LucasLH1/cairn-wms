@@ -51,6 +51,11 @@ async function sitesOf(db: Database, userId: string): Promise<CurrentSession['si
     .execute();
 }
 
+/** Nom du prestataire de l'instance (RG-ORG-001). */
+async function providerNameOf(db: Database): Promise<string | null> {
+  return (await db.selectFrom('foundation.provider').select('name').executeTakeFirst())?.name ?? null;
+}
+
 /**
  * Routes de session du contrat : ouvrir, lire, fermer (fiche 0027). Toutes exigent l'en-tête de
  * l'application, contre les requêtes forgées.
@@ -105,6 +110,7 @@ export function registerSessionRoutes(app: FastifyInstance, options: AccessOptio
     }
     const session: CurrentSession = {
       user: { id: opened.userId, displayName: opened.displayName },
+      providerName: await providerNameOf(db),
       workstation: workstation ?? null,
       sites: await sitesOf(db, opened.userId),
       permissions: await permissionsOf(db, opened.userId),
@@ -124,6 +130,7 @@ export function registerSessionRoutes(app: FastifyInstance, options: AccessOptio
     );
     const session: CurrentSession = {
       user: { id: user.userId, displayName: user.displayName },
+      providerName: await providerNameOf(db),
       workstation: workstation ?? null,
       sites: await sitesOf(db, user.userId),
       permissions: await permissionsOf(db, user.userId),

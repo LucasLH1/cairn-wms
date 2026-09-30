@@ -4,8 +4,10 @@ import { Banner, Button, Panel, Select, TextField } from '@cairn/ui';
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate, useParams } from '@tanstack/react-router';
 import { useState } from 'react';
+import { Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { NoResponseError, sendGesture } from '../contract/client.js';
+import { textField, useGestureForm } from '../contract/form.js';
 import { contractQuery } from '../contract/query.js';
 import {
   refusalLabelKey,
@@ -32,22 +34,17 @@ export function OpenArrivalScreen() {
   });
   const carriers = useQuery(contractQuery(listCarriers, {}));
   const dock = docks.data?.docks.find((candidate) => candidate.id === dockId);
-  const [vehicle, setVehicle] = useState('');
-  const [carrierId, setCarrierId] = useState<string | null>(null);
+  const form = useGestureForm(openInboundArrival, { dockId, vehicleIdentification: '', carrierId: null });
   const [refusal, setRefusal] = useState<
     { key: RefusalLabelKey | 'failure.noResponse'; details: RefusalDetails } | undefined
   >();
   const [sending, setSending] = useState(false);
 
-  const submit = async () => {
+  const submit = form.handleSubmit(async (input) => {
     setSending(true);
     setRefusal(undefined);
     try {
-      const outcome = await sendGesture(openInboundArrival, {
-        dockId,
-        vehicleIdentification: vehicle,
-        carrierId: carrierId === NO_CARRIER ? null : carrierId,
-      });
+      const outcome = await sendGesture(openInboundArrival, input);
       if (outcome.outcome === 'refused') {
         setRefusal({ key: refusalLabelKey(outcome.reason, fr.refusal), details: outcome.details });
         return;
@@ -59,7 +56,7 @@ export function OpenArrivalScreen() {
     } finally {
       setSending(false);
     }
-  };
+  });
 
   return (
     <>
@@ -75,29 +72,45 @@ export function OpenArrivalScreen() {
         </Banner>
       )}
       <Panel title={t('arrival.title', { code: dock?.code ?? '' })} meta={site?.name}>
-        <div className="grid grid-cols-2 gap-4">
-          <TextField label={t('arrival.vehicle')} value={vehicle} onChange={setVehicle} autoFocus code />
-          <Select
-            label={t('arrival.carrier')}
-            placeholder={t('arrival.noCarrier')}
-            options={[
-              { id: NO_CARRIER, label: t('arrival.noCarrier') },
-              ...(carriers.data?.carriers ?? []).map((carrier) => ({ id: carrier.id, label: carrier.name })),
-            ]}
-            value={carrierId}
-            onChange={setCarrierId}
-          />
-        </div>
-        <div className="flex justify-end gap-2">
-          <Button onPress={() => void navigate({ to: '/receptions' })}>{t('arrival.cancel')}</Button>
-          <Button
-            variant="primary"
-            isDisabled={vehicle.trim() === '' || sending}
-            onPress={() => void submit()}
-          >
-            {t('arrival.submit')}
-          </Button>
-        </div>
+        <form className="grid gap-4" onSubmit={(event) => void submit(event)}>
+          <div className="grid grid-cols-2 gap-4">
+            <Controller
+              control={form.control}
+              name="vehicleIdentification"
+              render={({ field }) => (
+                <TextField label={t('arrival.vehicle')} {...textField(field)} autoFocus code />
+              )}
+            />
+            <Controller
+              control={form.control}
+              name="carrierId"
+              render={({ field }) => (
+                <Select
+                  label={t('arrival.carrier')}
+                  placeholder={t('arrival.noCarrier')}
+                  options={[
+                    { id: NO_CARRIER, label: t('arrival.noCarrier') },
+                    ...(carriers.data?.carriers ?? []).map((carrier) => ({
+                      id: carrier.id,
+                      label: carrier.name,
+                    })),
+                  ]}
+                  value={field.value ?? NO_CARRIER}
+                  onChange={(value) => {
+                    // « Sans transporteur » se choisit, et vaut l'absence de transporteur (RG-REC-001).
+                    field.onChange(value === NO_CARRIER ? null : value);
+                  }}
+                />
+              )}
+            />
+          </div>
+          <div className="flex justify-end gap-2">
+            <Button onPress={() => void navigate({ to: '/receptions' })}>{t('arrival.cancel')}</Button>
+            <Button type="submit" variant="primary" isDisabled={!form.formState.isValid || sending}>
+              {t('arrival.submit')}
+            </Button>
+          </div>
+        </form>
       </Panel>
     </>
   );

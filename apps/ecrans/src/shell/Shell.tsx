@@ -91,7 +91,8 @@ export function Shell() {
   return (
     <AppShell
       productName={t('application.name')}
-      context={site?.name}
+      // Sous la marque, le prestataire et le site, comme dans la maquette.
+      context={[session?.providerName, site?.name].filter((part) => part != null).join(' · ')}
       navigation={
         <>
           <NavigationGroup title={t('navigation.office')}>

@@ -32,13 +32,17 @@ import {
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate, useParams } from '@tanstack/react-router';
 import { useState } from 'react';
+import { Controller, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { textField, useGestureForm, valueField } from '../../contract/form.js';
 import { contractQuery } from '../../contract/query.js';
 import { RefusalBanner } from '../../contract/RefusalBanner.js';
 import { useGesture } from '../../contract/useGesture.js';
 import { useHasPermission } from '../../shell/site.js';
 import { useChangeSignal } from '../../signals/useChangeSignal.js';
 import { formatDate } from '../format.js';
+
+type Gesture = ReturnType<typeof useGesture>;
 
 const postalExamples: Readonly<Record<string, string>> = {
   FR: '75001',
@@ -90,13 +94,24 @@ const natures = ['repair', 'destruction', 'recycling', 'refurbishment', 'other']
 function IdentityPanel({ party, readOnly }: { party: PartyDetail; readOnly: boolean }) {
   const { t } = useTranslation();
   const gesture = useGesture();
-  const [code, setCode] = useState(party.code);
-  const [name, setName] = useState(party.name);
-  const [email, setEmail] = useState(party.email ?? '');
-  const [phone, setPhone] = useState(party.phone ?? '');
-  const [nature, setNature] = useState(party.subcontractingNature);
-  const [certificate, setCertificate] = useState(party.issuesDestructionCertificate);
-  const optional = (value: string) => (value.trim() === '' ? null : value.trim());
+  const form = useGestureForm(saveParty, {
+    partyId: party.id,
+    family: party.family,
+    principalId: party.principalId,
+    code: party.code,
+    name: party.name,
+    email: party.email,
+    phone: party.phone,
+    subcontractingNature: party.subcontractingNature,
+    issuesDestructionCertificate: party.issuesDestructionCertificate,
+  });
+  const nature = useWatch({ control: form.control, name: 'subcontractingNature' });
+  const submit = form.handleSubmit((input) =>
+    gesture.run(saveParty, {
+      ...input,
+      subcontractingNature: party.family === 'subcontractor' ? input.subcontractingNature : null,
+    }),
+  );
   return (
     <>
       <RefusalBanner refusal={gesture.refusal} onDismiss={gesture.dismiss} />
@@ -119,68 +134,93 @@ function IdentityPanel({ party, readOnly }: { party: PartyDetail; readOnly: bool
           )
         }
       >
-        <div className="grid grid-cols-2 gap-4">
-          <TextField label={t('party.code')} value={code} onChange={setCode} isDisabled={readOnly} code />
-          <TextField label={t('party.name')} value={name} onChange={setName} isDisabled={readOnly} />
-          <TextField
-            label={t('party.email')}
-            value={email}
-            onChange={setEmail}
-            type="email"
-            isDisabled={readOnly}
-          />
-          <TextField
-            label={t('party.phone')}
-            value={phone}
-            onChange={setPhone}
-            type="tel"
-            isDisabled={readOnly}
-          />
-          {party.family === 'subcontractor' ? (
-            <Select
-              label={t('party.nature')}
-              placeholder={t('expectedReceipt.choose')}
-              options={natures.map((option) => ({ id: option, label: t(`party.natures.${option}`) }))}
-              value={nature}
-              onChange={(value) => {
-                setNature(natures.find((option) => option === value) ?? null);
-              }}
+        <form className="grid gap-4" onSubmit={(event) => void submit(event)}>
+          <div className="grid grid-cols-2 gap-4">
+            <Controller
+              control={form.control}
+              name="code"
+              render={({ field }) => (
+                <TextField
+                  label={t('party.code')}
+                  {...textField(field, { optional: true })}
+                  isDisabled={readOnly}
+                  code
+                />
+              )}
             />
-          ) : null}
-          {party.family === 'subcontractor' && nature === 'destruction' ? (
-            <ChipGroup
-              label={t('party.certificate')}
-              options={[{ id: 'certificate', label: t('party.certificate') }]}
-              value={certificate ? ['certificate'] : []}
-              onChange={(value) => {
-                setCertificate(value.includes('certificate'));
-              }}
+            <Controller
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <TextField label={t('party.name')} {...textField(field)} isDisabled={readOnly} />
+              )}
             />
-          ) : null}
-        </div>
-        {readOnly ? null : (
-          <div className="flex justify-end">
-            <Button
-              variant="primary"
-              isDisabled={name.trim() === '' || gesture.sending}
-              onPress={() =>
-                void gesture.run(saveParty, {
-                  partyId: party.id,
-                  family: party.family,
-                  principalId: party.principalId,
-                  code: optional(code),
-                  name,
-                  email: optional(email),
-                  phone: optional(phone),
-                  subcontractingNature: party.family === 'subcontractor' ? nature : null,
-                  issuesDestructionCertificate: certificate,
-                })
-              }
-            >
-              {t('common.save')}
-            </Button>
+            <Controller
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <TextField
+                  label={t('party.email')}
+                  {...textField(field, { optional: true, compact: true })}
+                  type="email"
+                  isDisabled={readOnly}
+                />
+              )}
+            />
+            <Controller
+              control={form.control}
+              name="phone"
+              render={({ field }) => (
+                <TextField
+                  label={t('party.phone')}
+                  {...textField(field, { optional: true })}
+                  type="tel"
+                  isDisabled={readOnly}
+                />
+              )}
+            />
+            {party.family === 'subcontractor' ? (
+              <Controller
+                control={form.control}
+                name="subcontractingNature"
+                render={({ field }) => (
+                  <Select
+                    label={t('party.nature')}
+                    placeholder={t('expectedReceipt.choose')}
+                    options={natures.map((option) => ({ id: option, label: t(`party.natures.${option}`) }))}
+                    value={field.value}
+                    onChange={(value) => {
+                      field.onChange(natures.find((option) => option === value) ?? null);
+                    }}
+                  />
+                )}
+              />
+            ) : null}
+            {party.family === 'subcontractor' && nature === 'destruction' ? (
+              <Controller
+                control={form.control}
+                name="issuesDestructionCertificate"
+                render={({ field }) => (
+                  <ChipGroup
+                    label={t('party.certificate')}
+                    options={[{ id: 'certificate', label: t('party.certificate') }]}
+                    value={field.value ? ['certificate'] : []}
+                    onChange={(value) => {
+                      field.onChange(value.includes('certificate'));
+                    }}
+                  />
+                )}
+              />
+            ) : null}
           </div>
-        )}
+          {readOnly ? null : (
+            <div className="flex justify-end">
+              <Button type="submit" variant="primary" isDisabled={!form.formState.isValid || gesture.sending}>
+                {t('common.save')}
+              </Button>
+            </div>
+          )}
+        </form>
       </Panel>
     </>
   );
@@ -190,9 +230,9 @@ interface AddressDraft {
   readonly addressId: string | null;
   readonly usage: AddressUsage;
   readonly isDefault: boolean;
-  readonly recipient: string;
+  readonly recipient: string | null;
   readonly line1: string;
-  readonly line2: string;
+  readonly line2: string | null;
   readonly postalCode: string;
   readonly city: string;
   readonly countryCode: string;
@@ -202,9 +242,9 @@ const emptyAddress: AddressDraft = {
   addressId: null,
   usage: 'delivery',
   isDefault: true,
-  recipient: '',
+  recipient: null,
   line1: '',
-  line2: '',
+  line2: null,
   postalCode: '',
   city: '',
   countryCode: 'FR',
@@ -215,9 +255,12 @@ function AddressesPanel({ party, readOnly }: { party: PartyDetail; readOnly: boo
   const { t } = useTranslation();
   const gesture = useGesture();
   const [draft, setDraft] = useState<AddressDraft | undefined>();
-  const pattern = draft === undefined ? undefined : postalCodePatterns[draft.countryCode.toUpperCase()];
-  const postalValid =
-    draft === undefined || pattern === undefined || pattern.test(draft.postalCode.trim().toUpperCase());
+  // Chaque ouverture repart de sa propre saisie, même quand une autre était déjà ouverte.
+  const [opening, setOpening] = useState(0);
+  const open = (values: AddressDraft) => {
+    setDraft(values);
+    setOpening((count) => count + 1);
+  };
   return (
     <>
       <RefusalBanner refusal={gesture.refusal} onDismiss={gesture.dismiss} />
@@ -227,7 +270,7 @@ function AddressesPanel({ party, readOnly }: { party: PartyDetail; readOnly: boo
           readOnly ? undefined : (
             <Button
               onPress={() => {
-                setDraft(emptyAddress);
+                open(emptyAddress);
               }}
             >
               {t('address.add')}
@@ -272,13 +315,13 @@ function AddressesPanel({ party, readOnly }: { party: PartyDetail; readOnly: boo
                   <div className="flex gap-2">
                     <Button
                       onPress={() => {
-                        setDraft({
+                        open({
                           addressId: address.id,
                           usage: address.usage,
                           isDefault: address.isDefault,
-                          recipient: address.recipient ?? '',
+                          recipient: address.recipient,
                           line1: address.line1 ?? '',
-                          line2: address.line2 ?? '',
+                          line2: address.line2,
                           postalCode: address.postalCode ?? '',
                           city: address.city ?? '',
                           countryCode: address.countryCode,
@@ -300,120 +343,142 @@ function AddressesPanel({ party, readOnly }: { party: PartyDetail; readOnly: boo
           ]}
         />
         {draft === undefined ? null : (
-          <>
-            <div className="grid grid-cols-3 gap-4">
-              <Select
-                label={t('address.usage')}
-                placeholder={t('expectedReceipt.choose')}
-                options={addressUsageSchema.options.map((usage) => ({
-                  id: usage,
-                  label: t(`address.usages.${usage}`),
-                }))}
-                value={draft.usage}
-                onChange={(value) => {
-                  const usage = addressUsageSchema.safeParse(value);
-                  if (usage.success) setDraft({ ...draft, usage: usage.data });
-                }}
-              />
-              <TextField
-                label={t('address.recipient')}
-                value={draft.recipient}
-                onChange={(recipient) => {
-                  setDraft({ ...draft, recipient });
-                }}
-              />
-              <TextField
-                label={t('address.countryCode')}
-                value={draft.countryCode}
-                onChange={(countryCode) => {
-                  setDraft({ ...draft, countryCode: countryCode.toUpperCase() });
-                }}
-                code
-              />
-              <TextField
-                label={t('address.line1')}
-                value={draft.line1}
-                onChange={(line1) => {
-                  setDraft({ ...draft, line1 });
-                }}
-              />
-              <TextField
-                label={t('address.line2')}
-                value={draft.line2}
-                onChange={(line2) => {
-                  setDraft({ ...draft, line2 });
-                }}
-              />
-              <TextField
-                label={t('address.postalCode')}
-                value={draft.postalCode}
-                onChange={(postalCode) => {
-                  setDraft({ ...draft, postalCode });
-                }}
-                code
-              />
-              <TextField
-                label={t('address.city')}
-                value={draft.city}
-                onChange={(city) => {
-                  setDraft({ ...draft, city });
-                }}
-              />
-              <ChipGroup
-                label={t('address.isDefault')}
-                options={[{ id: 'default', label: t('address.isDefault') }]}
-                value={draft.isDefault ? ['default'] : []}
-                onChange={(value) => {
-                  setDraft({ ...draft, isDefault: value.includes('default') });
-                }}
-              />
-            </div>
-            {postalValid ? null : (
-              <Banner tone="warn">
-                {t('address.postalFormat', {
-                  example: postalExamples[draft.countryCode.toUpperCase()] ?? '',
-                })}
-              </Banner>
-            )}
-            <div className="flex justify-end gap-2">
-              <Button
-                onPress={() => {
-                  setDraft(undefined);
-                }}
-              >
-                {t('common.cancel')}
-              </Button>
-              <Button
-                variant="primary"
-                isDisabled={
-                  !postalValid || draft.line1.trim() === '' || draft.city.trim() === '' || gesture.sending
-                }
-                onPress={() =>
-                  void gesture
-                    .run(saveAddress, {
-                      addressId: draft.addressId,
-                      partyId: party.id,
-                      usage: draft.usage,
-                      isDefault: draft.isDefault,
-                      recipient: draft.recipient.trim() === '' ? null : draft.recipient,
-                      line1: draft.line1,
-                      line2: draft.line2.trim() === '' ? null : draft.line2,
-                      postalCode: draft.postalCode,
-                      city: draft.city,
-                      countryCode: draft.countryCode.toUpperCase(),
-                    })
-                    .then((saved) => {
-                      if (saved !== undefined) setDraft(undefined);
-                    })
-                }
-              >
-                {t('common.save')}
-              </Button>
-            </div>
-          </>
+          <AddressForm
+            key={opening}
+            partyId={party.id}
+            draft={draft}
+            gesture={gesture}
+            onClose={() => {
+              setDraft(undefined);
+            }}
+          />
         )}
       </Panel>
     </>
+  );
+}
+
+/** La saisie d'une adresse : un formulaire du geste `saveAddress`. */
+function AddressForm({
+  partyId,
+  draft,
+  gesture,
+  onClose,
+}: {
+  partyId: string;
+  draft: AddressDraft;
+  gesture: Gesture;
+  onClose: () => void;
+}) {
+  const { t } = useTranslation();
+  const form = useGestureForm(saveAddress, { ...draft, partyId });
+  const [countryCode, postalCode] = useWatch({ control: form.control, name: ['countryCode', 'postalCode'] });
+  const pattern = postalCodePatterns[countryCode.toUpperCase()];
+  const postalValid = pattern === undefined || pattern.test(postalCode.trim().toUpperCase());
+  const submit = form.handleSubmit((input) =>
+    gesture.run(saveAddress, input).then((saved) => {
+      if (saved !== undefined) onClose();
+    }),
+  );
+  return (
+    <form className="grid gap-4" onSubmit={(event) => void submit(event)}>
+      <div className="grid grid-cols-3 gap-4">
+        <Controller
+          control={form.control}
+          name="usage"
+          render={({ field }) => (
+            <Select
+              label={t('address.usage')}
+              placeholder={t('expectedReceipt.choose')}
+              options={addressUsageSchema.options.map((usage) => ({
+                id: usage,
+                label: t(`address.usages.${usage}`),
+              }))}
+              value={field.value}
+              onChange={(value) => {
+                const usage = addressUsageSchema.safeParse(value);
+                if (usage.success) field.onChange(usage.data);
+              }}
+            />
+          )}
+        />
+        <Controller
+          control={form.control}
+          name="recipient"
+          render={({ field }) => (
+            <TextField label={t('address.recipient')} {...textField(field, { optional: true })} />
+          )}
+        />
+        <Controller
+          control={form.control}
+          name="countryCode"
+          render={({ field }) => (
+            <TextField
+              label={t('address.countryCode')}
+              {...textField(field)}
+              onChange={(text) => {
+                field.onChange(text.toUpperCase());
+              }}
+              code
+            />
+          )}
+        />
+        <Controller
+          control={form.control}
+          name="line1"
+          render={({ field }) => <TextField label={t('address.line1')} {...textField(field)} />}
+        />
+        <Controller
+          control={form.control}
+          name="line2"
+          render={({ field }) => (
+            <TextField label={t('address.line2')} {...textField(field, { optional: true })} />
+          )}
+        />
+        <Controller
+          control={form.control}
+          name="postalCode"
+          render={({ field }) => <TextField label={t('address.postalCode')} {...textField(field)} code />}
+        />
+        <Controller
+          control={form.control}
+          name="city"
+          render={({ field }) => <TextField label={t('address.city')} {...textField(field)} />}
+        />
+        <Controller
+          control={form.control}
+          name="isDefault"
+          render={({ field }) => (
+            <ChipGroup
+              label={t('address.isDefault')}
+              options={[{ id: 'default', label: t('address.isDefault') }]}
+              value={field.value ? ['default'] : []}
+              onChange={(value) => {
+                field.onChange(value.includes('default'));
+              }}
+            />
+          )}
+        />
+      </div>
+      {postalValid ? null : (
+        <Banner tone="warn">
+          {t('address.postalFormat', {
+            example: postalExamples[countryCode.toUpperCase()] ?? '',
+          })}
+        </Banner>
+      )}
+      <div className="flex justify-end gap-2">
+        <Button onPress={onClose}>{t('common.cancel')}</Button>
+        {/* Le format du code postal dépend du pays choisi (RG-TRS-009) : le schéma du geste ne le dit pas. */}
+        <Button
+          type="submit"
+          variant="primary"
+          isDisabled={!postalValid || !form.formState.isValid || gesture.sending}
+        >
+          {t('common.save')}
+        </Button>
+      </div>
+    </form>
   );
 }
 
@@ -425,7 +490,8 @@ function EndCustomerPanel({ party, readOnly }: { party: PartyDetail; readOnly: b
   const canAnonymize = useHasPermission('anonymizeEndCustomers');
   const canMerge = useHasPermission('mergeEndCustomers');
   const [anonymizing, setAnonymizing] = useState(false);
-  const [reason, setReason] = useState('');
+  const form = useGestureForm(anonymizeEndCustomer, { partyId: party.id, reason: '' });
+  const submit = form.handleSubmit((input) => gesture.run(anonymizeEndCustomer, input));
   return (
     <>
       <RefusalBanner refusal={gesture.refusal} onDismiss={gesture.dismiss} />
@@ -480,8 +546,15 @@ function EndCustomerPanel({ party, readOnly }: { party: PartyDetail; readOnly: b
           <>
             {/* L'écran dit, avant validation, que l'anonymisation est irréversible (RG-TRS-023). */}
             <Banner tone="warn">{t('endCustomer.anonymizeWarning')}</Banner>
-            <div className="grid grid-cols-(--cairn-line-columns) items-end gap-3">
-              <TextField label={t('endCustomer.reason')} value={reason} onChange={setReason} />
+            <form
+              className="grid grid-cols-(--cairn-line-columns) items-end gap-3"
+              onSubmit={(event) => void submit(event)}
+            >
+              <Controller
+                control={form.control}
+                name="reason"
+                render={({ field }) => <TextField label={t('endCustomer.reason')} {...textField(field)} />}
+              />
               <Button
                 onPress={() => {
                   setAnonymizing(false);
@@ -489,14 +562,10 @@ function EndCustomerPanel({ party, readOnly }: { party: PartyDetail; readOnly: b
               >
                 {t('common.cancel')}
               </Button>
-              <Button
-                variant="primary"
-                isDisabled={reason.trim() === '' || gesture.sending}
-                onPress={() => void gesture.run(anonymizeEndCustomer, { partyId: party.id, reason })}
-              >
+              <Button type="submit" variant="primary" isDisabled={!form.formState.isValid || gesture.sending}>
                 {t('endCustomer.confirm')}
               </Button>
-            </div>
+            </form>
           </>
         ) : null}
       </Panel>
@@ -520,7 +589,7 @@ interface ServiceDraft {
   readonly maxInsuredValueCents: number | null;
   readonly acceptsDangerousGoods: boolean;
   readonly label: (typeof labelKinds)[number];
-  readonly leadTimeDays: number | null;
+  readonly leadTimeDays: number;
 }
 
 const emptyService: ServiceDraft = {
@@ -544,17 +613,12 @@ function ServicesPanel({ party }: { party: PartyDetail }) {
   const { t } = useTranslation();
   const gesture = useGesture();
   const [draft, setDraft] = useState<ServiceDraft | undefined>();
-  const numeric = (key: keyof ServiceDraft & `max${string}`, label: string) =>
-    draft === undefined ? null : (
-      <NumberField
-        label={label}
-        value={draft[key]}
-        minValue={1}
-        onChange={(value) => {
-          setDraft({ ...draft, [key]: value });
-        }}
-      />
-    );
+  // Chaque ouverture repart de sa propre saisie, même quand une autre était déjà ouverte.
+  const [opening, setOpening] = useState(0);
+  const open = (values: ServiceDraft) => {
+    setDraft(values);
+    setOpening((count) => count + 1);
+  };
   return (
     <>
       <RefusalBanner refusal={gesture.refusal} onDismiss={gesture.dismiss} />
@@ -563,7 +627,7 @@ function ServicesPanel({ party }: { party: PartyDetail }) {
         actions={
           <Button
             onPress={() => {
-              setDraft(emptyService);
+              open(emptyService);
             }}
           >
             {t('carrier.addService')}
@@ -583,7 +647,7 @@ function ServicesPanel({ party }: { party: PartyDetail }) {
               cell: (service) => (
                 <Button
                   onPress={() => {
-                    setDraft({ ...service, serviceId: service.id });
+                    open({ ...service, serviceId: service.id });
                   }}
                 >
                   {service.code}
@@ -624,104 +688,126 @@ function ServicesPanel({ party }: { party: PartyDetail }) {
           ]}
         />
         {draft === undefined ? null : (
-          <>
-            <div className="grid grid-cols-3 gap-4">
-              <TextField
-                label={t('carrier.serviceCode')}
-                value={draft.code}
-                onChange={(code) => {
-                  setDraft({ ...draft, code });
-                }}
-                code
-              />
-              <TextField
-                label={t('carrier.serviceName')}
-                value={draft.name}
-                onChange={(name) => {
-                  setDraft({ ...draft, name });
-                }}
-              />
-              <Select
-                label={t('carrier.direction')}
-                placeholder={t('expectedReceipt.choose')}
-                options={directions.map((option) => ({
-                  id: option,
-                  label: t(`carrier.directions.${option}`),
-                }))}
-                value={draft.direction}
-                onChange={(value) => {
-                  setDraft({
-                    ...draft,
-                    direction: directions.find((option) => option === value) ?? 'outbound',
-                  });
-                }}
-              />
-              {numeric('maxWeightGrams', t('carrier.maxWeightGrams'))}
-              {numeric('maxLengthMm', t('carrier.maxLengthMm'))}
-              {numeric('maxWidthMm', t('carrier.maxWidthMm'))}
-              {numeric('maxHeightMm', t('carrier.maxHeightMm'))}
-              {numeric('maxDimensionSumMm', t('carrier.maxDimensionSumMm'))}
-              {numeric('maxInsuredValueCents', t('carrier.maxInsuredValueCents'))}
-              <Select
-                label={t('carrier.label')}
-                placeholder={t('expectedReceipt.choose')}
-                options={labelKinds.map((option) => ({ id: option, label: t(`carrier.labels.${option}`) }))}
-                value={draft.label}
-                onChange={(value) => {
-                  setDraft({ ...draft, label: labelKinds.find((option) => option === value) ?? 'carrier' });
-                }}
-              />
-              <NumberField
-                label={t('carrier.leadTimeDays')}
-                value={draft.leadTimeDays}
-                onChange={(leadTimeDays) => {
-                  setDraft({ ...draft, leadTimeDays });
-                }}
-              />
-              <ChipGroup
-                label={t('carrier.dangerousGoods')}
-                options={[{ id: 'adr', label: t('carrier.dangerousGoods') }]}
-                value={draft.acceptsDangerousGoods ? ['adr'] : []}
-                onChange={(value) => {
-                  setDraft({ ...draft, acceptsDangerousGoods: value.includes('adr') });
-                }}
-              />
-            </div>
-            <div className="flex justify-end gap-2">
-              <Button
-                onPress={() => {
-                  setDraft(undefined);
-                }}
-              >
-                {t('common.cancel')}
-              </Button>
-              <Button
-                variant="primary"
-                isDisabled={
-                  draft.code.trim() === '' ||
-                  draft.name.trim() === '' ||
-                  draft.leadTimeDays === null ||
-                  gesture.sending
-                }
-                onPress={() =>
-                  void gesture
-                    .run(saveCarrierService, {
-                      ...draft,
-                      carrierId: party.id,
-                      leadTimeDays: draft.leadTimeDays ?? 0,
-                    })
-                    .then((saved) => {
-                      if (saved !== undefined) setDraft(undefined);
-                    })
-                }
-              >
-                {t('common.save')}
-              </Button>
-            </div>
-          </>
+          <ServiceForm
+            key={opening}
+            carrierId={party.id}
+            draft={draft}
+            gesture={gesture}
+            onClose={() => {
+              setDraft(undefined);
+            }}
+          />
         )}
       </Panel>
     </>
+  );
+}
+
+/** La saisie d'un service : un formulaire du geste `saveCarrierService`. */
+function ServiceForm({
+  carrierId,
+  draft,
+  gesture,
+  onClose,
+}: {
+  carrierId: string;
+  draft: ServiceDraft;
+  gesture: Gesture;
+  onClose: () => void;
+}) {
+  const { t } = useTranslation();
+  const form = useGestureForm(saveCarrierService, { ...draft, carrierId });
+  const submit = form.handleSubmit((input) =>
+    gesture.run(saveCarrierService, input).then((saved) => {
+      if (saved !== undefined) onClose();
+    }),
+  );
+  const numeric = (key: keyof ServiceDraft & `max${string}`, label: string) => (
+    <Controller
+      control={form.control}
+      name={key}
+      render={({ field }) => <NumberField label={label} {...valueField(field)} minValue={1} />}
+    />
+  );
+  return (
+    <form className="grid gap-4" onSubmit={(event) => void submit(event)}>
+      <div className="grid grid-cols-3 gap-4">
+        <Controller
+          control={form.control}
+          name="code"
+          render={({ field }) => <TextField label={t('carrier.serviceCode')} {...textField(field)} code />}
+        />
+        <Controller
+          control={form.control}
+          name="name"
+          render={({ field }) => <TextField label={t('carrier.serviceName')} {...textField(field)} />}
+        />
+        <Controller
+          control={form.control}
+          name="direction"
+          render={({ field }) => (
+            <Select
+              label={t('carrier.direction')}
+              placeholder={t('expectedReceipt.choose')}
+              options={directions.map((option) => ({
+                id: option,
+                label: t(`carrier.directions.${option}`),
+              }))}
+              value={field.value}
+              onChange={(value) => {
+                field.onChange(directions.find((option) => option === value) ?? 'outbound');
+              }}
+            />
+          )}
+        />
+        {numeric('maxWeightGrams', t('carrier.maxWeightGrams'))}
+        {numeric('maxLengthMm', t('carrier.maxLengthMm'))}
+        {numeric('maxWidthMm', t('carrier.maxWidthMm'))}
+        {numeric('maxHeightMm', t('carrier.maxHeightMm'))}
+        {numeric('maxDimensionSumMm', t('carrier.maxDimensionSumMm'))}
+        {numeric('maxInsuredValueCents', t('carrier.maxInsuredValueCents'))}
+        <Controller
+          control={form.control}
+          name="label"
+          render={({ field }) => (
+            <Select
+              label={t('carrier.label')}
+              placeholder={t('expectedReceipt.choose')}
+              options={labelKinds.map((option) => ({ id: option, label: t(`carrier.labels.${option}`) }))}
+              value={field.value}
+              onChange={(value) => {
+                field.onChange(labelKinds.find((option) => option === value) ?? 'carrier');
+              }}
+            />
+          )}
+        />
+        <Controller
+          control={form.control}
+          name="leadTimeDays"
+          render={({ field }) => <NumberField label={t('carrier.leadTimeDays')} {...valueField(field)} />}
+        />
+        <Controller
+          control={form.control}
+          name="acceptsDangerousGoods"
+          render={({ field }) => (
+            <ChipGroup
+              label={t('carrier.dangerousGoods')}
+              options={[{ id: 'adr', label: t('carrier.dangerousGoods') }]}
+              value={field.value ? ['adr'] : []}
+              onChange={(value) => {
+                field.onChange(value.includes('adr'));
+              }}
+            />
+          )}
+        />
+      </div>
+      <div className="flex justify-end gap-2">
+        <Button onPress={onClose}>{t('common.cancel')}</Button>
+        <Button type="submit" variant="primary" isDisabled={!form.formState.isValid || gesture.sending}>
+          {t('common.save')}
+        </Button>
+      </div>
+    </form>
   );
 }
 
@@ -732,9 +818,21 @@ function AccountsPanel({ party }: { party: PartyDetail }) {
   const { t } = useTranslation();
   const gesture = useGesture();
   const principals = useQuery(contractQuery(listPrincipals, {}));
-  const [accountNumber, setAccountNumber] = useState('');
-  const [contractReference, setContractReference] = useState('');
-  const [principalId, setPrincipalId] = useState<string>(PROVIDER);
+  const form = useGestureForm(saveCarrierAccount, {
+    accountId: null,
+    carrierId: party.id,
+    principalId: null,
+    accountNumber: '',
+    contractReference: null,
+  });
+  const submit = form.handleSubmit((input) =>
+    gesture.run(saveCarrierAccount, input).then((saved) => {
+      if (saved !== undefined) {
+        form.setValue('accountNumber', '', { shouldValidate: true });
+        form.setValue('contractReference', null, { shouldValidate: true });
+      }
+    }),
+  );
   const principalName = (id: string | null) =>
     id === null
       ? t('carrier.providerAccount')
@@ -787,58 +885,50 @@ function AccountsPanel({ party }: { party: PartyDetail }) {
             },
           ]}
         />
-        <div className="grid grid-cols-3 gap-4">
-          <TextField
-            label={t('carrier.accountNumber')}
-            value={accountNumber}
-            onChange={setAccountNumber}
-            code
-          />
-          <TextField
-            label={t('carrier.contractReference')}
-            value={contractReference}
-            onChange={setContractReference}
-          />
-          <Select
-            label={t('carrier.accountPrincipal')}
-            placeholder={t('carrier.providerAccount')}
-            options={[
-              { id: PROVIDER, label: t('carrier.providerAccount') },
-              ...(principals.data?.principals ?? []).map((principal) => ({
-                id: principal.id,
-                label: principal.name,
-              })),
-            ]}
-            value={principalId}
-            onChange={(value) => {
-              setPrincipalId(value ?? PROVIDER);
-            }}
-          />
-        </div>
-        <div className="flex justify-end">
-          <Button
-            variant="primary"
-            isDisabled={accountNumber.trim() === '' || gesture.sending}
-            onPress={() =>
-              void gesture
-                .run(saveCarrierAccount, {
-                  accountId: null,
-                  carrierId: party.id,
-                  principalId: principalId === PROVIDER ? null : principalId,
-                  accountNumber,
-                  contractReference: contractReference.trim() === '' ? null : contractReference,
-                })
-                .then((saved) => {
-                  if (saved !== undefined) {
-                    setAccountNumber('');
-                    setContractReference('');
-                  }
-                })
-            }
-          >
-            {t('carrier.addAccount')}
-          </Button>
-        </div>
+        <form className="grid gap-4" onSubmit={(event) => void submit(event)}>
+          <div className="grid grid-cols-3 gap-4">
+            <Controller
+              control={form.control}
+              name="accountNumber"
+              render={({ field }) => (
+                <TextField label={t('carrier.accountNumber')} {...textField(field)} code />
+              )}
+            />
+            <Controller
+              control={form.control}
+              name="contractReference"
+              render={({ field }) => (
+                <TextField label={t('carrier.contractReference')} {...textField(field, { optional: true })} />
+              )}
+            />
+            <Controller
+              control={form.control}
+              name="principalId"
+              render={({ field }) => (
+                <Select
+                  label={t('carrier.accountPrincipal')}
+                  placeholder={t('carrier.providerAccount')}
+                  options={[
+                    { id: PROVIDER, label: t('carrier.providerAccount') },
+                    ...(principals.data?.principals ?? []).map((principal) => ({
+                      id: principal.id,
+                      label: principal.name,
+                    })),
+                  ]}
+                  value={field.value ?? PROVIDER}
+                  onChange={(value) => {
+                    field.onChange(value === null || value === PROVIDER ? null : value);
+                  }}
+                />
+              )}
+            />
+          </div>
+          <div className="flex justify-end">
+            <Button type="submit" variant="primary" isDisabled={!form.formState.isValid || gesture.sending}>
+              {t('carrier.addAccount')}
+            </Button>
+          </div>
+        </form>
       </Panel>
     </>
   );

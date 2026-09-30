@@ -23,6 +23,8 @@ export const sessionRefusalSchema = refusalSchema(sessionRefusalReasonSchema);
 /** Ce que les écrans savent de la session courante. */
 export const currentSessionSchema = z.object({
   user: z.object({ id: z.uuid(), displayName: z.string() }),
+  /** Nom du prestataire, affiché sous la marque avec le site (maquette) ; absent tant qu'il n'est pas saisi. */
+  providerName: z.string().nullable(),
   workstation: z.object({ id: z.uuid(), name: z.string() }).nullable(),
   /** Sites de rattachement, et si l'utilisateur y agit (RG-ORG-015, RG-SUR-026). */
   sites: z.array(z.object({ id: z.uuid(), code: z.string(), name: z.string(), execution: z.boolean() })),

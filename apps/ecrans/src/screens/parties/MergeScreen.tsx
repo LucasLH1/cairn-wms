@@ -8,8 +8,9 @@ import {
 import { Banner, Button, ChipGroup, Panel, Select } from '@cairn/ui';
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate, useParams, useSearch } from '@tanstack/react-router';
-import { useState } from 'react';
+import { Controller, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { useGestureForm } from '../../contract/form.js';
 import { contractQuery } from '../../contract/query.js';
 import { RefusalBanner } from '../../contract/RefusalBanner.js';
 import { useGesture } from '../../contract/useGesture.js';
@@ -27,9 +28,19 @@ export function MergeScreen() {
   const { partyId } = useParams({ from: '/shell/parties/$partyId/merge' });
   const search = useSearch({ from: '/shell/parties/$partyId/merge' });
   const gesture = useGesture();
-  const [otherId, setOtherId] = useState<string | null>(search.other === '' ? null : search.other);
-  const [keepFirst, setKeepFirst] = useState(true);
-  const [taken, setTaken] = useState<readonly string[]>([]);
+  const form = useGestureForm(mergeEndCustomers, {
+    keptPartyId: partyId,
+    absorbedPartyId: search.other,
+    takeFromAbsorbed: [],
+  });
+  // La fiche ouverte est l'une des deux : l'autre, et laquelle est conservée, se lisent du formulaire.
+  const [keptPartyId, absorbedPartyId] = useWatch({
+    control: form.control,
+    name: ['keptPartyId', 'absorbedPartyId'],
+  });
+  const keepFirst = keptPartyId === partyId;
+  const otherValue = keepFirst ? absorbedPartyId : keptPartyId;
+  const otherId = otherValue === '' ? null : otherValue;
   const first = useQuery(contractQuery(getParty, { partyId })).data?.party;
   const second = useQuery({
     ...contractQuery(getParty, { partyId: otherId ?? '' }),
@@ -48,15 +59,11 @@ export function MergeScreen() {
   if (first === undefined) return null;
   const [kept, absorbed] = keepFirst ? [first, second] : [second, first];
 
-  const merge = async () => {
+  const submit = form.handleSubmit(async (input) => {
     if (kept === undefined || absorbed === undefined) return;
-    const done = await gesture.run(mergeEndCustomers, {
-      keptPartyId: kept.id,
-      absorbedPartyId: absorbed.id,
-      takeFromAbsorbed: fields.filter((field) => taken.includes(field)),
-    });
+    const done = await gesture.run(mergeEndCustomers, input);
     if (done !== undefined) await navigate({ to: '/parties/$partyId', params: { partyId: kept.id } });
-  };
+  });
 
   const column = (party: PartyDetail | undefined, title: string) => (
     <Panel title={title} meta={party?.code}>
@@ -89,7 +96,11 @@ export function MergeScreen() {
               label: `${party.code} · ${party.name}`,
             }))}
             value={otherId}
-            onChange={setOtherId}
+            onChange={(value) => {
+              form.setValue(keepFirst ? 'absorbedPartyId' : 'keptPartyId', value ?? '', {
+                shouldValidate: true,
+              });
+            }}
           />
           <Select
             label={t('endCustomer.kept')}
@@ -100,7 +111,9 @@ export function MergeScreen() {
             ]}
             value={keepFirst ? 'first' : 'second'}
             onChange={(value) => {
-              setKeepFirst(value !== 'second');
+              if ((value !== 'second') === keepFirst) return;
+              form.setValue('keptPartyId', absorbedPartyId, { shouldValidate: true });
+              form.setValue('absorbedPartyId', keptPartyId, { shouldValidate: true });
             }}
           />
         </div>
@@ -111,18 +124,28 @@ export function MergeScreen() {
       </div>
       {absorbed === undefined ? null : (
         <Panel title={t('endCustomer.takeFrom')}>
-          <ChipGroup
-            label={t('endCustomer.absorbed')}
-            options={fields.map((field) => ({ id: field, label: t(`party.${field}`) }))}
-            value={taken}
-            onChange={setTaken}
-          />
-          <Banner tone="warn">{t('endCustomer.mergeWarning')}</Banner>
-          <div className="flex justify-end">
-            <Button variant="primary" isDisabled={gesture.sending} onPress={() => void merge()}>
-              {t('endCustomer.confirmMerge')}
-            </Button>
-          </div>
+          <form className="grid gap-4" onSubmit={(event) => void submit(event)}>
+            <Controller
+              control={form.control}
+              name="takeFromAbsorbed"
+              render={({ field }) => (
+                <ChipGroup
+                  label={t('endCustomer.absorbed')}
+                  options={fields.map((option) => ({ id: option, label: t(`party.${option}`) }))}
+                  value={field.value}
+                  onChange={(value) => {
+                    field.onChange(fields.filter((option) => value.includes(option)));
+                  }}
+                />
+              )}
+            />
+            <Banner tone="warn">{t('endCustomer.mergeWarning')}</Banner>
+            <div className="flex justify-end">
+              <Button type="submit" variant="primary" isDisabled={!form.formState.isValid || gesture.sending}>
+                {t('endCustomer.confirmMerge')}
+              </Button>
+            </div>
+          </form>
         </Panel>
       )}
     </>

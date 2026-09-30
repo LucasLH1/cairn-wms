@@ -2,9 +2,10 @@ import { listSites, listTeams, listUsers, saveTeam, setTeamActive } from '@cairn
 import { Button, Panel, Select, StatusBadge, TextField } from '@cairn/ui';
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate, useParams } from '@tanstack/react-router';
-import { useState } from 'react';
+import { Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import type { z } from 'zod';
+import { textField, useGestureForm } from '../../contract/form.js';
 import { contractQuery } from '../../contract/query.js';
 import { RefusalBanner } from '../../contract/RefusalBanner.js';
 import { useGesture } from '../../contract/useGesture.js';
@@ -26,18 +27,22 @@ function TeamForm({ team }: { team: TeamRow | undefined }) {
   const gesture = useGesture();
   const sites = useQuery(contractQuery(listSites, {}));
   const users = useQuery(contractQuery(listUsers, {}));
-  const [siteId, setSiteId] = useState<string | null>(team?.siteId ?? null);
-  const [name, setName] = useState(team?.name ?? '');
-  const [leadUserId, setLeadUserId] = useState<string | null>(team?.leadUserId ?? null);
+  // Aucun site choisi vaut '' dans le formulaire : le schéma du geste le refuse.
+  const form = useGestureForm(saveTeam, {
+    teamId: team?.id ?? null,
+    siteId: team?.siteId ?? '',
+    name: team?.name ?? '',
+    leadUserId: team?.leadUserId ?? null,
+  });
+  const siteId = form.watch('siteId');
   const siteCode = sites.data?.sites.find((site) => site.id === siteId)?.code;
 
-  const save = async () => {
-    if (siteId === null) return;
-    const saved = await gesture.run(saveTeam, { teamId: team?.id ?? null, siteId, name, leadUserId });
+  const submit = form.handleSubmit(async (input) => {
+    const saved = await gesture.run(saveTeam, input);
     if (saved !== undefined && team === undefined) {
       await navigate({ to: '/administration/teams/$teamId', params: { teamId: saved.teamId } });
     }
-  };
+  });
 
   return (
     <>
@@ -60,43 +65,61 @@ function TeamForm({ team }: { team: TeamRow | undefined }) {
           )
         }
       >
-        <div className="grid grid-cols-3 gap-4">
-          <Select
-            label={t('team.site')}
-            placeholder={t('expectedReceipt.choose')}
-            options={(sites.data?.sites ?? []).map((site) => ({
-              id: site.id,
-              label: `${site.code} · ${site.name}`,
-            }))}
-            value={siteId}
-            onChange={setSiteId}
-            isDisabled={team !== undefined}
-          />
-          <TextField label={t('team.name')} value={name} onChange={setName} />
-          <Select
-            label={t('team.lead')}
-            placeholder={t('team.noLead')}
-            options={[
-              { id: NO_ONE, label: t('team.noLead') },
-              ...(users.data?.users ?? [])
-                .filter((user) => user.active && siteCode !== undefined && user.sites.includes(siteCode))
-                .map((user) => ({ id: user.id, label: user.displayName })),
-            ]}
-            value={leadUserId ?? NO_ONE}
-            onChange={(value) => {
-              setLeadUserId(value === NO_ONE ? null : value);
-            }}
-          />
-        </div>
-        <div className="flex justify-end">
-          <Button
-            variant="primary"
-            isDisabled={siteId === null || name.trim() === '' || gesture.sending}
-            onPress={() => void save()}
-          >
-            {team === undefined ? t('team.create') : t('common.save')}
-          </Button>
-        </div>
+        <form className="grid gap-4" onSubmit={(event) => void submit(event)}>
+          <div className="grid grid-cols-3 gap-4">
+            <Controller
+              control={form.control}
+              name="siteId"
+              render={({ field }) => (
+                <Select
+                  label={t('team.site')}
+                  placeholder={t('expectedReceipt.choose')}
+                  options={(sites.data?.sites ?? []).map((site) => ({
+                    id: site.id,
+                    label: `${site.code} · ${site.name}`,
+                  }))}
+                  value={field.value === '' ? null : field.value}
+                  onChange={(value) => {
+                    field.onChange(value ?? '');
+                  }}
+                  isDisabled={team !== undefined}
+                />
+              )}
+            />
+            <Controller
+              control={form.control}
+              name="name"
+              render={({ field }) => <TextField label={t('team.name')} {...textField(field)} />}
+            />
+            <Controller
+              control={form.control}
+              name="leadUserId"
+              render={({ field }) => (
+                <Select
+                  label={t('team.lead')}
+                  placeholder={t('team.noLead')}
+                  options={[
+                    { id: NO_ONE, label: t('team.noLead') },
+                    ...(users.data?.users ?? [])
+                      .filter(
+                        (user) => user.active && siteCode !== undefined && user.sites.includes(siteCode),
+                      )
+                      .map((user) => ({ id: user.id, label: user.displayName })),
+                  ]}
+                  value={field.value ?? NO_ONE}
+                  onChange={(value) => {
+                    field.onChange(value === NO_ONE ? null : value);
+                  }}
+                />
+              )}
+            />
+          </div>
+          <div className="flex justify-end">
+            <Button type="submit" variant="primary" isDisabled={!form.formState.isValid || gesture.sending}>
+              {team === undefined ? t('team.create') : t('common.save')}
+            </Button>
+          </div>
+        </form>
       </Panel>
     </>
   );

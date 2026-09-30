@@ -141,8 +141,12 @@ describe('sessions (fiche 0027, règles 2 et 3)', () => {
       url: SESSION_PATH,
       headers: { ...applicationHeaders, cookie: valueOf(cookie) },
     });
-    expect(current.json()).toEqual({
+    // Le nom du prestataire dépend de ce que les autres tests ont saisi : seule sa forme compte ici.
+    const session = current.json<{ providerName: unknown }>();
+    expect(session.providerName === null || typeof session.providerName === 'string').toBe(true);
+    expect(session).toEqual({
       user: { id: users.operator, displayName: 'operator' },
+      providerName: session.providerName,
       workstation: null,
       sites: [{ id: siteId, code: `A-${suffix}`, name: 'Site A', execution: true }],
       permissions: [],

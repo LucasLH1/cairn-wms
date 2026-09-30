@@ -16,7 +16,9 @@ import { Banner, Button, ChipGroup, Disclosure, Panel, Select, StatusBadge, Text
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate, useParams } from '@tanstack/react-router';
 import { useState } from 'react';
+import { Controller, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { textField, useGestureForm, valueField } from '../../contract/form.js';
 import { contractQuery } from '../../contract/query.js';
 import { RefusalBanner } from '../../contract/RefusalBanner.js';
 import { currentSessionQuery } from '../../contract/session.js';
@@ -50,14 +52,23 @@ function UserForm({ user }: { user: UserDetail | undefined }) {
   const { data: session } = useQuery(currentSessionQuery);
   const canSetExecution = useHasPermission('administerExecutionSites');
 
-  const [displayName, setDisplayName] = useState(user?.displayName ?? '');
-  const [loginName, setLoginName] = useState(user?.loginName ?? '');
-  const [email, setEmail] = useState(user?.email ?? '');
-  const [password, setPassword] = useState('');
-  const [roleIds, setRoleIds] = useState<readonly string[]>(user?.roleIds ?? []);
-  const [siteIds, setSiteIds] = useState<readonly string[]>(user?.siteIds ?? []);
-  const [teamId, setTeamId] = useState<string | null>(user?.teamId ?? null);
-  const [reportsTo, setReportsTo] = useState<string | null>(user?.reportsToUserId ?? null);
+  const form = useGestureForm(saveUser, {
+    userId: user?.id ?? null,
+    displayName: user?.displayName ?? '',
+    loginName: user?.loginName ?? '',
+    email: user?.email ?? null,
+    password: null,
+    roleIds: user?.roleIds ?? [],
+    siteIds: user?.siteIds ?? [],
+    teamId: user?.teamId ?? null,
+    reportsToUserId: user?.reportsToUserId ?? null,
+  });
+  const [siteIds, roleIds, password] = useWatch({
+    control: form.control,
+    name: ['siteIds', 'roleIds', 'password'],
+  });
+  // Sites d'exécution et restrictions sont d'autres gestes, envoyés après l'utilisateur, une fois son
+  // identifiant connu : ils ne sont pas champs du formulaire de `saveUser`.
   const [executionSiteIds, setExecutionSiteIds] = useState<readonly string[]>(user?.executionSiteIds ?? []);
   const [restricted, setRestricted] = useState<readonly string[] | undefined>();
   const principalRestrictions = restricted ?? restrictions.data?.principalIds ?? [];
@@ -65,35 +76,27 @@ function UserForm({ user }: { user: UserDetail | undefined }) {
 
   const siteTeams = (teams.data?.teams ?? []).filter((team) => team.active && siteIds.includes(team.siteId));
   const selectedRoles = (roles.data?.roles ?? []).filter((role) => roleIds.includes(role.id));
-  const complete =
-    displayName.trim() !== '' && loginName.trim() !== '' && (user !== undefined || password.length >= 12);
 
-  const save = async () => {
+  const submit = form.handleSubmit(async (input) => {
     const saved = await gesture.run(saveUser, {
-      userId: user?.id ?? null,
-      displayName,
-      loginName,
-      email: email.trim() === '' ? null : email.trim(),
-      password: password === '' ? null : password,
-      roleIds: [...roleIds],
-      siteIds: [...siteIds],
-      teamId: teamId !== null && siteTeams.some((team) => team.id === teamId) ? teamId : null,
-      reportsToUserId: reportsTo,
+      ...input,
+      teamId:
+        input.teamId !== null && siteTeams.some((team) => team.id === input.teamId) ? input.teamId : null,
     });
     if (saved === undefined) return;
     if (canSetExecution && !isSelf) {
       await gesture.run(setExecutionSites, {
         userId: saved.userId,
-        siteIds: executionSiteIds.filter((siteId) => siteIds.includes(siteId)),
+        siteIds: executionSiteIds.filter((siteId) => input.siteIds.includes(siteId)),
       });
     }
     if (restricted !== undefined) {
       await gesture.run(setPrincipalRestrictions, { userId: saved.userId, principalIds: [...restricted] });
     }
-    setPassword('');
+    form.setValue('password', null, { shouldValidate: true });
     if (user === undefined)
       await navigate({ to: '/administration/users/$userId', params: { userId: saved.userId } });
-  };
+  });
 
   return (
     <>
@@ -119,118 +122,164 @@ function UserForm({ user }: { user: UserDetail | undefined }) {
           )
         }
       >
-        <div className="grid grid-cols-2 gap-4">
-          <TextField label={t('user.displayName')} value={displayName} onChange={setDisplayName} />
-          <TextField
-            label={t('user.loginName')}
-            value={loginName}
-            onChange={setLoginName}
-            autoComplete="off"
-          />
-          <TextField
-            label={t('user.email')}
-            value={email}
-            onChange={setEmail}
-            type="email"
-            autoComplete="off"
-          />
-          <TextField
-            label={t('user.password')}
-            value={password}
-            onChange={setPassword}
-            type="password"
-            autoComplete="new-password"
-          />
-        </div>
-        <span>{t('user.passwordHint')}</span>
-        <ChipGroup
-          label={t('user.sites')}
-          options={(sites.data?.sites ?? []).map((site) => ({
-            id: site.id,
-            label: `${site.code} · ${site.name}`,
-          }))}
-          value={siteIds}
-          onChange={setSiteIds}
-        />
-        <ChipGroup
-          label={t('user.roles')}
-          options={(roles.data?.roles ?? []).map((role) => ({
-            id: role.id,
-            label: `${role.name} · ${t(`role.natures.${role.nature}`)}`,
-          }))}
-          value={roleIds}
-          onChange={setRoleIds}
-        />
-        <div>
-          {t('user.effectivePermissions')} :{' '}
-          {[
-            ...new Set([
-              ...(user?.effectivePermissions ?? []),
-              ...selectedRoles.flatMap((role) => role.permissions),
-            ]),
-          ]
-            .map((permission) => t(`permission.${permission}`))
-            .join(', ') || t('common.none')}
-        </div>
-        <div className="grid grid-cols-2 gap-4">
-          <Select
-            label={t('user.team')}
-            placeholder={t('common.none')}
-            options={[
-              { id: NO_ONE, label: t('common.none') },
-              ...siteTeams.map((team) => ({ id: team.id, label: `${team.name} · ${team.siteName}` })),
-            ]}
-            value={teamId ?? NO_ONE}
-            onChange={(value) => {
-              setTeamId(value === NO_ONE ? null : value);
-            }}
-          />
-          <Select
-            label={t('user.reportsTo')}
-            placeholder={t('common.none')}
-            options={[
-              { id: NO_ONE, label: t('common.none') },
-              ...(users.data?.users ?? [])
-                .filter((other) => other.id !== user?.id)
-                .map((other) => ({ id: other.id, label: other.displayName })),
-            ]}
-            value={reportsTo ?? NO_ONE}
-            onChange={(value) => {
-              setReportsTo(value === NO_ONE ? null : value);
-            }}
-          />
-        </div>
-        {canSetExecution ? (
-          <>
-            <ChipGroup
-              label={t('user.executionSites')}
-              options={(sites.data?.sites ?? [])
-                .filter((site) => siteIds.includes(site.id))
-                .map((site) => ({ id: site.id, label: `${site.code} · ${site.name}` }))}
-              value={executionSiteIds}
-              onChange={setExecutionSiteIds}
-              isDisabled={isSelf}
+        <form className="grid gap-4" onSubmit={(event) => void submit(event)}>
+          <div className="grid grid-cols-2 gap-4">
+            <Controller
+              control={form.control}
+              name="displayName"
+              render={({ field }) => <TextField label={t('user.displayName')} {...textField(field)} />}
             />
-            <span>{isSelf ? t('user.ownExecution') : t('user.executionHint')}</span>
-          </>
-        ) : null}
-        <Disclosure title={t('user.restrictions')}>
-          <span>{t('user.restrictionsHint')}</span>
-          <ChipGroup
-            label={t('user.restrictions')}
-            options={(principals.data?.principals ?? []).map((principal) => ({
-              id: principal.id,
-              label: principal.name,
-            }))}
-            value={principalRestrictions}
-            onChange={setRestricted}
+            <Controller
+              control={form.control}
+              name="loginName"
+              render={({ field }) => (
+                <TextField label={t('user.loginName')} {...textField(field)} autoComplete="off" />
+              )}
+            />
+            <Controller
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <TextField
+                  label={t('user.email')}
+                  {...textField(field, { optional: true, compact: true })}
+                  type="email"
+                  autoComplete="off"
+                />
+              )}
+            />
+            <Controller
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <TextField
+                  label={t('user.password')}
+                  {...textField(field, { optional: true })}
+                  type="password"
+                  autoComplete="new-password"
+                />
+              )}
+            />
+          </div>
+          <span>{t('user.passwordHint')}</span>
+          <Controller
+            control={form.control}
+            name="siteIds"
+            render={({ field }) => (
+              <ChipGroup
+                label={t('user.sites')}
+                options={(sites.data?.sites ?? []).map((site) => ({
+                  id: site.id,
+                  label: `${site.code} · ${site.name}`,
+                }))}
+                {...valueField(field)}
+              />
+            )}
           />
-        </Disclosure>
-        <div className="flex justify-end">
-          <Button variant="primary" isDisabled={!complete || gesture.sending} onPress={() => void save()}>
-            {user === undefined ? t('user.create') : t('common.save')}
-          </Button>
-        </div>
+          <Controller
+            control={form.control}
+            name="roleIds"
+            render={({ field }) => (
+              <ChipGroup
+                label={t('user.roles')}
+                options={(roles.data?.roles ?? []).map((role) => ({
+                  id: role.id,
+                  label: `${role.name} · ${t(`role.natures.${role.nature}`)}`,
+                }))}
+                {...valueField(field)}
+              />
+            )}
+          />
+          <div>
+            {t('user.effectivePermissions')} :{' '}
+            {[
+              ...new Set([
+                ...(user?.effectivePermissions ?? []),
+                ...selectedRoles.flatMap((role) => role.permissions),
+              ]),
+            ]
+              .map((permission) => t(`permission.${permission}`))
+              .join(', ') || t('common.none')}
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <Controller
+              control={form.control}
+              name="teamId"
+              render={({ field }) => (
+                <Select
+                  label={t('user.team')}
+                  placeholder={t('common.none')}
+                  options={[
+                    { id: NO_ONE, label: t('common.none') },
+                    ...siteTeams.map((team) => ({ id: team.id, label: `${team.name} · ${team.siteName}` })),
+                  ]}
+                  value={field.value ?? NO_ONE}
+                  onChange={(value) => {
+                    field.onChange(value === NO_ONE ? null : value);
+                  }}
+                />
+              )}
+            />
+            <Controller
+              control={form.control}
+              name="reportsToUserId"
+              render={({ field }) => (
+                <Select
+                  label={t('user.reportsTo')}
+                  placeholder={t('common.none')}
+                  options={[
+                    { id: NO_ONE, label: t('common.none') },
+                    ...(users.data?.users ?? [])
+                      .filter((other) => other.id !== user?.id)
+                      .map((other) => ({ id: other.id, label: other.displayName })),
+                  ]}
+                  value={field.value ?? NO_ONE}
+                  onChange={(value) => {
+                    field.onChange(value === NO_ONE ? null : value);
+                  }}
+                />
+              )}
+            />
+          </div>
+          {canSetExecution ? (
+            <>
+              <ChipGroup
+                label={t('user.executionSites')}
+                options={(sites.data?.sites ?? [])
+                  .filter((site) => siteIds.includes(site.id))
+                  .map((site) => ({ id: site.id, label: `${site.code} · ${site.name}` }))}
+                value={executionSiteIds}
+                onChange={setExecutionSiteIds}
+                isDisabled={isSelf}
+              />
+              <span>{isSelf ? t('user.ownExecution') : t('user.executionHint')}</span>
+            </>
+          ) : null}
+          <Disclosure title={t('user.restrictions')}>
+            <span>{t('user.restrictionsHint')}</span>
+            <ChipGroup
+              label={t('user.restrictions')}
+              options={(principals.data?.principals ?? []).map((principal) => ({
+                id: principal.id,
+                label: principal.name,
+              }))}
+              value={principalRestrictions}
+              onChange={setRestricted}
+            />
+          </Disclosure>
+          <div className="flex justify-end">
+            {/* À la création, le mot de passe est obligatoire ; le schéma, commun aux deux cas, l'accepte absent. */}
+            <Button
+              type="submit"
+              variant="primary"
+              isDisabled={
+                !form.formState.isValid || (user === undefined && password === null) || gesture.sending
+              }
+            >
+              {user === undefined ? t('user.create') : t('common.save')}
+            </Button>
+          </div>
+        </form>
       </Panel>
     </>
   );

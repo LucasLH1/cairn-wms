@@ -3,18 +3,21 @@ import { fr } from '@cairn/libelles';
 import { Banner, Button, DateField, NumberField, Panel, Select } from '@cairn/ui';
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { Controller, useFieldArray, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { NoResponseError, sendGesture } from '../contract/client.js';
+import { useGestureForm } from '../contract/form.js';
 import { contractQuery } from '../contract/query.js';
 import { refusalLabelKey, type RefusalLabelKey } from '../contract/refusal.js';
 import { useWorkingSite } from '../shell/site.js';
 
-interface DraftLine {
-  readonly key: number;
-  readonly itemId: string | null;
-  readonly quantity: number | null;
-}
+/*
+ * Un choix pas encore fait vaut '' et une quantité pas encore saisie NaN, comme le champ numérique
+ * vide : le schéma du geste refuse l'un et l'autre, le bouton attend.
+ */
+const blankLine = () => ({ itemId: '', quantity: Number.NaN });
+const chosen = (value: string) => (value === '' ? null : value);
 
 /**
  * Saisie manuelle d'un attendu (RG-REC-010) : donneur d'ordre, fournisseur, date d'arrivée prévue,
@@ -25,11 +28,19 @@ export function NewExpectedReceiptScreen() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const site = useWorkingSite();
-  const [principalId, setPrincipalId] = useState<string | null>(null);
-  const [supplierId, setSupplierId] = useState<string | null>(null);
-  const [expectedArrivalDate, setExpectedArrivalDate] = useState<string | null>(null);
-  const [lines, setLines] = useState<readonly DraftLine[]>([{ key: 0, itemId: null, quantity: null }]);
-  const [nextKey, setNextKey] = useState(1);
+  const form = useGestureForm(createExpectedReceipt, {
+    principalId: '',
+    siteId: site?.id ?? '',
+    supplierId: '',
+    expectedArrivalDate: '',
+    lines: [blankLine()],
+  });
+  const lines = useFieldArray({ control: form.control, name: 'lines' });
+  const principalId = chosen(useWatch({ control: form.control, name: 'principalId' }));
+  // Le site de l'attendu est le site de travail, qui peut changer pendant la saisie.
+  useEffect(() => {
+    form.setValue('siteId', site?.id ?? '', { shouldValidate: true });
+  }, [form, site]);
   const [refusal, setRefusal] = useState<RefusalLabelKey | 'failure.noResponse' | undefined>();
   const [sending, setSending] = useState(false);
 
@@ -43,33 +54,11 @@ export function NewExpectedReceiptScreen() {
     enabled: principalId !== null,
   });
 
-  const complete =
-    site !== undefined &&
-    principalId !== null &&
-    supplierId !== null &&
-    expectedArrivalDate !== null &&
-    lines.every((line) => line.itemId !== null && line.quantity !== null && line.quantity > 0);
-
-  const update = (key: number, change: Partial<DraftLine>) => {
-    setLines((current) => current.map((line) => (line.key === key ? { ...line, ...change } : line)));
-  };
-
-  const save = async () => {
-    if (!complete) return;
+  const save = form.handleSubmit(async (input) => {
     setSending(true);
     setRefusal(undefined);
     try {
-      const outcome = await sendGesture(createExpectedReceipt, {
-        principalId,
-        siteId: site.id,
-        supplierId,
-        expectedArrivalDate,
-        lines: lines.flatMap((line) =>
-          line.itemId === null || line.quantity === null
-            ? []
-            : [{ itemId: line.itemId, quantity: line.quantity }],
-        ),
-      });
+      const outcome = await sendGesture(createExpectedReceipt, input);
       if (outcome.outcome === 'refused') {
         setRefusal(refusalLabelKey(outcome.reason, fr.refusal));
         return;
@@ -84,7 +73,7 @@ export function NewExpectedReceiptScreen() {
     } finally {
       setSending(false);
     }
-  };
+  });
 
   const itemOptions = (items.data?.items ?? []).map((item) => ({
     id: item.id,
@@ -106,36 +95,58 @@ export function NewExpectedReceiptScreen() {
       )}
       <Panel title={t('expectedReceipt.newTitle')} meta={site?.name}>
         <div className="grid grid-cols-3 gap-4">
-          <Select
-            label={t('expectedReceipt.principal')}
-            placeholder={t('expectedReceipt.choose')}
-            options={(principals.data?.principals ?? []).map((principal) => ({
-              id: principal.id,
-              label: principal.name,
-            }))}
-            value={principalId}
-            onChange={(value) => {
-              setPrincipalId(value);
-              setSupplierId(null);
-              setLines([{ key: nextKey, itemId: null, quantity: null }]);
-              setNextKey(nextKey + 1);
-            }}
+          <Controller
+            control={form.control}
+            name="principalId"
+            render={({ field }) => (
+              <Select
+                label={t('expectedReceipt.principal')}
+                placeholder={t('expectedReceipt.choose')}
+                options={(principals.data?.principals ?? []).map((principal) => ({
+                  id: principal.id,
+                  label: principal.name,
+                }))}
+                value={chosen(field.value)}
+                onChange={(value) => {
+                  // Fournisseurs et références sont ceux du donneur d'ordre : un autre choix les efface.
+                  field.onChange(value ?? '');
+                  form.setValue('supplierId', '', { shouldValidate: true });
+                  lines.replace([blankLine()]);
+                }}
+              />
+            )}
           />
-          <Select
-            label={t('expectedReceipt.supplier')}
-            placeholder={t('expectedReceipt.choose')}
-            options={(suppliers.data?.suppliers ?? []).map((supplier) => ({
-              id: supplier.id,
-              label: supplier.name,
-            }))}
-            value={supplierId}
-            onChange={setSupplierId}
-            isDisabled={principalId === null}
+          <Controller
+            control={form.control}
+            name="supplierId"
+            render={({ field }) => (
+              <Select
+                label={t('expectedReceipt.supplier')}
+                placeholder={t('expectedReceipt.choose')}
+                options={(suppliers.data?.suppliers ?? []).map((supplier) => ({
+                  id: supplier.id,
+                  label: supplier.name,
+                }))}
+                value={chosen(field.value)}
+                onChange={(value) => {
+                  field.onChange(value ?? '');
+                }}
+                isDisabled={principalId === null}
+              />
+            )}
           />
-          <DateField
-            label={t('expectedReceipt.expectedArrivalDate')}
-            value={expectedArrivalDate}
-            onChange={setExpectedArrivalDate}
+          <Controller
+            control={form.control}
+            name="expectedArrivalDate"
+            render={({ field }) => (
+              <DateField
+                label={t('expectedReceipt.expectedArrivalDate')}
+                value={chosen(field.value)}
+                onChange={(value) => {
+                  field.onChange(value ?? '');
+                }}
+              />
+            )}
           />
         </div>
       </Panel>
@@ -145,38 +156,49 @@ export function NewExpectedReceiptScreen() {
           <Button
             isDisabled={principalId === null}
             onPress={() => {
-              setLines([...lines, { key: nextKey, itemId: null, quantity: null }]);
-              setNextKey(nextKey + 1);
+              lines.append(blankLine());
             }}
           >
             {t('expectedReceipt.addLine')}
           </Button>
         }
       >
-        {lines.map((line, index) => (
-          <div key={line.key} className="grid grid-cols-(--cairn-line-columns) items-end gap-3">
-            <Select
-              label={`${t('expectedReceipt.item')} ${String(index + 1)}`}
-              placeholder={t('expectedReceipt.choose')}
-              options={itemOptions}
-              value={line.itemId}
-              onChange={(itemId) => {
-                update(line.key, { itemId });
-              }}
-              isDisabled={principalId === null}
+        {lines.fields.map((line, index) => (
+          <div key={line.id} className="grid grid-cols-(--cairn-line-columns) items-end gap-3">
+            <Controller
+              control={form.control}
+              name={`lines.${index}.itemId`}
+              render={({ field }) => (
+                <Select
+                  label={`${t('expectedReceipt.item')} ${String(index + 1)}`}
+                  placeholder={t('expectedReceipt.choose')}
+                  options={itemOptions}
+                  value={chosen(field.value)}
+                  onChange={(itemId) => {
+                    field.onChange(itemId ?? '');
+                  }}
+                  isDisabled={principalId === null}
+                />
+              )}
             />
-            <NumberField
-              label={`${t('expectedReceipt.quantity')} ${String(index + 1)}`}
-              value={line.quantity}
-              minValue={1}
-              onChange={(quantity) => {
-                update(line.key, { quantity });
-              }}
+            <Controller
+              control={form.control}
+              name={`lines.${index}.quantity`}
+              render={({ field }) => (
+                <NumberField
+                  label={`${t('expectedReceipt.quantity')} ${String(index + 1)}`}
+                  value={Number.isNaN(field.value) ? null : field.value}
+                  minValue={1}
+                  onChange={(quantity) => {
+                    field.onChange(quantity ?? Number.NaN);
+                  }}
+                />
+              )}
             />
             <Button
-              isDisabled={lines.length === 1}
+              isDisabled={lines.fields.length === 1}
               onPress={() => {
-                setLines(lines.filter((other) => other.key !== line.key));
+                lines.remove(index);
               }}
             >
               {t('expectedReceipt.removeLine')}
@@ -184,7 +206,12 @@ export function NewExpectedReceiptScreen() {
           </div>
         ))}
         <div className="flex justify-end">
-          <Button variant="primary" isDisabled={!complete || sending} onPress={() => void save()}>
+          {/* Deux panneaux, un seul geste : le bouton envoie le formulaire sans l'envelopper. */}
+          <Button
+            variant="primary"
+            isDisabled={!form.formState.isValid || sending}
+            onPress={() => void save()}
+          >
             {t('expectedReceipt.save')}
           </Button>
         </div>

@@ -1,8 +1,9 @@
 import { getProvider, saveProvider } from '@cairn/contrat';
 import { Button, Panel, TextField } from '@cairn/ui';
 import { useQuery } from '@tanstack/react-query';
-import { useState } from 'react';
+import { Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { textField, useGestureForm } from '../../contract/form.js';
 import { contractQuery } from '../../contract/query.js';
 import { RefusalBanner } from '../../contract/RefusalBanner.js';
 import { useGesture } from '../../contract/useGesture.js';
@@ -16,24 +17,27 @@ export function ProviderTab() {
 
 function ProviderForm({ current }: { current: string | null }) {
   const { t } = useTranslation();
-  const [name, setName] = useState(current ?? '');
   const gesture = useGesture();
+  const form = useGestureForm(saveProvider, { name: current ?? '' });
+  const submit = form.handleSubmit((input) => gesture.run(saveProvider, input));
   return (
     <>
       <RefusalBanner refusal={gesture.refusal} onDismiss={gesture.dismiss} />
       <Panel title={t('provider.title')} meta={current === null ? t('provider.unnamed') : undefined}>
-        <div className="grid grid-cols-2 gap-4">
-          <TextField label={t('provider.name')} value={name} onChange={setName} />
-        </div>
-        <div className="flex justify-end">
-          <Button
-            variant="primary"
-            isDisabled={name.trim() === '' || gesture.sending}
-            onPress={() => void gesture.run(saveProvider, { name })}
-          >
-            {t('common.save')}
-          </Button>
-        </div>
+        <form className="grid gap-4" onSubmit={(event) => void submit(event)}>
+          <div className="grid grid-cols-2 gap-4">
+            <Controller
+              control={form.control}
+              name="name"
+              render={({ field }) => <TextField label={t('provider.name')} {...textField(field)} />}
+            />
+          </div>
+          <div className="flex justify-end">
+            <Button type="submit" variant="primary" isDisabled={!form.formState.isValid || gesture.sending}>
+              {t('common.save')}
+            </Button>
+          </div>
+        </form>
       </Panel>
     </>
   );

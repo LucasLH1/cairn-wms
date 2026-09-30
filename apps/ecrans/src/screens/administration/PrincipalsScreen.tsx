@@ -9,9 +9,10 @@ import {
 import { Button, DataTable, NumberField, Panel, StatusBadge, TextField } from '@cairn/ui';
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate, useParams } from '@tanstack/react-router';
-import { useState } from 'react';
+import { Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import type { z } from 'zod';
+import { z } from 'zod';
+import { textField, useGestureForm, valueField } from '../../contract/form.js';
 import { contractQuery } from '../../contract/query.js';
 import { RefusalBanner } from '../../contract/RefusalBanner.js';
 import { useGesture } from '../../contract/useGesture.js';
@@ -20,6 +21,53 @@ import { RouteLink } from '../../shell/RouteLink.js';
 const NEW = 'new';
 type PrincipalRow = z.infer<typeof listPrincipalsForAdministration.output>['principals'][number];
 type PrincipalDetail = z.infer<typeof getPrincipal.output>['principal'];
+
+const optional = (value: string) => (value.trim() === '' ? null : value.trim());
+
+/**
+ * La fiche se saisit champ par champ ; le geste reçoit un code en capitales et une adresse entière ou
+ * aucune. Le schéma du geste valide ce qui en résulte, comme le serveur le recevra.
+ */
+const principalForm = {
+  input: z
+    .object({
+      principalId: z.string().nullable(),
+      code: z.string(),
+      name: z.string(),
+      group: z.string(),
+      line1: z.string(),
+      postalCode: z.string(),
+      city: z.string(),
+      countryCode: z.string(),
+      email: z.string(),
+      phone: z.string(),
+    })
+    .transform(
+      ({ line1, postalCode, city, countryCode, ...values }): z.input<typeof savePrincipal.input> => ({
+        principalId: values.principalId,
+        code: values.code.trim().toUpperCase(),
+        name: values.name,
+        group: optional(values.group),
+        address: [line1, postalCode, city].every((value) => value.trim() !== '')
+          ? { line1, line2: null, postalCode, city, countryCode: countryCode.toUpperCase() }
+          : null,
+        email: optional(values.email),
+        phone: optional(values.phone),
+      }),
+    )
+    .pipe(savePrincipal.input),
+};
+
+/** La devise se saisit en minuscules comme en capitales ; vide, elle s'efface (RG-REF-049). */
+const currencyForm = {
+  input: z
+    .object({ principalId: z.string(), currency: z.string() })
+    .transform(({ principalId, currency }) => ({
+      principalId,
+      currency: optional(currency)?.toUpperCase() ?? null,
+    }))
+    .pipe(setPrincipalCurrency.input),
+};
 
 /** Donneurs d'ordre (RG-ORG-005 à 009) : le porteur principal du paramétrage. */
 export function PrincipalsScreen() {
@@ -111,37 +159,28 @@ function PrincipalForm({ principal }: { principal: PrincipalDetail | undefined }
   const { t } = useTranslation();
   const navigate = useNavigate();
   const gesture = useGesture();
-  const [code, setCode] = useState(principal?.code ?? '');
-  const [name, setName] = useState(principal?.name ?? '');
-  const [group, setGroup] = useState(principal?.group ?? '');
-  const [line1, setLine1] = useState(principal?.address?.line1 ?? '');
-  const [postalCode, setPostalCode] = useState(principal?.address?.postalCode ?? '');
-  const [city, setCity] = useState(principal?.address?.city ?? '');
-  const [countryCode, setCountryCode] = useState(principal?.address?.countryCode ?? 'FR');
-  const [email, setEmail] = useState(principal?.email ?? '');
-  const [phone, setPhone] = useState(principal?.phone ?? '');
-  const hasAddress = [line1, postalCode, city].every((value) => value.trim() !== '');
-  const optional = (value: string) => (value.trim() === '' ? null : value.trim());
+  const form = useGestureForm(principalForm, {
+    principalId: principal?.id ?? null,
+    code: principal?.code ?? '',
+    name: principal?.name ?? '',
+    group: principal?.group ?? '',
+    line1: principal?.address?.line1 ?? '',
+    postalCode: principal?.address?.postalCode ?? '',
+    city: principal?.address?.city ?? '',
+    countryCode: principal?.address?.countryCode ?? 'FR',
+    email: principal?.email ?? '',
+    phone: principal?.phone ?? '',
+  });
 
-  const save = async () => {
-    const saved = await gesture.run(savePrincipal, {
-      principalId: principal?.id ?? null,
-      code: code.trim().toUpperCase(),
-      name,
-      group: optional(group),
-      address: hasAddress
-        ? { line1, line2: null, postalCode, city, countryCode: countryCode.toUpperCase() }
-        : null,
-      email: optional(email),
-      phone: optional(phone),
-    });
+  const submit = form.handleSubmit(async (input) => {
+    const saved = await gesture.run(savePrincipal, input);
     if (saved !== undefined && principal === undefined) {
       await navigate({
         to: '/administration/principals/$principalId',
         params: { principalId: saved.principalId },
       });
     }
-  };
+  });
 
   return (
     <>
@@ -168,26 +207,70 @@ function PrincipalForm({ principal }: { principal: PrincipalDetail | undefined }
           )
         }
       >
-        <div className="grid grid-cols-3 gap-4">
-          <TextField label={t('principalAdmin.code')} value={code} onChange={setCode} code />
-          <TextField label={t('principalAdmin.name')} value={name} onChange={setName} />
-          <TextField label={t('principalAdmin.group')} value={group} onChange={setGroup} />
-          <TextField label={t('site.addressLine1')} value={line1} onChange={setLine1} />
-          <TextField label={t('site.postalCode')} value={postalCode} onChange={setPostalCode} />
-          <TextField label={t('site.city')} value={city} onChange={setCity} />
-          <TextField label={t('site.countryCode')} value={countryCode} onChange={setCountryCode} code />
-          <TextField label={t('principalAdmin.email')} value={email} onChange={setEmail} type="email" />
-          <TextField label={t('principalAdmin.phone')} value={phone} onChange={setPhone} type="tel" />
-        </div>
-        <div className="flex justify-end">
-          <Button
-            variant="primary"
-            isDisabled={code.trim() === '' || name.trim() === '' || gesture.sending}
-            onPress={() => void save()}
-          >
-            {principal === undefined ? t('principalAdmin.create') : t('common.save')}
-          </Button>
-        </div>
+        <form className="grid gap-4" onSubmit={(event) => void submit(event)}>
+          <div className="grid grid-cols-3 gap-4">
+            <Controller
+              control={form.control}
+              name="code"
+              render={({ field }) => (
+                <TextField label={t('principalAdmin.code')} {...textField(field)} code />
+              )}
+            />
+            <Controller
+              control={form.control}
+              name="name"
+              render={({ field }) => <TextField label={t('principalAdmin.name')} {...textField(field)} />}
+            />
+            <Controller
+              control={form.control}
+              name="group"
+              render={({ field }) => <TextField label={t('principalAdmin.group')} {...textField(field)} />}
+            />
+            <Controller
+              control={form.control}
+              name="line1"
+              render={({ field }) => <TextField label={t('site.addressLine1')} {...textField(field)} />}
+            />
+            <Controller
+              control={form.control}
+              name="postalCode"
+              render={({ field }) => <TextField label={t('site.postalCode')} {...textField(field)} />}
+            />
+            <Controller
+              control={form.control}
+              name="city"
+              render={({ field }) => <TextField label={t('site.city')} {...textField(field)} />}
+            />
+            <Controller
+              control={form.control}
+              name="countryCode"
+              render={({ field }) => <TextField label={t('site.countryCode')} {...textField(field)} code />}
+            />
+            <Controller
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <TextField
+                  label={t('principalAdmin.email')}
+                  {...textField(field, { compact: true })}
+                  type="email"
+                />
+              )}
+            />
+            <Controller
+              control={form.control}
+              name="phone"
+              render={({ field }) => (
+                <TextField label={t('principalAdmin.phone')} {...textField(field)} type="tel" />
+              )}
+            />
+          </div>
+          <div className="flex justify-end">
+            <Button type="submit" variant="primary" isDisabled={!form.formState.isValid || gesture.sending}>
+              {principal === undefined ? t('principalAdmin.create') : t('common.save')}
+            </Button>
+          </div>
+        </form>
       </Panel>
     </>
   );
@@ -197,25 +280,28 @@ function PrincipalForm({ principal }: { principal: PrincipalDetail | undefined }
 function CurrencyPanel({ principalId, current }: { principalId: string; current: string | null }) {
   const { t } = useTranslation();
   const gesture = useGesture();
-  const [currency, setCurrency] = useState(current ?? '');
-  const code = currency.trim().toUpperCase();
+  const form = useGestureForm(currencyForm, { principalId, currency: current ?? '' });
+  const submit = form.handleSubmit((input) => gesture.run(setPrincipalCurrency, input));
   return (
     <>
       <RefusalBanner refusal={gesture.refusal} onDismiss={gesture.dismiss} />
       <Panel title={t('principalAdmin.currencyTitle')} meta={t('principalAdmin.currencyHint')}>
-        <div className="grid grid-cols-(--cairn-line-columns) items-end gap-3">
-          <TextField label={t('principalAdmin.currency')} value={currency} onChange={setCurrency} code />
+        <form
+          className="grid grid-cols-(--cairn-line-columns) items-end gap-3"
+          onSubmit={(event) => void submit(event)}
+        >
+          <Controller
+            control={form.control}
+            name="currency"
+            render={({ field }) => (
+              <TextField label={t('principalAdmin.currency')} {...textField(field)} code />
+            )}
+          />
           <span />
-          <Button
-            variant="primary"
-            isDisabled={(code !== '' && !/^[A-Z]{3}$/u.test(code)) || gesture.sending}
-            onPress={() =>
-              void gesture.run(setPrincipalCurrency, { principalId, currency: code === '' ? null : code })
-            }
-          >
+          <Button type="submit" variant="primary" isDisabled={!form.formState.isValid || gesture.sending}>
             {t('common.save')}
           </Button>
-        </div>
+        </form>
       </Panel>
     </>
   );
@@ -225,22 +311,28 @@ function CurrencyPanel({ principalId, current }: { principalId: string; current:
 function RetentionPanel({ principalId }: { principalId: string }) {
   const { t } = useTranslation();
   const gesture = useGesture();
-  const [months, setMonths] = useState<number | null>(null);
+  const form = useGestureForm(setEndCustomerRetention, { principalId, months: null });
+  const submit = form.handleSubmit((input) => gesture.run(setEndCustomerRetention, input));
   return (
     <>
       <RefusalBanner refusal={gesture.refusal} onDismiss={gesture.dismiss} />
       <Panel title={t('retention.title')} meta={t('retention.hint')}>
-        <div className="grid grid-cols-(--cairn-line-columns) items-end gap-3">
-          <NumberField label={t('retention.months')} value={months} minValue={1} onChange={setMonths} />
+        <form
+          className="grid grid-cols-(--cairn-line-columns) items-end gap-3"
+          onSubmit={(event) => void submit(event)}
+        >
+          <Controller
+            control={form.control}
+            name="months"
+            render={({ field }) => (
+              <NumberField label={t('retention.months')} minValue={1} {...valueField(field)} />
+            )}
+          />
           <span />
-          <Button
-            variant="primary"
-            isDisabled={gesture.sending}
-            onPress={() => void gesture.run(setEndCustomerRetention, { principalId, months })}
-          >
+          <Button type="submit" variant="primary" isDisabled={!form.formState.isValid || gesture.sending}>
             {t('common.save')}
           </Button>
-        </div>
+        </form>
       </Panel>
     </>
   );
