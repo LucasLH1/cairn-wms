@@ -30,7 +30,7 @@
 # À tenir à jour à chaque session, en même temps que journal/ et les issues.
 
 projet: Cairn WMS
-mis_a_jour_le: 2026-09-29
+mis_a_jour_le: 2026-09-30
 
 # Pile, reprise de zéro le 2026-09-24 (fiches 0002 et 0004 à 0008 abandonnées)
 # et actée le 2026-09-25 (fiches 0009 à 0030). Reflète l'index de docs/decisions/README.md, qui fait foi.
