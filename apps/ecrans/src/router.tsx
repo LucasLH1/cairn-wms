@@ -24,6 +24,7 @@ import { ItemsScreen } from './screens/items/ItemsScreen.js';
 import { NewExpectedReceiptScreen } from './screens/NewExpectedReceiptScreen.js';
 import { OpenArrivalScreen } from './screens/OpenArrivalScreen.js';
 import { ReceptionsScreen } from './screens/ReceptionsScreen.js';
+import { SearchScreen } from './screens/SearchScreen.js';
 import { SessionScreen } from './screens/SessionScreen.js';
 import type { ScreenPlace } from './shell/place.js';
 import { Shell } from './shell/Shell.js';
@@ -65,6 +66,18 @@ const homeRoute = createRoute({
   path: '/',
   component: HomeScreen,
   staticData: { place: 'home' },
+});
+
+const searchRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/search',
+  component: SearchScreen,
+  staticData: { place: 'search' },
+  // `scan` : le texte vient d'une lecture de code-barres, qui ouvre l'objet désigné (RG-SUR-060).
+  validateSearch: (search: Record<string, unknown>) => ({
+    q: typeof search['q'] === 'string' ? search['q'] : '',
+    scan: search['scan'] === true || search['scan'] === 'true',
+  }),
 });
 
 const receptionsRoute = createRoute({
@@ -194,6 +207,7 @@ const routeTree = rootRoute.addChildren([
   sessionRoute,
   shellRoute.addChildren([
     homeRoute,
+    searchRoute,
     receptionsRoute,
     newExpectedReceiptRoute,
     expectedReceiptRoute,

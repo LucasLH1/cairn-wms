@@ -10,3 +10,4 @@ export {
   saveItemFamilyHandler,
   setPrincipalCurrencyHandler,
 } from './custom-field.js';
+export { itemSearchSource } from './search.js';

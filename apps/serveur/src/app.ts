@@ -1,6 +1,7 @@
 import Fastify, { type FastifyInstance } from 'fastify';
 import {
   itemCatalog,
+  itemSearchSource,
   listCustomFieldsHandler,
   listItemFamiliesHandler,
   listItemsHandler,
@@ -11,9 +12,15 @@ import {
 } from './logistique/item/index.js';
 import { listDocksHandler } from './logistique/location/index.js';
 import { listPrincipalsHandler, organizationAdministration } from './logistique/organization/index.js';
-import { listCarriersHandler, listSuppliersHandler, partyAdministration } from './logistique/party/index.js';
+import {
+  listCarriersHandler,
+  listSuppliersHandler,
+  partyAdministration,
+  partySearchSource,
+} from './logistique/party/index.js';
 import {
   createExpectedReceiptHandler,
+  expectedReceiptSearchSource,
   getExpectedReceiptHandler,
   listOpenExpectedReceiptsHandler,
   openInboundArrivalHandler,
@@ -28,6 +35,7 @@ import { authorize } from './socle/permission/index.js';
 import { listNumberingSchemesHandler, saveNumberingSchemeHandler } from './socle/numbering/index.js';
 import { getProviderHandler, saveProviderHandler } from './socle/provider/index.js';
 import { registerQueries } from './socle/query/index.js';
+import { searchHandler } from './socle/search/index.js';
 import { deleteRoleHandler, listRolesHandler, saveRoleHandler } from './socle/role/index.js';
 import { registerSignalRoute, type SignalRelay } from './socle/signal/index.js';
 import {
@@ -162,6 +170,8 @@ export function buildApp(options: AppOptions): FastifyInstance {
         ...items.queries,
         listItemFamiliesHandler,
         listCustomFieldsHandler,
+        // Chaque module réalisé apporte ses objets à l'entrée de recherche unique (RG-SUR-059).
+        searchHandler([itemSearchSource, partySearchSource, expectedReceiptSearchSource]),
       ],
     });
   }

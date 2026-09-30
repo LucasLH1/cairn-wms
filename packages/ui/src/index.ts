@@ -14,6 +14,7 @@ export {
 } from './Navigation.js';
 export { NumberField, type NumberFieldProps } from './NumberField.js';
 export { Panel, type PanelProps } from './Panel.js';
+export { SearchField, type SearchFieldProps } from './SearchField.js';
 export { Select, type SelectOption, type SelectProps } from './Select.js';
 export { StatusBadge, type StatusBadgeProps, type StatusTone } from './StatusBadge.js';
 export { Tabs, type TabsProps } from './Tabs.js';

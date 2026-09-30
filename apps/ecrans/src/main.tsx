@@ -24,8 +24,10 @@ const router = createAppRouter(queryClient);
 const signals = new SignalChannel(() => {
   void queryClient.invalidateQueries();
 });
-// Sans écran qui l'attende, une lecture ouvrira l'objet lu ; aucun objet ne s'ouvre encore ainsi.
-const barcode = new BarcodeService(() => undefined);
+// Sans écran qui l'attende, une lecture ouvre l'objet lu, par la recherche (RG-EXI-033, RG-SUR-060).
+const barcode = new BarcodeService((code) => {
+  void router.navigate({ to: '/search', search: { q: code, scan: true } });
+});
 barcode.start();
 
 await startLabels();

@@ -1,5 +1,5 @@
 import type { Permission } from '@cairn/contrat';
-import { AppShell, Button, NavigationGroup, NavigationItem, Select } from '@cairn/ui';
+import { AppShell, Button, NavigationGroup, NavigationItem, SearchField, Select } from '@cairn/ui';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { Outlet, useMatches, useNavigate } from '@tanstack/react-router';
 import { useContext, useEffect, useState } from 'react';
@@ -11,6 +11,7 @@ import { defaultSite, WorkingSiteContext } from './site.js';
 
 const titles = {
   home: 'shell.home',
+  search: 'search.title',
   receptions: 'navigation.receptions',
   items: 'navigation.items',
   parties: 'party.menu',
@@ -142,17 +143,25 @@ export function Shell() {
       }
       title={t(titles[place])}
       tools={
-        // Un seul site : une indication sous la marque, pas un choix (0.1, « Contexte de travail »).
-        sites.length > 1 ? (
-          <Select
-            label={t('siteSelector.label')}
-            hideLabel
-            placeholder={t('siteSelector.label')}
-            options={sites.map((option) => ({ id: option.id, label: `${option.code} · ${option.name}` }))}
-            value={site?.id ?? null}
-            onChange={choose}
+        <>
+          {/* Un seul site : une indication sous la marque, pas un choix (0.1, « Contexte de travail »). */}
+          {sites.length > 1 ? (
+            <Select
+              label={t('siteSelector.label')}
+              hideLabel
+              placeholder={t('siteSelector.label')}
+              options={sites.map((option) => ({ id: option.id, label: `${option.code} · ${option.name}` }))}
+              value={site?.id ?? null}
+              onChange={choose}
+            />
+          ) : null}
+          {/* L'entrée de recherche unique, sur tout écran (RG-SUR-059). */}
+          <SearchField
+            label={t('search.label')}
+            placeholder={t('search.placeholder')}
+            onSubmit={(text) => void navigate({ to: '/search', search: { q: text, scan: false } })}
           />
-        ) : undefined
+        </>
       }
     >
       <WorkingSiteContext value={site}>

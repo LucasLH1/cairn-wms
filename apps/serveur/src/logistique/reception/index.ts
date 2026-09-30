@@ -11,3 +11,4 @@ export {
   getExpectedReceiptHandler,
   listOpenExpectedReceiptsHandler,
 } from './expected-receipt.js';
+export { expectedReceiptSearchSource } from './search.js';

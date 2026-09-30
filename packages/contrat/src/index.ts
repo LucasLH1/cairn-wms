@@ -9,6 +9,7 @@ export * from './permission.js';
 export * from './query.js';
 export * from './reception.js';
 export * from './refusal.js';
+export * from './search.js';
 export * from './session.js';
 export * from './signal.js';
 export * from './workstation.js';

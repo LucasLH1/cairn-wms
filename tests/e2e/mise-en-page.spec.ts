@@ -16,8 +16,9 @@ interface Defect {
 async function layoutDefects(page: Page): Promise<Defect[]> {
   await page.waitForLoadState('networkidle');
   return page.evaluate(() => {
-    const main = document.querySelector('main');
-    if (main === null) return [{ kind: 'overflow' as const, what: 'main absent' }];
+    // Le contenu, sous la barre du haut : celle-ci est collante et passe au-dessus de ce qui défile.
+    const main = document.querySelector('main > section');
+    if (main === null) return [{ kind: 'overflow' as const, what: 'contenu absent' }];
     const bounds = main.getBoundingClientRect();
     const name = (element: Element) => {
       const text = element.textContent.trim().slice(0, 40);
@@ -67,6 +68,14 @@ test.beforeEach(async ({ page }) => {
 
 const screens: readonly { readonly name: string; readonly open: (page: Page) => Promise<void> }[] = [
   { name: 'Accueil', open: () => Promise.resolve() },
+  {
+    name: 'Recherche',
+    open: async (page) => {
+      await page.getByRole('searchbox', { name: fr.search.label }).fill('MD');
+      await page.getByRole('searchbox', { name: fr.search.label }).press('Enter');
+      await page.getByRole('region', { name: fr.search.results }).waitFor();
+    },
+  },
   { name: 'Réceptions', open: (page) => page.goto('/receptions').then(() => undefined) },
   { name: 'Nouvel attendu', open: (page) => page.goto('/expected-receipts/new').then(() => undefined) },
   { name: 'Références', open: (page) => page.goto('/items').then(() => undefined) },
