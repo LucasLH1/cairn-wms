@@ -24,3 +24,4 @@ export {
   setUserActiveHandler,
   USER,
 } from './administration.js';
+export { languageChangedEvent, setOwnLanguageHandler } from './language.js';

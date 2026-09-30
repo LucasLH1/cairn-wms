@@ -29,6 +29,7 @@ import {
   receptionHistoryOnSite,
 } from './logistique/reception/index.js';
 import type { Database } from './socle/database/index.js';
+import { recordListExportHandler } from './socle/export/index.js';
 import { registerGestures } from './socle/gesture/index.js';
 import { runHealthChecks, type HealthCheck } from './socle/health/index.js';
 import { authorize } from './socle/permission/index.js';
@@ -57,6 +58,7 @@ import {
   saveUserHandler,
   sessionUserId,
   setExecutionSitesHandler,
+  setOwnLanguageHandler,
   setUserActiveHandler,
   type AccessConfig,
 } from './socle/user/index.js';
@@ -131,6 +133,7 @@ export function buildApp(options: AppOptions): FastifyInstance {
         deleteRoleHandler,
         saveUserHandler,
         setUserActiveHandler,
+        setOwnLanguageHandler,
         setExecutionSitesHandler,
         saveTeamHandler,
         setTeamActiveHandler,
@@ -144,6 +147,8 @@ export function buildApp(options: AppOptions): FastifyInstance {
         setPrincipalCurrencyHandler,
         createExpectedReceiptHandler,
         openInboundArrivalHandler,
+        // Toute liste affichée s'exporte, et l'export se trace (RG-SUR-101, 102, fiche 0033).
+        recordListExportHandler,
       ],
     });
     registerQueries(app, {

@@ -282,6 +282,7 @@ Règles d'usage :
 | État de santé | `InstanceHealth` | Indicateurs techniques d'une instance — disponibilité, traitements différés, échanges et impressions en échec, sauvegardes, stockage — dénombrés, jamais détaillés par leur contenu métier. |
 | Poste | `Workstation` | L'ordinateur depuis lequel un utilisateur travaille : fixe, ou embarqué sur un chariot. Origine tracée des événements et destination d'impression. Ne désigne jamais l'établi d'atelier (`Bench`). |
 | Recherche | `Search` | Entrée unique, présente sur tout écran, qui accepte indifféremment une lecture de code-barres ou du texte et retrouve tout objet, sans recherche séparée par type (`RG-SUR-059`). |
+| Export | `ListExport` | Fichier d'une liste telle qu'elle est affichée — mêmes filtres, mêmes colonnes, même ordre —, produit depuis la liste elle-même et tracé (`RG-SUR-101`, `102`, fiche 0033). Distinct du jeu d'export, déclaré et rejouable. |
 | Lecteur de code-barres | `BarcodeReader` | Appareil branché au poste comme un clavier, qui lit les codes-barres (`RG-EXI-078`). Jamais « douchette ». |
 
 ## Gestes et accès

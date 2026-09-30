@@ -9,11 +9,13 @@ export const fr = {
   shell: {
     home: 'Accueil',
     dismiss: 'Masquer',
+    siteTime: 'Heure locale du site',
   },
   navigation: {
     office: 'Bureau',
     receptions: 'Réceptions',
     items: 'Références',
+    arrivalsInProgress: '{{count}} arrivage(s) en cours',
   },
   expectedReceipt: {
     openList: 'Attendus ouverts',
@@ -74,6 +76,7 @@ export const fr = {
     saved: 'Enregistré.',
     yes: 'Oui',
     no: 'Non',
+    export: 'Exporter',
   },
   administration: {
     group: 'Administration',
@@ -292,6 +295,7 @@ export const fr = {
     undeclared: 'Ce navigateur n’est pas un poste déclaré : aucun geste n’y est possible.',
   },
   siteSelector: { label: 'Site' },
+  principalSelector: { label: 'Donneur d’ordre du contexte de travail', placeholder: 'Donneur d’ordre' },
   remainingKind: { expectedReceipts: 'attendu(s) ouvert(s)', inboundArrivals: 'arrivage(s) en cours' },
   party: {
     menu: 'Tiers',
@@ -416,8 +420,10 @@ export const fr = {
   item: {
     menu: 'Références',
     list: 'Références',
+    all: 'Toutes',
     toComplete: 'Références à compléter',
     toCompleteHint: 'Brouillons, du plus ancien au plus récent, avec le stock qu’ils immobilisent.',
+    toCompleteTab: 'À compléter',
     principal: 'Donneur d’ordre',
     family: 'Famille',
     anyFamily: 'Toutes les familles',
@@ -487,7 +493,7 @@ export const fr = {
     noPackingGroup: 'Sans groupe',
     adrHint: 'Déclaratif : alimente les documents de transport, sans contrainte de stockage.',
     value: 'Valeur déclarée',
-    valueAmount: 'Valeur unitaire en centimes ({{currency}})',
+    valueAmount: 'Valeur unitaire ({{currency}})',
     noCurrency: 'Le donneur d’ordre n’a pas de devise : la valeur attend qu’il en déclare une.',
     noValue: 'Sans valeur',
     setAt: 'Depuis le',
@@ -544,7 +550,7 @@ export const fr = {
   },
   search: {
     label: 'Rechercher ou scanner',
-    placeholder: 'Rechercher ou scanner : référence, tiers, attendu…',
+    placeholder: 'Rechercher ou scanner un code…',
     title: 'Recherche',
     results: 'Résultats',
     unknown: 'Aucun objet ne correspond à « {{text}} » : ce code n’est pas connu.',
@@ -558,6 +564,7 @@ export const fr = {
     inactiveCode: 'Identifiant désactivé',
   },
   session: {
+    otherLanguage: 'English',
     title: 'Ouvrir une session',
     loginName: 'Identifiant de connexion',
     password: 'Mot de passe',

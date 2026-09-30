@@ -1,6 +1,8 @@
 export {
+  queryRefusedEvent,
   defineQueryHandler,
   QueryRefusal,
+  recordOutOfScopeQuery,
   registerQueries,
   type QueriesOptions,
   type QueryContext,

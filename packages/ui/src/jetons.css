@@ -25,6 +25,9 @@
   --cairn-occupied-bd: rgb(111 227 196 / 30%);
   --cairn-chip-active-bg: rgb(111 227 196 / 16%);
   --cairn-border-tabs: #27313f;
+  --cairn-context-code: #222b38;
+  --cairn-count-bg: rgb(255 255 255 / 9%);
+  --cairn-count-current-bg: rgb(111 227 196 / 20%);
 
   /* Bords */
   --cairn-border: rgb(255 255 255 / 11%);
@@ -42,6 +45,7 @@
   --cairn-text-secondary: #b0bbc9;
   --cairn-text-3: #98a3b6;
   --cairn-text-4: #7c879a;
+  --cairn-nav-icon: #8593a8;
 
   /* Accent */
   --cairn-accent: #6fe3c4;

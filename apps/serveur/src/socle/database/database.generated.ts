@@ -137,6 +137,7 @@ export interface FoundationUser {
   displayName: string;
   email: string | null;
   id: Generated<string>;
+  language: Generated<string>;
   loginName: string;
   passwordHash: string;
   reportsToUserId: string | null;

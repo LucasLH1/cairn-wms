@@ -71,7 +71,7 @@ test('Administrateur — composer un rôle, créer un utilisateur qui ne voit qu
   await other.getByLabel(fr.session.loginName, { exact: true }).fill('fictif');
   await other.getByLabel(fr.session.password, { exact: true }).fill('mot-de-passe-fictif-12');
   await other.getByRole('button', { name: fr.session.open }).click();
-  await other.waitForURL(/\/$/u);
+  await other.waitForURL(/\/receptions$/u);
   await expect(other.getByRole('link', { name: fr.navigation.receptions })).toBeVisible();
   await expect(other.getByRole('link', { name: fr.administration.settings })).toHaveCount(0);
   await context.close();

@@ -1,6 +1,6 @@
 import type { CurrentSession, Permission } from '@cairn/contrat';
 import { useQuery } from '@tanstack/react-query';
-import { createContext, useContext } from 'react';
+import { createContext, useContext, useState } from 'react';
 import { currentSessionQuery } from '../contract/session.js';
 
 type SessionSite = CurrentSession['sites'][number];
@@ -27,4 +27,27 @@ export function defaultSite(
 export function useHasPermission(permission: Permission): boolean {
   const { data: session } = useQuery(currentSessionQuery);
   return session?.permissions.includes(permission) ?? false;
+}
+
+/**
+ * Un choix du contexte de travail mémorisé par ce navigateur (site, donneur d'ordre) : son absence ou
+ * un stockage refusé ne gêne rien, le choix vaut alors pour la page ouverte.
+ */
+export function useRememberedChoice(storageKey: string): [string | null, (id: string) => void] {
+  const [chosen, setChosen] = useState<string | null>(() => {
+    try {
+      return localStorage.getItem(storageKey);
+    } catch {
+      return null;
+    }
+  });
+  const choose = (id: string) => {
+    setChosen(id);
+    try {
+      localStorage.setItem(storageKey, id);
+    } catch {
+      // Stockage refusé : le choix vaut pour la page ouverte.
+    }
+  };
+  return [chosen, choose];
 }

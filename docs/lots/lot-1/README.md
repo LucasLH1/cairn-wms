@@ -112,3 +112,36 @@ plus tard sans rien réécrire. La spécification n'exige pas de thème clair au
 - Les parcours opérateur disent ce que l'écran doit permettre, pas à quoi il ressemble. Quand ils ne
   suffisent pas, le manque précis se signale au lieu d'être inventé ; il se tranche côté métier.
 - Lucas vérifie les écrans une fois construits, dans l'application, pas sur maquette.
+
+## Décisions sur les écrans du 2026-09-30
+
+Treize points relevés au point design des écrans (#76), tranchés par Lucas le 2026-09-30 sur les
+propositions de Claude (« vas-y fais ce que tu proposes »). Le format d'export fait l'objet de la fiche
+[0033](../../decisions/0033-export-des-listes.md).
+
+1. **Le donneur d'ordre est un contexte permanent**, choisi dans la barre du haut comme dans la
+   maquette, à côté du site. Il fixe le donneur d'ordre des écrans qui en montrent un seul (Références,
+   Tiers) et la valeur proposée des formulaires qui en demandent un. Il est mémorisé par navigateur,
+   comme le site. Le donneur d'ordre interne reste choisissable, jamais proposé d'office.
+2. **La navigation reprend les icônes au trait de la maquette.** Une entrée porte un compteur quand elle
+   mène à du travail en attente, et seulement alors : Réceptions compte les arrivages en cours du site.
+3. **Le pied de la navigation** montre l'utilisateur, ses rôles et son poste. « Toutes zones » n'est pas
+   repris : la spécification ne connaît pas de zone de poste.
+4. **La barre du haut montre l'heure locale du site de travail**, comme la maquette.
+5. **La file de décisions naît avec le premier flux qui produit une décision** (module 1.1). D'ici là,
+   l'accueil conduit au premier écran que l'utilisateur peut ouvrir.
+6. **Toute liste est exportable** en CSV, telle qu'affichée, et l'export est tracé (fiche 0033).
+7. **Chaque utilisateur choisit sa langue**, français ou anglais, depuis le pied de la navigation ; elle
+   est conservée sur son compte (`RG-EXI-054`, `079`).
+8. **Une consultation refusée pour cause de périmètre produit un événement**, comme l'objet hors
+   périmètre rendu par la recherche (`RG-SUR-065`, `RG-TRA-005`).
+9. **Un montant se saisit dans la devise**, avec ses décimales, et se conserve en centimes.
+10. **Une bascule entre deux vues d'une même liste prend la forme des onglets segmentés** de la
+    maquette (« Toutes » / « À compléter »), jamais une puce.
+11. **Dans un tableau, un code est un lien quand il ouvre une fiche** ; sinon c'est du texte en chasse
+    fixe, et les actions sont des boutons en fin de ligne.
+12. **Un panneau porte un geste et un seul bouton qui l'enregistre.** Une fiche qui compte plusieurs
+    panneaux compte donc plusieurs boutons « Enregistrer » : chacun enregistre ce qui est dans son
+    panneau, et seulement cela.
+13. **Un bouton désactivé se distingue au premier coup d'œil** : fond transparent, bord en tirets,
+    texte estompé. La maquette ne montre aucun bouton désactivé.

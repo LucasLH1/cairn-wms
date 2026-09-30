@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { languageSchema } from './language.js';
 import { permissionSchema } from './permission.js';
 import { refusalSchema } from './refusal.js';
 
@@ -26,8 +27,23 @@ export const currentSessionSchema = z.object({
   /** Nom du prestataire, affiché sous la marque avec le site (maquette) ; absent tant qu'il n'est pas saisi. */
   providerName: z.string().nullable(),
   workstation: z.object({ id: z.uuid(), name: z.string() }).nullable(),
-  /** Sites de rattachement, et si l'utilisateur y agit (RG-ORG-015, RG-SUR-026). */
-  sites: z.array(z.object({ id: z.uuid(), code: z.string(), name: z.string(), execution: z.boolean() })),
+  /**
+   * Sites de rattachement, et si l'utilisateur y agit (RG-ORG-015, RG-SUR-026). Le fuseau horaire
+   * donne l'heure locale du site de travail, montrée dans la barre du haut (RG-EXI-076).
+   */
+  sites: z.array(
+    z.object({
+      id: z.uuid(),
+      code: z.string(),
+      name: z.string(),
+      timeZone: z.string(),
+      execution: z.boolean(),
+    }),
+  ),
+  /** Noms des rôles de l'utilisateur, triés, montrés au pied de la navigation avec son poste. */
+  roles: z.array(z.string()),
+  /** Langue de l'interface choisie par l'utilisateur, conservée sur son compte (RG-EXI-079). */
+  language: languageSchema,
   /**
    * Permissions de l'utilisateur, pour que l'écran ne propose pas un geste qu'il refuserait
    * (RG-SUR-028). Le serveur contrôle chaque geste quand même (RG-EXI-012).

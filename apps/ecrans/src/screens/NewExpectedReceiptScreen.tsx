@@ -10,6 +10,7 @@ import { NoResponseError, sendGesture } from '../contract/client.js';
 import { useGestureForm } from '../contract/form.js';
 import { contractQuery } from '../contract/query.js';
 import { refusalLabelKey, type RefusalLabelKey } from '../contract/refusal.js';
+import { useWorkingPrincipal } from '../shell/principal.js';
 import { useWorkingSite } from '../shell/site.js';
 
 /*
@@ -28,8 +29,11 @@ export function NewExpectedReceiptScreen() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const site = useWorkingSite();
+  const workingPrincipal = useWorkingPrincipal();
   const form = useGestureForm(createExpectedReceipt, {
-    principalId: '',
+    // Valeur proposée : le donneur d'ordre du contexte de travail (README du lot 1, décisions du
+    // 2026-09-30, point 1). Le champ reste, pour en saisir un autre.
+    principalId: workingPrincipal?.id ?? '',
     siteId: site?.id ?? '',
     supplierId: '',
     expectedArrivalDate: '',
@@ -41,6 +45,13 @@ export function NewExpectedReceiptScreen() {
   useEffect(() => {
     form.setValue('siteId', site?.id ?? '', { shouldValidate: true });
   }, [form, site]);
+  // Le donneur d'ordre du contexte peut n'être connu qu'après l'ouverture de l'écran : il est alors
+  // proposé, tant que rien n'a été choisi.
+  useEffect(() => {
+    if (workingPrincipal !== undefined && form.getValues('principalId') === '') {
+      form.setValue('principalId', workingPrincipal.id, { shouldValidate: true });
+    }
+  }, [form, workingPrincipal]);
   const [refusal, setRefusal] = useState<RefusalLabelKey | 'failure.noResponse' | undefined>();
   const [sending, setSending] = useState(false);
 

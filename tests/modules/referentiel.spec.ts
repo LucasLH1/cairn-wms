@@ -67,7 +67,7 @@ test('Gestionnaire — les références à compléter, triées par ancienneté',
   const list = page.getByRole('region', { name: fr.item.list });
   await expect(list.getByRole('table')).toContainText('MD-100');
   await expect(list.getByRole('table')).toContainText('MD-101');
-  await page.getByRole('checkbox', { name: fr.item.toComplete }).check({ force: true });
+  await page.getByRole('tab', { name: fr.item.toCompleteTab }).click();
   const drafts = page.getByRole('region', { name: fr.item.toComplete });
   await expect(drafts.getByText(fr.item.toCompleteHint)).toBeVisible();
   await expect(drafts.getByRole('table')).toContainText('MD-101');

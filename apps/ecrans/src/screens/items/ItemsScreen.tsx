@@ -3,7 +3,6 @@ import {
   itemStateSchema,
   listCustomFields,
   listItemFamilies,
-  listPrincipals,
   removeCustomField,
   saveCustomField,
   saveItemFamily,
@@ -24,6 +23,7 @@ import { textField, useGestureForm } from '../../contract/form.js';
 import { contractQuery } from '../../contract/query.js';
 import { RefusalBanner } from '../../contract/RefusalBanner.js';
 import { useGesture } from '../../contract/useGesture.js';
+import { useWorkingPrincipal } from '../../shell/principal.js';
 import { useHasPermission } from '../../shell/site.js';
 import { useChangeSignal } from '../../signals/useChangeSignal.js';
 import { formatDate } from '../format.js';
@@ -33,31 +33,16 @@ import { RouteLink } from '../../shell/RouteLink.js';
 /**
  * Référentiel produit d'un donneur d'ordre (0.2) : ses références, filtrées, et la bascule des
  * références à compléter ; ses familles ; ses champs personnalisés. Un geste du bureau (RG-SUR-127).
+ * Le donneur d'ordre est celui du contexte de travail, choisi dans la barre du haut (README du lot 1,
+ * décisions du 2026-09-30, point 1).
  */
 export function ItemsScreen() {
   const { t } = useTranslation();
-  const { data: principals } = useQuery(contractQuery(listPrincipals, {}));
-  const [chosen, setChosen] = useState<string | null>(null);
-  const principalId =
-    chosen ??
-    (principals?.principals.find((principal) => !principal.internal) ?? principals?.principals[0])?.id ??
-    null;
+  const principalId = useWorkingPrincipal()?.id ?? null;
   const canManage = useHasPermission('manageItems');
   const canDeclare = useHasPermission('manageCustomFields');
   return (
     <>
-      <div className="grid grid-cols-3 gap-4">
-        <Select
-          label={t('item.principal')}
-          placeholder={t('item.choose')}
-          options={(principals?.principals ?? []).map((principal) => ({
-            id: principal.id,
-            label: principal.name,
-          }))}
-          value={principalId}
-          onChange={setChosen}
-        />
-      </div>
       {principalId === null ? null : (
         <Tabs
           label={t('item.menu')}
@@ -93,6 +78,8 @@ export function ItemsScreen() {
 }
 
 const ALL = 'all';
+/** Les deux vues de la liste, en onglets segmentés (README du lot 1, décisions du 2026-09-30, point 10). */
+const TO_COMPLETE = 'toComplete';
 
 /** Liste filtrée (0.2 § 6, étape 1) ; la bascule met en avant les brouillons (RG-REF-041). */
 function ItemListPanel({ principalId, canManage }: { principalId: string; canManage: boolean }) {
@@ -103,7 +90,8 @@ function ItemListPanel({ principalId, canManage }: { principalId: string; canMan
   const [familyId, setFamilyId] = useState<string>(ALL);
   const [state, setState] = useState<string>(ALL);
   const [trackingMode, setTrackingMode] = useState<string>(ALL);
-  const [draftsOnly, setDraftsOnly] = useState(false);
+  const [view, setView] = useState<string>(ALL);
+  const draftsOnly = view === TO_COMPLETE;
   const { data: families } = useQuery(contractQuery(listItemFamilies, { principalId }));
   const query = contractQuery(searchItems, {
     principalId,
@@ -116,6 +104,92 @@ function ItemListPanel({ principalId, canManage }: { principalId: string; canMan
   const { data } = useQuery(query);
   useChangeSignal('Item', undefined, query.queryKey);
   const day = (iso: string) => formatDate(iso.slice(0, 10), i18n.language);
+  // La même liste sous les deux onglets : l'onglet choisi fixe la vue, colonnes et filtre compris.
+  const list = (
+    <DataTable<ItemRow>
+      label={draftsOnly ? t('item.toComplete') : t('item.list')}
+      rows={data?.items ?? []}
+      rowKey={(row) => row.id}
+      empty={t('item.none')}
+      columns={[
+        {
+          id: 'code',
+          header: t('item.code'),
+          size: 'code',
+          code: true,
+          cell: (row) => (
+            <RouteLink to="/items/$itemId" params={{ itemId: row.id }}>
+              {row.code}
+            </RouteLink>
+          ),
+        },
+        { id: 'label', header: t('item.shortLabel'), size: 'text', cell: (row) => row.shortLabel },
+        ...(draftsOnly
+          ? [
+              {
+                id: 'created',
+                header: t('item.createdOn'),
+                size: 'date' as const,
+                cell: (row: ItemRow) => day(row.createdAt),
+              },
+              {
+                id: 'stock',
+                header: t('item.stock'),
+                size: 'number' as const,
+                numeric: true,
+                cell: (row: ItemRow) => row.stockQuantity,
+              },
+              {
+                id: 'sites',
+                header: t('item.stockSites'),
+                size: 'date' as const,
+                cell: (row: ItemRow) => (row.stockSites.length === 0 ? '—' : row.stockSites.join(', ')),
+              },
+            ]
+          : [
+              {
+                id: 'family',
+                header: t('item.family'),
+                size: 'text' as const,
+                cell: (row: ItemRow) => row.familyName ?? '—',
+              },
+              {
+                id: 'tracking',
+                header: t('item.trackingMode'),
+                size: 'date' as const,
+                cell: (row: ItemRow) =>
+                  row.serialBatchTracking
+                    ? `${t('item.trackingModes.serial')} + ${t('item.trackingModes.batch')}`
+                    : t(`item.trackingModes.${row.trackingMode}`),
+              },
+            ]),
+        {
+          id: 'state',
+          header: t('item.state'),
+          size: 'status',
+          cell: (row) => <StateBadge state={row.state} />,
+        },
+        ...(draftsOnly && canManage
+          ? [
+              {
+                id: 'activate',
+                header: '',
+                size: 'status' as const,
+                // Activation à la volée depuis la liste, dès que les conditions sont réunies (0.2 § 6).
+                cell: (row: ItemRow) =>
+                  row.activable ? (
+                    <Button
+                      onPress={() => void gesture.run(changeItemState, { itemId: row.id, state: 'active' })}
+                    >
+                      {t('common.activate')}
+                    </Button>
+                  ) : null,
+              },
+            ]
+          : []),
+      ]}
+    />
+  );
 
   return (
     <>
@@ -180,97 +254,13 @@ function ItemListPanel({ principalId, canManage }: { principalId: string; canMan
             }}
           />
         </div>
-        <ChipGroup
-          label={t('item.toComplete')}
-          options={[{ id: 'drafts', label: t('item.toComplete') }]}
-          value={draftsOnly ? ['drafts'] : []}
-          onChange={(value) => {
-            setDraftsOnly(value.includes('drafts'));
-          }}
-        />
-        <DataTable<ItemRow>
-          label={draftsOnly ? t('item.toComplete') : t('item.list')}
-          rows={data?.items ?? []}
-          rowKey={(row) => row.id}
-          empty={t('item.none')}
-          columns={[
-            {
-              id: 'code',
-              header: t('item.code'),
-              size: 'code',
-              code: true,
-              cell: (row) => (
-                <RouteLink to="/items/$itemId" params={{ itemId: row.id }}>
-                  {row.code}
-                </RouteLink>
-              ),
-            },
-            { id: 'label', header: t('item.shortLabel'), size: 'text', cell: (row) => row.shortLabel },
-            ...(draftsOnly
-              ? [
-                  {
-                    id: 'created',
-                    header: t('item.createdOn'),
-                    size: 'date' as const,
-                    cell: (row: ItemRow) => day(row.createdAt),
-                  },
-                  {
-                    id: 'stock',
-                    header: t('item.stock'),
-                    size: 'number' as const,
-                    numeric: true,
-                    cell: (row: ItemRow) => row.stockQuantity,
-                  },
-                  {
-                    id: 'sites',
-                    header: t('item.stockSites'),
-                    size: 'date' as const,
-                    cell: (row: ItemRow) => (row.stockSites.length === 0 ? '—' : row.stockSites.join(', ')),
-                  },
-                ]
-              : [
-                  {
-                    id: 'family',
-                    header: t('item.family'),
-                    size: 'text' as const,
-                    cell: (row: ItemRow) => row.familyName ?? '—',
-                  },
-                  {
-                    id: 'tracking',
-                    header: t('item.trackingMode'),
-                    size: 'date' as const,
-                    cell: (row: ItemRow) =>
-                      row.serialBatchTracking
-                        ? `${t('item.trackingModes.serial')} + ${t('item.trackingModes.batch')}`
-                        : t(`item.trackingModes.${row.trackingMode}`),
-                  },
-                ]),
-            {
-              id: 'state',
-              header: t('item.state'),
-              size: 'status',
-              cell: (row) => <StateBadge state={row.state} />,
-            },
-            ...(draftsOnly && canManage
-              ? [
-                  {
-                    id: 'activate',
-                    header: '',
-                    size: 'status' as const,
-                    // Activation à la volée depuis la liste, dès que les conditions sont réunies (0.2 § 6).
-                    cell: (row: ItemRow) =>
-                      row.activable ? (
-                        <Button
-                          onPress={() =>
-                            void gesture.run(changeItemState, { itemId: row.id, state: 'active' })
-                          }
-                        >
-                          {t('common.activate')}
-                        </Button>
-                      ) : null,
-                  },
-                ]
-              : []),
+        <Tabs
+          label={t('item.list')}
+          selected={view}
+          onSelectionChange={setView}
+          tabs={[
+            { id: ALL, label: t('item.all'), content: list },
+            { id: TO_COMPLETE, label: t('item.toCompleteTab'), content: list },
           ]}
         />
       </Panel>

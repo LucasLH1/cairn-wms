@@ -44,6 +44,7 @@ async function sitesOf(db: Database, userId: string): Promise<CurrentSession['si
       'site.id',
       'site.code',
       'site.name',
+      'site.timeZone',
       sql<boolean>`coalesce(${sql.ref('userSite.execution')}, false)`.as('execution'),
     ])
     .where('site.id', 'in', visible)
@@ -51,7 +52,28 @@ async function sitesOf(db: Database, userId: string): Promise<CurrentSession['si
     .execute();
 }
 
+/** Noms des rôles de l'utilisateur, triés, montrés au pied de la navigation (README du lot 1, point 3). */
+async function rolesOf(db: Database, userId: string): Promise<CurrentSession['roles']> {
+  const rows = await db
+    .selectFrom('foundation.userRole as userRole')
+    .innerJoin('foundation.role as role', 'role.id', 'userRole.roleId')
+    .select('role.name')
+    .where('userRole.userId', '=', userId)
+    .execute();
+  return rows.map((row) => row.name).sort((a, b) => a.localeCompare(b));
+}
+
 /** Nom du prestataire de l'instance (RG-ORG-001). */
+/** Langue de l'interface de l'utilisateur, conservée sur son compte (RG-EXI-079). */
+async function languageOf(db: Database, userId: string): Promise<CurrentSession['language']> {
+  const { language } = await db
+    .selectFrom('foundation.user')
+    .select('language')
+    .where('id', '=', userId)
+    .executeTakeFirstOrThrow();
+  return language === 'en' ? 'en' : 'fr';
+}
+
 async function providerNameOf(db: Database): Promise<string | null> {
   return (await db.selectFrom('foundation.provider').select('name').executeTakeFirst())?.name ?? null;
 }
@@ -113,6 +135,8 @@ export function registerSessionRoutes(app: FastifyInstance, options: AccessOptio
       providerName: await providerNameOf(db),
       workstation: workstation ?? null,
       sites: await sitesOf(db, opened.userId),
+      roles: await rolesOf(db, opened.userId),
+      language: await languageOf(db, opened.userId),
       permissions: await permissionsOf(db, opened.userId),
     };
     return reply.header('set-cookie', cookies).send({ outcome: 'accepted', result: session });
@@ -133,6 +157,8 @@ export function registerSessionRoutes(app: FastifyInstance, options: AccessOptio
       providerName: await providerNameOf(db),
       workstation: workstation ?? null,
       sites: await sitesOf(db, user.userId),
+      roles: await rolesOf(db, user.userId),
+      language: await languageOf(db, user.userId),
       permissions: await permissionsOf(db, user.userId),
     };
     return session;

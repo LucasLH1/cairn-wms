@@ -48,10 +48,13 @@ Elles viennent des fiches citées ; ce document les rassemble, il n'en ajoute au
 | Composant | Usage |
 |---|---|
 | `AppShell`, `Brand`, `BrandMark` | Ossature de l'application : navigation latérale, barre du haut (fil d'Ariane, titre, outils), contenu. Un seul, dans `apps/ecrans/src/shell/Shell.tsx`. |
-| `NavigationGroup`, `NavigationItem` | Groupes et entrées de la navigation latérale. |
+| `NavigationGroup`, `NavigationItem` | Groupes et entrées de la navigation latérale. Une entrée porte une icône (`icon`) et, quand elle mène à du travail en attente, un compteur (`count`, avec `countLabel` pour les technologies d'assistance), montré seulement s'il est positif. |
+| `ReceiptIcon`, `ItemIcon`, `PartyIcon`, `SettingsIcon`, `UserIcon`, `PrincipalIcon` | Icônes au trait de la navigation (`src/icons.tsx`), tirées de la maquette ; celles des entrées qu'elle ne montre pas sont dessinées dans son style. |
+| `ContextSelect` | Sélecteur du contexte de travail de la barre du haut (donneur d'ordre, site) : code en pastille à chasse fixe, puis nom. |
+| `Clock` | Heure locale du site de travail, à droite de la barre du haut. |
 | `Panel` | Conteneur de tout contenu d'écran : titre, précision, actions, corps. Région nommée par son titre. |
 | `Card`, `CardGrid` | Cartes de la maquette (quais…), en grille. |
-| `DataTable` | Tableau dense : largeurs de colonne nommées (`code`, `number`, `date`, `status`, `text`), nombres à droite en chasse fixe, codes en chasse fixe. Défile dans son panneau s'il est large. |
+| `DataTable` | Tableau dense : largeurs de colonne nommées (`code`, `number`, `date`, `status`, `text`), nombres à droite en chasse fixe, codes en chasse fixe. Défile dans son panneau s'il est large. Sous `DataTableExportContext`, fourni une fois par l'application, porte un bouton d'export : CSV de la liste telle qu'affichée, colonnes sans titre exclues (fiche 0033). |
 | `Tabs` | Onglets segmentés. |
 | `Disclosure` | Section repliée par défaut, ouverte d'emblée si elle concerne l'objet affiché. |
 | `Banner` | Bandeau d'information, d'avertissement ou de refus. Dans les écrans, un refus de geste passe par `RefusalBanner`. |

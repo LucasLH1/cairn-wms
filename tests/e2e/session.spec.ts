@@ -18,7 +18,8 @@ test("Anna ouvre une session, voit son nom et l'état de son poste, puis la ferm
   await page.getByLabel(fr.session.loginName).fill('anna');
   await page.getByLabel(fr.session.password).fill('demo-fictif');
   await page.getByRole('button', { name: fr.session.open }).click();
-  await expect(page).toHaveURL(/\/$/u);
+  // L'accueil conduit au premier écran ouvert à l'utilisateur : Réceptions (README du lot 1, point 5).
+  await expect(page).toHaveURL(/\/receptions$/u);
   await expect(page.getByText('Anna')).toBeVisible();
   await expect(page.getByText(fr.workstation.undeclared)).toBeVisible();
 

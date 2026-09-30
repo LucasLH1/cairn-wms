@@ -8,11 +8,13 @@ export const en: LabelCatalog = {
   shell: {
     home: 'Home',
     dismiss: 'Dismiss',
+    siteTime: 'Site local time',
   },
   navigation: {
     office: 'Office',
     receptions: 'Receptions',
     items: 'Items',
+    arrivalsInProgress: '{{count}} inbound arrival(s) in progress',
   },
   expectedReceipt: {
     openList: 'Open expected receipts',
@@ -73,6 +75,7 @@ export const en: LabelCatalog = {
     saved: 'Saved.',
     yes: 'Yes',
     no: 'No',
+    export: 'Export',
   },
   administration: {
     group: 'Administration',
@@ -284,6 +287,7 @@ export const en: LabelCatalog = {
     undeclared: 'This browser is not a declared workstation: no gesture is possible here.',
   },
   siteSelector: { label: 'Site' },
+  principalSelector: { label: 'Principal of the working context', placeholder: 'Principal' },
   remainingKind: { expectedReceipts: 'open expected receipt(s)', inboundArrivals: 'open arrival(s)' },
   party: {
     menu: 'Parties',
@@ -404,8 +408,10 @@ export const en: LabelCatalog = {
   item: {
     menu: 'Items',
     list: 'Items',
+    all: 'All',
     toComplete: 'Items to complete',
     toCompleteHint: 'Drafts, oldest first, with the stock they tie up.',
+    toCompleteTab: 'To complete',
     principal: 'Principal',
     family: 'Family',
     anyFamily: 'All families',
@@ -475,7 +481,7 @@ export const en: LabelCatalog = {
     noPackingGroup: 'No group',
     adrHint: 'Declarative: feeds transport documents, with no storage constraint.',
     value: 'Declared value',
-    valueAmount: 'Unit value in cents ({{currency}})',
+    valueAmount: 'Unit value ({{currency}})',
     noCurrency: 'The principal has no currency: the value waits until one is declared.',
     noValue: 'No value',
     setAt: 'Since',
@@ -531,7 +537,7 @@ export const en: LabelCatalog = {
   },
   search: {
     label: 'Search or scan',
-    placeholder: 'Search or scan: item, party, expected receipt…',
+    placeholder: 'Search or scan a code…',
     title: 'Search',
     results: 'Results',
     unknown: 'No object matches “{{text}}”: this code is not known.',
@@ -545,6 +551,7 @@ export const en: LabelCatalog = {
     inactiveCode: 'Deactivated barcode',
   },
   session: {
+    otherLanguage: 'Français',
     title: 'Open a session',
     loginName: 'Login name',
     password: 'Password',

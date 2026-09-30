@@ -1,11 +1,11 @@
-import { listAnonymizationSchedule, listEndCustomerDuplicates, listPrincipals } from '@cairn/contrat';
-import { Button, DataTable, Panel, Select, Tabs } from '@cairn/ui';
+import { listAnonymizationSchedule, listEndCustomerDuplicates } from '@cairn/contrat';
+import { Button, DataTable, Panel, Tabs } from '@cairn/ui';
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
-import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { z } from 'zod';
 import { contractQuery } from '../../contract/query.js';
+import { useWorkingPrincipal } from '../../shell/principal.js';
 import { useHasPermission } from '../../shell/site.js';
 import { PartyListPanel } from './PartyListPanel.js';
 
@@ -14,28 +14,15 @@ type ScheduleRow = z.infer<typeof listAnonymizationSchedule.output>['principals'
 
 /**
  * Tiers d'un donneur d'ordre (0.5) : ses fournisseurs, ses clients finaux, leurs doublons potentiels ;
- * les échéances d'anonymisation de tous les donneurs d'ordre visibles.
+ * les échéances d'anonymisation de tous les donneurs d'ordre visibles. Le donneur d'ordre est celui du
+ * contexte de travail, choisi dans la barre du haut (README du lot 1, décisions du 2026-09-30, point 1).
  */
 export function PartiesScreen() {
   const { t } = useTranslation();
-  const { data: principals } = useQuery(contractQuery(listPrincipals, {}));
-  const [chosen, setChosen] = useState<string | null>(null);
-  const principalId = chosen ?? principals?.principals.find((principal) => !principal.internal)?.id ?? null;
+  const principalId = useWorkingPrincipal()?.id ?? null;
   const canManage = useHasPermission('managePrincipalParties');
   return (
     <>
-      <div className="grid grid-cols-3 gap-4">
-        <Select
-          label={t('party.principal')}
-          placeholder={t('expectedReceipt.choose')}
-          options={(principals?.principals ?? []).map((principal) => ({
-            id: principal.id,
-            label: principal.name,
-          }))}
-          value={principalId}
-          onChange={setChosen}
-        />
-      </div>
       {principalId === null ? null : (
         <Tabs
           label={t('party.menu')}

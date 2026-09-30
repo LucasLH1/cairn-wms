@@ -33,6 +33,7 @@ import {
   DataTable,
   DateField,
   Disclosure,
+  MoneyField,
   NumberField,
   Panel,
   Select,
@@ -774,7 +775,11 @@ function ValuePanel({ item }: { item: ItemDetail }) {
               control={form.control}
               name="valueCents"
               render={({ field }) => (
-                <NumberField label={t('item.valueAmount', { currency })} {...valueField(field)} />
+                <MoneyField
+                  label={t('item.valueAmount', { currency })}
+                  currency={currency}
+                  {...valueField(field)}
+                />
               )}
             />
             <Button

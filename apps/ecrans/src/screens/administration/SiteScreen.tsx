@@ -474,23 +474,8 @@ function ZonesPanel({ site }: { site: SiteDetail }) {
               header: t('site.code'),
               size: 'code',
               code: true,
-              cell: (zone) => (
-                <Button
-                  onPress={() => {
-                    edit({
-                      zoneId: zone.id,
-                      siteId: site.id,
-                      code: zone.code,
-                      name: zone.name,
-                      purpose: zone.purpose,
-                      cohabitation: zone.cohabitation,
-                      principalId: zone.principalId,
-                    });
-                  }}
-                >
-                  {zone.code}
-                </Button>
-              ),
+              // Un code n'est un lien que s'il ouvre une fiche ; l'action est en fin de ligne (point 11).
+              cell: (zone) => zone.code,
             },
             { id: 'name', header: t('site.name'), size: 'text', cell: (zone) => zone.name },
             {
@@ -513,11 +498,38 @@ function ZonesPanel({ site }: { site: SiteDetail }) {
               header: t('site.state'),
               size: 'status',
               cell: (zone) => (
-                <Button
-                  onPress={() => void gesture.run(setZoneActive, { zoneId: zone.id, active: !zone.active })}
-                >
-                  {zone.active ? t('common.deactivate') : t('common.activate')}
-                </Button>
+                <StatusBadge tone={zone.active ? 'ok' : 'mute'}>
+                  {zone.active ? t('common.active') : t('common.inactive')}
+                </StatusBadge>
+              ),
+            },
+            {
+              id: 'actions',
+              header: '',
+              size: 'text',
+              cell: (zone) => (
+                <div className="flex gap-2">
+                  <Button
+                    onPress={() => {
+                      edit({
+                        zoneId: zone.id,
+                        siteId: site.id,
+                        code: zone.code,
+                        name: zone.name,
+                        purpose: zone.purpose,
+                        cohabitation: zone.cohabitation,
+                        principalId: zone.principalId,
+                      });
+                    }}
+                  >
+                    {t('common.edit')}
+                  </Button>
+                  <Button
+                    onPress={() => void gesture.run(setZoneActive, { zoneId: zone.id, active: !zone.active })}
+                  >
+                    {zone.active ? t('common.deactivate') : t('common.activate')}
+                  </Button>
+                </div>
               ),
             },
           ]}

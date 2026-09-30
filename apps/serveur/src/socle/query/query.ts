@@ -10,6 +10,7 @@ import type { FastifyInstance, FastifyRequest } from 'fastify';
 import { z } from 'zod';
 import type { Database } from '../database/index.js';
 import { effectivePermissions } from '../permission/index.js';
+import { appendTraceEvent, defineTraceEventType, type TraceObject } from '../trace-event/index.js';
 
 /** Définition de consultation quelconque, pour un registre qui en tient plusieurs. */
 type AnyQueryDefinition = QueryDefinition<string, z.ZodType, z.ZodType>;
@@ -40,10 +41,45 @@ export function defineQueryHandler<Definition extends AnyQueryDefinition>(
  * la réponse ne dit pas ce qu'on ne peut pas voir (RG-EXI-050).
  */
 export class QueryRefusal extends Error {
-  constructor(readonly reason: 'outOfScope' | 'invalidInput') {
+  constructor(
+    readonly reason: 'outOfScope' | 'invalidInput',
+    /** Objets que la consultation visait, quand le traitement les connaît : l'événement les désigne. */
+    readonly objects: readonly TraceObject[] = [],
+  ) {
     super(`query refused: ${reason}`);
     this.name = 'QueryRefusal';
   }
+}
+
+/**
+ * Consultation refusée pour cause de périmètre (RG-SUR-065, RG-TRA-005) : l'utilisateur a demandé ce
+ * qu'il ne peut pas voir, ou la recherche lui a signalé un objet sans le lui montrer (RG-SUR-064). Le
+ * refus d'un geste a son propre événement, `gestureRefused`.
+ */
+export const queryRefusedEvent = defineTraceEventType(
+  'queryRefused',
+  z.object({ query: z.string(), reason: z.literal('outOfScope') }),
+);
+
+/**
+ * Trace un refus pour cause de périmètre, attribué à l'utilisateur. Une consultation n'a ni identifiant
+ * de geste ni poste d'émission connu du greffon : l'événement n'en porte pas (fiche 0022, règle 3). Il
+ * s'écrit dans sa propre transaction, la consultation n'en ayant aucune.
+ */
+export async function recordOutOfScopeQuery(
+  db: Database,
+  userId: string,
+  query: string,
+  objects: readonly TraceObject[] = [],
+): Promise<void> {
+  await db.transaction().execute(async (transaction) => {
+    await appendTraceEvent(transaction, {
+      eventType: queryRefusedEvent,
+      data: { query, reason: 'outOfScope' },
+      author: { userId },
+      objects: [{ type: 'User', id: userId }, ...objects],
+    });
+  });
 }
 
 export interface QueriesOptions {
@@ -95,7 +131,12 @@ export function registerQueries(app: FastifyInstance, options: QueriesOptions): 
         return await reply.send(definition.output.parse(result));
       } catch (error) {
         if (error instanceof QueryRefusal) {
-          return refused(error.reason === 'outOfScope' ? 403 : 400, error.reason);
+          if (error.reason === 'outOfScope') {
+            // Le refus est tracé avant d'être rendu (RG-SUR-065, décision 8 du 2026-09-30).
+            await recordOutOfScopeQuery(options.db, userId, definition.name, error.objects);
+            return refused(403, error.reason);
+          }
+          return refused(400, error.reason);
         }
         throw error;
       }

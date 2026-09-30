@@ -43,6 +43,7 @@ createRoot(container).render(
               router.history.push(path);
             }}
           >
+            {/* Toute liste affichée est exportable, et l'export est tracé (RG-SUR-101, 102). */}
             <RouterProvider router={router} />
           </AriaRouterProvider>
         </BarcodeServiceContext>

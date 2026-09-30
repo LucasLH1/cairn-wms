@@ -22,6 +22,7 @@
   --spacing-2-5: 10px;
   --spacing-2-75: 11px;
   --spacing-3: 12px;
+  --spacing-3-25: 13px;
   --spacing-3-5: 14px;
   --spacing-3-75: 15px;
   --spacing-4: 16px;
@@ -35,12 +36,14 @@
   --spacing-10: 40px;
   --spacing-12: 48px;
   --spacing-logo: 30px;
+  --spacing-nav-icon: 17px;
   --spacing-nav: 252px;
 
   /* Largeurs de contenu : celle du champ de recherche de la maquette sert aux formulaires étroits */
   --container-narrow: 360px;
 
   /* Rayons */
+  --radius-tag: 6px;
   --radius-badge: 7px;
   --radius-control: 10px;
   --radius-field: 11px;
@@ -52,6 +55,7 @@
   --radius-full: 9999px;
 
   /* Tailles de texte */
+  --text-tag: 10px;
   --text-label: 11px;
   --text-small: 12px;
   --text-secondary: 13px;
@@ -95,6 +99,10 @@
   --color-occupied-bd: var(--cairn-occupied-bd);
   --color-chip-active-bg: var(--cairn-chip-active-bg);
   --color-border-tabs: var(--cairn-border-tabs);
+  --color-context-code: var(--cairn-context-code);
+  --color-count-bg: var(--cairn-count-bg);
+  --color-count-current-bg: var(--cairn-count-current-bg);
+  --color-nav-icon: var(--cairn-nav-icon);
   --color-field: var(--cairn-field);
   --color-well: var(--cairn-well);
   --color-control: var(--cairn-control);

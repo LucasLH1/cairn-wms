@@ -32,7 +32,8 @@ export async function signIn(page: Page, loginName: string): Promise<void> {
   await page.getByLabel(fr.session.loginName).fill(loginName);
   await page.getByLabel(fr.session.password).fill(DATASET_PASSWORD);
   await page.getByRole('button', { name: fr.session.open }).click();
-  await page.waitForURL(/\/$/u);
+  // L'accueil conduit au premier écran ouvert à l'utilisateur : Réceptions (README du lot 1, point 5).
+  await page.waitForURL(/\/receptions$/u);
 }
 
 /** Choisit une option d'une liste déroulante par son libellé. */

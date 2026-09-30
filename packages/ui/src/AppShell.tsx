@@ -40,8 +40,10 @@ export interface AppShellProps {
   /** Sous la marque : prestataire et site, quand ils sont connus. */
   readonly context?: ReactNode;
   readonly navigation?: ReactNode;
-  /** Pied de la barre latérale : l'utilisateur, son poste, et une action. */
+  /** Pied de la barre latérale : l'utilisateur, ses rôles, son poste, et une action. */
   readonly user: string;
+  /** Les noms des rôles de l'utilisateur, déjà joints ; rien s'il n'en a aucun. */
+  readonly roles?: string;
   readonly workstation: string;
   readonly footerAction?: ReactNode;
   readonly breadcrumb: ReactNode;
@@ -60,6 +62,7 @@ export function AppShell({
   context,
   navigation,
   user,
+  roles,
   workstation,
   footerAction,
   breadcrumb,
@@ -76,6 +79,7 @@ export function AppShell({
         <nav className="flex flex-1 flex-col gap-0-5 overflow-y-auto pt-2-5 pb-4">{navigation}</nav>
         <div className="grid gap-1 border-t border-border-frame px-4-5 pt-3-5 pb-4 text-secondary">
           <span className="font-medium text-text">{user}</span>
+          {roles === undefined || roles === '' ? null : <span className="text-text-3">{roles}</span>}
           <span className="text-text-3">{workstation}</span>
           {footerAction === undefined ? null : <div className="mt-2">{footerAction}</div>}
         </div>

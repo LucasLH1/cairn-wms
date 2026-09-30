@@ -148,9 +148,18 @@ describe('sessions (fiche 0027, règles 2 et 3)', () => {
       user: { id: users.operator, displayName: 'operator' },
       providerName: session.providerName,
       workstation: null,
-      sites: [{ id: siteId, code: `A-${suffix}`, name: 'Site A', execution: true }],
+      sites: [{ id: siteId, code: `A-${suffix}`, name: 'Site A', timeZone: 'Europe/Paris', execution: true }],
+      roles: [],
+      language: 'fr',
       permissions: [],
     });
+  });
+
+  it("donne les noms des rôles de l'utilisateur", async () => {
+    const response = await login('administrator');
+    expect(response.statusCode).toBe(200);
+    const session = response.json<{ result: { roles: unknown } }>();
+    expect(session.result.roles).toEqual([`Administrateur ${suffix}`]);
   });
 
   it("refuse sans distinguer un mauvais mot de passe d'un identifiant inconnu, ni un utilisateur désactivé", async () => {
