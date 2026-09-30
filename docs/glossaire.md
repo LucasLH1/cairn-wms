@@ -65,6 +65,15 @@ Règles d'usage :
 | Emplacement de prélèvement dédié | `FixedPickLocation` | Emplacement attitré à une référence, réapprovisionné depuis la réserve. |
 | Règle de réapprovisionnement | `ReplenishmentRule` | Seuil et quantité de recomplètement d'un emplacement de prélèvement dédié. |
 | Générateur de plan | `LayoutGenerator` | Outil de création en masse d'emplacements à partir d'une description paramétrique d'une zone. |
+| Type d'emplacement | `LocationType` | Nature d'un emplacement parmi la liste fournie par le produit : prélèvement, réserve, quai de réception, quai d'expédition, préparation, consolidation, quarantaine, litige, atelier, destruction, virtuel. Non extensible (`RG-EMP-002`). |
+| Adresse d'emplacement | `LocationAddress` | Nom d'un emplacement : ses segments d'adresse joints par le séparateur de la zone, unique sur le site (`RG-EMP-003`, `011`). Ne se confond pas avec l'adresse postale d'un tiers. |
+| Segment d'adresse | `AddressSegment` | Élément nommé et ordonné d'un masque d'adressage — allée, travée, niveau, alvéole —, avec son format (numérique, alphabétique, alphanumérique) et sa longueur (`RG-EMP-009`). |
+| Sens de circulation | `Traversal` | Manière dont une zone se parcourt d'une allée à l'autre : constant, ou alterné (serpentin). Déclaré par zone (`RG-EMP-016`). |
+| Ordre des zones | `ZoneVisitOrder` | Séquence de visite des zones d'un site, qui ordonne les listes de prélèvement après la séquence de parcours (`RG-EMP-017`). |
+| Mode de prélèvement | `PickMode` | Dédié ou dynamique : déclaré par zone, il dit si ses emplacements de prélèvement sont attitrés à une référence (`RG-EMP-032`). |
+| Famille d'emplacement virtuel | `VirtualFamily` | Ce qu'un emplacement virtuel représente : transit inter-sites, chez le transporteur, chez le client final, chez le sous-traitant, en attente de retour. Liste fournie par le produit (0.3 § 2, `RG-EMP-042`). |
+| Exclusion | `Exclusion` | Adresse, ou motif d'adresses, que le générateur de plan ne crée pas : passage, pilier, trémie (`RG-EMP-021`). |
+| Capacité d'emplacement | `LocationCapacity` | Poids maximum, volume maximum et nombre maximum de supports d'un emplacement, chacun facultatif (`RG-EMP-023`). |
 
 ## Stock
 

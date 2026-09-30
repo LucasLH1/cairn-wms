@@ -10,7 +10,7 @@ import {
   saveItemFamilyHandler,
   setPrincipalCurrencyHandler,
 } from './logistique/item/index.js';
-import { listDocksHandler } from './logistique/location/index.js';
+import { listDocksHandler, locationSearchSource, warehouseLayout } from './logistique/location/index.js';
 import { listPrincipalsHandler, organizationAdministration } from './logistique/organization/index.js';
 import {
   listCarriersHandler,
@@ -113,6 +113,8 @@ export function buildApp(options: AppOptions): FastifyInstance {
       stockOfItems: () => Promise.resolve(new Map()),
       hasStockMovement: () => Promise.resolve(false),
     });
+    // Le stock des emplacements viendra avec son module (0.4) : d'ici là, aucun n'en porte.
+    const layout = warehouseLayout({ stockInLocation: () => Promise.resolve({}) });
     registerSessionRoutes(app, { db, config: access });
     registerSignalRoute(app, { relay, authenticate: hasSession({ db, config: access }) });
     registerGestures(app, {
@@ -141,6 +143,7 @@ export function buildApp(options: AppOptions): FastifyInstance {
         ...organization.gestures,
         ...parties.gestures,
         ...items.gestures,
+        ...layout.gestures,
         saveItemFamilyHandler,
         saveCustomFieldHandler,
         removeCustomFieldHandler,
@@ -173,10 +176,16 @@ export function buildApp(options: AppOptions): FastifyInstance {
         ...organization.queries,
         ...parties.queries,
         ...items.queries,
+        ...layout.queries,
         listItemFamiliesHandler,
         listCustomFieldsHandler,
         // Chaque module réalisé apporte ses objets à l'entrée de recherche unique (RG-SUR-059).
-        searchHandler([itemSearchSource, partySearchSource, expectedReceiptSearchSource]),
+        searchHandler([
+          itemSearchSource,
+          partySearchSource,
+          expectedReceiptSearchSource,
+          locationSearchSource,
+        ]),
       ],
     });
   }

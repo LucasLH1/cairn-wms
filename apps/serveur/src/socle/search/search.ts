@@ -19,6 +19,7 @@ const traceObjectTypes: Readonly<Record<SearchObjectType, string>> = {
   item: 'Item',
   party: 'Party',
   expectedReceipt: 'ExpectedReceipt',
+  location: 'Location',
 };
 
 /**

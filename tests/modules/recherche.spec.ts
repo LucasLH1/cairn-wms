@@ -41,3 +41,11 @@ test('Tous rôles — un code inconnu le dit, jamais d’écran vide (RG-SUR-063
     page.getByText('Aucun objet ne correspond à « XYZ-999 » : ce code n’est pas connu.').first(),
   ).toBeVisible();
 });
+
+test('Administrateur — la lecture d’un emplacement ouvre la fiche de sa zone (RG-EMP-007)', async ({
+  page,
+}) => {
+  await page.goto('/receptions');
+  await scan(page, 'EMP-A-A-03-1');
+  await expect(page.getByRole('heading', { name: 'RES · Réserve' })).toBeVisible();
+});

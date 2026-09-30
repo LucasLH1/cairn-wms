@@ -4,6 +4,7 @@ export * from './export.js';
 export * from './gesture.js';
 export * from './item.js';
 export * from './language.js';
+export * from './layout.js';
 export * from './numbering.js';
 export * from './organization.js';
 export * from './party.js';

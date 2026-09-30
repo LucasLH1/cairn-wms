@@ -100,6 +100,8 @@ export const zoneSchema = z.object({
   cohabitation: zoneCohabitationSchema,
   principalId: z.uuid().nullable(),
   active: z.boolean(),
+  /** Rang de la zone dans l'ordre de visite du site (RG-EMP-017) ; les zones s'y listent dans cet ordre. */
+  visitRank: z.int(),
 });
 export type Zone = z.infer<typeof zoneSchema>;
 

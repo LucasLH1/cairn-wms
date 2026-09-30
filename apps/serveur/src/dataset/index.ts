@@ -1,9 +1,12 @@
 import type { Database, DatabaseTransaction } from '../socle/database/index.js';
-import { permissionSchema } from '@cairn/contrat';
+import { locationBarcode, permissionSchema } from '@cairn/contrat';
 import { hashPassword } from '../socle/user/index.js';
 
 /** Ce qu'un chargement a posé, par objet : le chargeur rend compte de ce qu'il fait. */
 export type DatasetReport = Readonly<Record<string, number>>;
+
+/** Code du site A du scénario 1 (§ 4). */
+const DATASET_SITE_CODE = 'A';
 
 /** Mot de passe de tous les utilisateurs du jeu de données : fictif, public, jamais celui d'une instance réelle. */
 export const DATASET_PASSWORD = 'demo-fictif';
@@ -87,7 +90,7 @@ export async function loadScenarioDataset(
     await transaction.updateTable('foundation.provider').set({ name: 'Logistique Démo' }).execute();
     const site = await transaction
       .insertInto('foundation.site')
-      .values({ code: 'A', name: 'Site A', timeZone: 'Europe/Paris', active: true })
+      .values({ code: DATASET_SITE_CODE, name: 'Site A', timeZone: 'Europe/Paris', active: true })
       .returning('id')
       .executeTakeFirstOrThrow();
     await transaction
@@ -330,7 +333,14 @@ async function loadWarehouse(transaction: DatabaseTransaction, siteId: string): 
 
   await transaction
     .insertInto('logistics.location')
-    .values(rows.map((row, index) => ({ ...row, siteId, routeSequence: (index + 1) * 10 })))
+    .values(
+      rows.map((row, index) => ({
+        ...row,
+        siteId,
+        barcode: locationBarcode(DATASET_SITE_CODE, row.address),
+        traversalRank: (index + 1) * 10,
+      })),
+    )
     .execute();
   return rows.length;
 }

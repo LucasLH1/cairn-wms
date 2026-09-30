@@ -43,6 +43,7 @@ export const expectedReceiptSearchSource: SearchSource = async (db, userId, text
         label: inScope ? row.supplierName : null,
         principalCode: row.principalCode,
         siteCode: row.siteCode,
+        ownerId: null,
         outOfScope: !inScope,
         exact: row.exact,
         inactiveCode: false,

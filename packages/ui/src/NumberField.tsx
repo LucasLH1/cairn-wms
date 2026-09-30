@@ -7,13 +7,21 @@ export interface NumberFieldProps {
   readonly onChange: (value: number | null) => void;
   readonly minValue?: number;
   readonly hideLabel?: boolean;
+  readonly isDisabled?: boolean;
 }
 
 /**
  * Champ de quantité : entier seulement (fiche 0017, règle 5), chiffres en chasse fixe, comme les
  * quantités de la maquette. La valeur suit la frappe, pas seulement la sortie du champ.
  */
-export function NumberField({ label, value, onChange, minValue = 0, hideLabel = false }: NumberFieldProps) {
+export function NumberField({
+  label,
+  value,
+  onChange,
+  minValue = 0,
+  hideLabel = false,
+  isDisabled = false,
+}: NumberFieldProps) {
   return (
     <AriaNumberField
       className="grid min-w-0 gap-1-5"
@@ -22,6 +30,7 @@ export function NumberField({ label, value, onChange, minValue = 0, hideLabel = 
         onChange(Number.isNaN(next) ? null : next);
       }}
       minValue={minValue}
+      isDisabled={isDisabled}
       formatOptions={{ maximumFractionDigits: 0, useGrouping: false }}
       {...(hideLabel ? { 'aria-label': label } : {})}
     >

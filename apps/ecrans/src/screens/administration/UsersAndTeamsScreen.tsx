@@ -31,11 +31,14 @@ export function UsersAndTeamsScreen() {
   );
 }
 
-const state = (active: boolean, t: ReturnType<typeof useTranslation>['t']) => (
-  <StatusBadge tone={active ? 'ok' : 'mute'}>
-    {active ? t('common.active') : t('common.inactive')}
-  </StatusBadge>
-);
+function ActiveBadge({ active }: { active: boolean }) {
+  const { t } = useTranslation();
+  return (
+    <StatusBadge tone={active ? 'ok' : 'mute'}>
+      {active ? t('common.active') : t('common.inactive')}
+    </StatusBadge>
+  );
+}
 
 function UsersTab() {
   const { t } = useTranslation();
@@ -79,7 +82,12 @@ function UsersTab() {
           { id: 'roles', header: t('user.roles'), size: 'text', cell: (row) => row.roles.join(', ') || '—' },
           { id: 'sites', header: t('user.sites'), size: 'code', cell: (row) => row.sites.join(', ') || '—' },
           { id: 'team', header: t('user.team'), size: 'text', cell: (row) => row.team ?? '—' },
-          { id: 'state', header: t('user.state'), size: 'status', cell: (row) => state(row.active, t) },
+          {
+            id: 'state',
+            header: t('user.state'),
+            size: 'status',
+            cell: (row) => <ActiveBadge active={row.active} />,
+          },
         ]}
       />
     </Panel>
@@ -197,7 +205,12 @@ function TeamsTab() {
             numeric: true,
             cell: (row) => row.memberCount,
           },
-          { id: 'state', header: t('team.state'), size: 'status', cell: (row) => state(row.active, t) },
+          {
+            id: 'state',
+            header: t('team.state'),
+            size: 'status',
+            cell: (row) => <ActiveBadge active={row.active} />,
+          },
         ]}
       />
     </Panel>

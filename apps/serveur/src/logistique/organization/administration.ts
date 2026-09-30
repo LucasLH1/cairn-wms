@@ -180,8 +180,10 @@ export function organizationAdministration(activity: OrganizationActivity) {
           .execute(),
         db
           .selectFrom('logistics.zone')
-          .select(['id', 'code', 'name', 'purpose', 'cohabitation', 'principalId', 'active'])
+          .select(['id', 'code', 'name', 'purpose', 'cohabitation', 'principalId', 'active', 'visitRank'])
           .where('siteId', '=', site.id)
+          // Dans l'ordre où une liste de prélèvement visite les zones (RG-EMP-017).
+          .orderBy('visitRank')
           .orderBy('code')
           .execute(),
         db.transaction().execute((transaction) => activity.siteHasHistory(transaction, site.id)),
@@ -260,6 +262,14 @@ export function organizationAdministration(activity: OrganizationActivity) {
           throw new GestureRefusal('codeLocked');
         }
         await transaction.updateTable('foundation.site').set(values).where('id', '=', siteId).execute();
+        // L'identifiant scannable d'un emplacement porte le code du site (0.3 § 7) : il le suit tant que
+        // ce code peut encore changer, c'est-à-dire avant tout flux.
+        if (current.code !== input.code)
+          await transaction
+            .updateTable('logistics.location')
+            .set({ barcode: sql<string>`'EMP-' || ${input.code} || '-' || address` })
+            .where('siteId', '=', siteId)
+            .execute();
       }
       await appendEvent({
         eventType: siteSavedEvent,

@@ -14,6 +14,7 @@ import { SiteScreen } from './screens/administration/SiteScreen.js';
 import { TeamScreen } from './screens/administration/TeamScreen.js';
 import { UserScreen } from './screens/administration/UserScreen.js';
 import { UsersAndTeamsScreen } from './screens/administration/UsersAndTeamsScreen.js';
+import { ZoneScreen } from './screens/administration/zone/ZoneScreen.js';
 import { ExpectedReceiptScreen } from './screens/ExpectedReceiptScreen.js';
 import { MergeScreen } from './screens/parties/MergeScreen.js';
 import { PartiesScreen } from './screens/parties/PartiesScreen.js';
@@ -144,6 +145,13 @@ const siteRoute = createRoute({
   component: SiteScreen,
   staticData: { place: 'settings' },
 });
+/** Fiche zone (0.3 § 6, « Générer une zone de racking », « Ajuster un parcours »). */
+const zoneRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/administration/zones/$zoneId',
+  component: ZoneScreen,
+  staticData: { place: 'settings' },
+});
 const usersRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/administration/users',
@@ -217,6 +225,7 @@ const routeTree = rootRoute.addChildren([
     itemRoute,
     settingsRoute,
     siteRoute,
+    zoneRoute,
     usersRoute,
     userRoute,
     roleRoute,

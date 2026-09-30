@@ -226,6 +226,13 @@ export interface LogisticsExpectedReceiptLine {
   servedQuantity: Generated<number>;
 }
 
+export interface LogisticsFixedPickLocation {
+  itemId: string;
+  locationId: string;
+  replenishmentTarget: number;
+  replenishmentThreshold: number;
+}
+
 export interface LogisticsInboundArrival {
   arrivedAt: Generated<Timestamp>;
   carrierId: string | null;
@@ -304,14 +311,19 @@ export interface LogisticsKitComponent {
 export interface LogisticsLocation {
   active: Generated<boolean>;
   address: string;
+  barcode: string;
   dockId: string | null;
   id: Generated<string>;
+  maxVolumeCm3: number | null;
+  maxWeightGrams: number | null;
   overflow: Generated<boolean>;
-  routeSequence: number;
+  partyId: string | null;
   segments: Json;
   siteId: string;
   supportCapacity: number | null;
+  traversalRank: number;
   type: string;
+  virtualFamily: string | null;
   zoneId: string;
 }
 
@@ -395,10 +407,13 @@ export interface LogisticsZone {
   cohabitation: string;
   id: Generated<string>;
   name: string;
+  pickMode: Generated<string>;
   principalId: string | null;
   purpose: string;
   putawayMode: Generated<string>;
   siteId: string;
+  traversal: Generated<string>;
+  visitRank: Generated<number>;
 }
 
 export interface DB {
@@ -426,6 +441,7 @@ export interface DB {
   "logistics.dock": LogisticsDock;
   "logistics.expectedReceipt": LogisticsExpectedReceipt;
   "logistics.expectedReceiptLine": LogisticsExpectedReceiptLine;
+  "logistics.fixedPickLocation": LogisticsFixedPickLocation;
   "logistics.inboundArrival": LogisticsInboundArrival;
   "logistics.item": LogisticsItem;
   "logistics.itemBarcode": LogisticsItemBarcode;

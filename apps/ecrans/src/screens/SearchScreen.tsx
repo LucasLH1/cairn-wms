@@ -24,6 +24,7 @@ export function SearchScreen() {
   const providerParties = useHasPermission('administerProviderParties');
   const mergeParties = useHasPermission('mergeEndCustomers');
   const anonymizeParties = useHasPermission('anonymizeEndCustomers');
+  const sites = useHasPermission('administerSites');
   // Une fiche ne s'ouvre qu'à qui peut la consulter ; les autres voient le résultat, sans lien.
   const canOpen = (result: SearchResult): boolean => {
     if (result.outOfScope) return false;
@@ -34,6 +35,9 @@ export function SearchScreen() {
         return principalParties || providerParties || mergeParties || anonymizeParties;
       case 'expectedReceipt':
         return true;
+      // Un emplacement s'ouvre dans la fiche de sa zone, au paramétrage des sites.
+      case 'location':
+        return sites && result.ownerId !== null;
     }
   };
   const opened = data?.results.filter((result) => result.exact && canOpen(result));
@@ -41,15 +45,22 @@ export function SearchScreen() {
 
   useEffect(() => {
     if (single === undefined) return;
-    const target =
-      single.type === 'item'
-        ? { to: '/items/$itemId' as const, params: { itemId: single.id } }
-        : single.type === 'party'
-          ? { to: '/parties/$partyId' as const, params: { partyId: single.id } }
-          : {
-              to: '/expected-receipts/$expectedReceiptId' as const,
-              params: { expectedReceiptId: single.id },
-            };
+    // Un type par cas, sans « sinon » : un type d'objet ajouté à la recherche doit dire où il s'ouvre.
+    const target = (() => {
+      switch (single.type) {
+        case 'item':
+          return { to: '/items/$itemId' as const, params: { itemId: single.id } };
+        case 'party':
+          return { to: '/parties/$partyId' as const, params: { partyId: single.id } };
+        case 'expectedReceipt':
+          return {
+            to: '/expected-receipts/$expectedReceiptId' as const,
+            params: { expectedReceiptId: single.id },
+          };
+        case 'location':
+          return { to: '/administration/zones/$zoneId' as const, params: { zoneId: single.ownerId ?? '' } };
+      }
+    })();
     void navigate({ ...target, replace: true });
   }, [single, navigate]);
 
@@ -72,6 +83,12 @@ export function SearchScreen() {
       case 'expectedReceipt':
         return (
           <RouteLink to="/expected-receipts/$expectedReceiptId" params={{ expectedReceiptId: result.id }}>
+            {code}
+          </RouteLink>
+        );
+      case 'location':
+        return (
+          <RouteLink to="/administration/zones/$zoneId" params={{ zoneId: result.ownerId ?? '' }}>
             {code}
           </RouteLink>
         );

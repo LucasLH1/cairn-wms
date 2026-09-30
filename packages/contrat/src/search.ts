@@ -6,7 +6,7 @@ import { defineQuery } from './query.js';
  * code-barres ou du texte. Chaque module réalisé y apporte ses objets.
  */
 
-export const searchObjectTypeSchema = z.enum(['item', 'party', 'expectedReceipt']);
+export const searchObjectTypeSchema = z.enum(['item', 'party', 'expectedReceipt', 'location']);
 export type SearchObjectType = z.infer<typeof searchObjectTypeSchema>;
 
 export const searchResultSchema = z.object({
@@ -16,6 +16,8 @@ export const searchResultSchema = z.object({
   code: z.string().nullable(),
   label: z.string().nullable(),
   principalCode: z.string().nullable(),
+  /** L'objet qui porte celui-ci, et dont la fiche l'affiche : la zone d'un emplacement. */
+  ownerId: z.uuid().nullable(),
   siteCode: z.string().nullable(),
   outOfScope: z.boolean(),
   /** Le texte cherché est exactement l'un de ses codes : c'est l'objet qu'une lecture ouvre (RG-SUR-060). */

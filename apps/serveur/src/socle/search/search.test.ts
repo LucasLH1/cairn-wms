@@ -26,6 +26,7 @@ const result = (id: string, outOfScope: boolean): SearchResult => ({
   id,
   code: outOfScope ? null : 'A',
   label: outOfScope ? null : 'Référence A',
+  ownerId: null,
   principalCode: 'P',
   siteCode: null,
   outOfScope,

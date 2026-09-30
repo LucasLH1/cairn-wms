@@ -44,6 +44,7 @@ export const partySearchSource: SearchSource = async (db, userId, text) => {
         label: !inScope ? null : row.anonymizedAt === null ? row.name : null,
         principalCode: row.principalCode,
         siteCode: null,
+        ownerId: null,
         outOfScope: !inScope,
         exact: row.exact,
         inactiveCode: false,

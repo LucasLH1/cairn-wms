@@ -108,6 +108,23 @@ const screens: readonly { readonly name: string; readonly open: (page: Page) => 
       await page.getByRole('region', { name: fr.site.zones }).waitFor();
     },
   },
+  ...(
+    [
+      ['masque et circulation', 'RES', fr.zone.patternTab],
+      ['quais', 'QUAI', fr.zone.docksTab],
+      ['générateur de plan', 'RES', fr.zone.generatorTab],
+      ['emplacements', 'RES', fr.zone.locationsTab],
+    ] as const
+  ).map(([tab, zone, label]) => ({
+    name: `Fiche zone — ${tab}`,
+    open: async (page: Page) => {
+      await page.goto('/administration/settings');
+      await page.getByRole('link', { name: 'A', exact: true }).click();
+      await page.getByRole('link', { name: zone, exact: true }).click();
+      await page.getByRole('tab', { name: label }).click();
+      await page.getByRole('tabpanel').getByRole('region').first().waitFor();
+    },
+  })),
   {
     name: 'Utilisateurs et équipes',
     open: (page) => page.goto('/administration/users').then(() => undefined),

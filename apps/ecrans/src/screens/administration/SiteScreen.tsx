@@ -9,6 +9,7 @@ import {
   saveZone,
   setSiteActive,
   setZoneActive,
+  setZoneVisitOrder,
   zonePurposeSchema,
   type SiteDetail,
   type Zone,
@@ -34,6 +35,7 @@ import { textField, useGestureForm, valueField } from '../../contract/form.js';
 import { contractQuery } from '../../contract/query.js';
 import { RefusalBanner } from '../../contract/RefusalBanner.js';
 import { useGesture } from '../../contract/useGesture.js';
+import { RouteLink } from '../../shell/RouteLink.js';
 import { formatDate } from '../format.js';
 
 const NEW = 'new';
@@ -448,6 +450,16 @@ function ZonesPanel({ site }: { site: SiteDetail }) {
   });
   const principalName = (id: string | null) =>
     principals.data?.principals.find((principal) => principal.id === id)?.name;
+  // Les zones se listent dans l'ordre de visite du site (RG-EMP-017) ; monter ou descendre une zone
+  // enregistre l'ordre entier.
+  const zones = site.zones.toSorted((first, second) => first.visitRank - second.visitRank);
+  const move = (index: number, offset: -1 | 1) => {
+    const order = zones.map((zone) => zone.id);
+    const [moved] = order.splice(index, 1);
+    if (moved === undefined) return;
+    order.splice(index + offset, 0, moved);
+    void gesture.run(setZoneVisitOrder, { siteId: site.id, zoneIds: order });
+  };
   return (
     <>
       <RefusalBanner refusal={gesture.refusal} onDismiss={gesture.dismiss} />
@@ -465,17 +477,28 @@ function ZonesPanel({ site }: { site: SiteDetail }) {
       >
         <DataTable<Zone>
           label={t('site.zones')}
-          rows={site.zones}
+          rows={zones}
           rowKey={(zone) => zone.id}
           empty={t('site.noZone')}
           columns={[
+            {
+              id: 'visitOrder',
+              header: t('site.visitOrder'),
+              size: 'number',
+              numeric: true,
+              cell: (zone) => zones.indexOf(zone) + 1,
+            },
             {
               id: 'code',
               header: t('site.code'),
               size: 'code',
               code: true,
-              // Un code n'est un lien que s'il ouvre une fiche ; l'action est en fin de ligne (point 11).
-              cell: (zone) => zone.code,
+              // Le code ouvre la fiche zone ; les actions restent en fin de ligne (point 11).
+              cell: (zone) => (
+                <RouteLink to="/administration/zones/$zoneId" params={{ zoneId: zone.id }}>
+                  {zone.code}
+                </RouteLink>
+              ),
             },
             { id: 'name', header: t('site.name'), size: 'text', cell: (zone) => zone.name },
             {
@@ -509,6 +532,22 @@ function ZonesPanel({ site }: { site: SiteDetail }) {
               size: 'text',
               cell: (zone) => (
                 <div className="flex gap-2">
+                  <Button
+                    isDisabled={zones.indexOf(zone) === 0 || gesture.sending}
+                    onPress={() => {
+                      move(zones.indexOf(zone), -1);
+                    }}
+                  >
+                    {t('site.moveUp')}
+                  </Button>
+                  <Button
+                    isDisabled={zones.indexOf(zone) === zones.length - 1 || gesture.sending}
+                    onPress={() => {
+                      move(zones.indexOf(zone), 1);
+                    }}
+                  >
+                    {t('site.moveDown')}
+                  </Button>
                   <Button
                     onPress={() => {
                       edit({
