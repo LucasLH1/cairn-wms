@@ -552,6 +552,7 @@ export const en: LabelCatalog = {
   },
   session: {
     otherLanguage: 'Français',
+    otherLanguageCode: 'FR',
     title: 'Open a session',
     loginName: 'Login name',
     password: 'Password',

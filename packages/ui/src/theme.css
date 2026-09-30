@@ -168,6 +168,9 @@
   /* Ligne de saisie : référence, quantité (champ de quantité de la maquette, 230 px), action */
   --cairn-line-columns: minmax(0, 1fr) 230px auto;
 
+  /* Pied de la navigation : l'action principale prend la place, la langue reste compacte */
+  --cairn-footer-actions: minmax(0, 1fr) auto;
+
   /* Ligne du calendrier : le jour, ses plages, l'ajout d'une plage */
   --cairn-calendar-columns: 120px minmax(0, 1fr) auto;
 }

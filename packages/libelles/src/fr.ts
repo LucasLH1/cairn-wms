@@ -565,6 +565,7 @@ export const fr = {
   },
   session: {
     otherLanguage: 'English',
+    otherLanguageCode: 'EN',
     title: 'Ouvrir une session',
     loginName: 'Identifiant de connexion',
     password: 'Mot de passe',

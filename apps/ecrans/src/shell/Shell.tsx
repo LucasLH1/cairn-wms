@@ -192,16 +192,18 @@ export function Shell() {
       roles={(session?.roles ?? []).join(', ')}
       workstation={session?.workstation?.name ?? t('workstation.undeclared')}
       footerAction={
-        <div className="flex flex-wrap gap-2">
+        <div className="grid grid-cols-(--cairn-footer-actions) gap-2">
           <Button onPress={() => void close()}>{t('session.close')}</Button>
-          {/* L'autre langue, sous son propre nom : la session relue l'applique (point 7). */}
+          {/* L'autre langue, par son code, et sous son propre nom pour qui ne lit pas l'écran : la
+              session relue l'applique (point 7). Sur une ligne, le pied de 252 px garde deux boutons. */}
           <Button
+            aria-label={t('session.otherLanguage')}
             isDisabled={languageGesture.sending}
             onPress={() =>
               void languageGesture.run(setOwnLanguage, { language: language === 'en' ? 'fr' : 'en' })
             }
           >
-            {t('session.otherLanguage')}
+            {t('session.otherLanguageCode')}
           </Button>
         </div>
       }
