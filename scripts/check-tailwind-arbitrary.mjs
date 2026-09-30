@@ -15,8 +15,9 @@ const walk = (directory) => {
       readFileSync(path, 'utf8')
         .split('\n')
         .forEach((line, index) => {
-          for (const match of line.matchAll(/className=\{?[`"'][^`"']*[`"']/gu)) {
-            for (const value of match[0].matchAll(pattern))
+          // Toute chaîne, pas seulement l'attribut className : une classe peut passer par une variable.
+          for (const match of line.matchAll(/([`"'])((?:(?!\1).)*)\1/gu)) {
+            for (const value of ` ${match[2] ?? ''}`.matchAll(pattern))
               offenders.push(`${path}:${index + 1} ${value[0].trim()}`);
           }
         });

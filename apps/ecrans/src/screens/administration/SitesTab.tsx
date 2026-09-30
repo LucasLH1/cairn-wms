@@ -1,10 +1,11 @@
 import { listSites } from '@cairn/contrat';
 import { Button, DataTable, Panel, StatusBadge } from '@cairn/ui';
 import { useQuery } from '@tanstack/react-query';
-import { Link, useNavigate } from '@tanstack/react-router';
+import { useNavigate } from '@tanstack/react-router';
 import { useTranslation } from 'react-i18next';
 import type { z } from 'zod';
 import { contractQuery } from '../../contract/query.js';
+import { RouteLink } from '../../shell/RouteLink.js';
 
 type SiteRow = z.infer<typeof listSites.output>['sites'][number];
 
@@ -37,9 +38,9 @@ export function SitesTab() {
             size: 'code',
             code: true,
             cell: (row) => (
-              <Link to="/administration/sites/$siteId" params={{ siteId: row.id }}>
+              <RouteLink to="/administration/sites/$siteId" params={{ siteId: row.id }}>
                 {row.code}
-              </Link>
+              </RouteLink>
             ),
           },
           { id: 'name', header: t('site.name'), size: 'text', cell: (row) => row.name },

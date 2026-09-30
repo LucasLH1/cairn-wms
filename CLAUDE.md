@@ -15,6 +15,14 @@ Avant toute action — réponse, proposition, modification, création de fichier
   principes directeurs), `docs/glossaire.md`, et le document du module concerné.
 - `docs/decisions/` : les décisions engageantes déjà prises, et leur statut.
 
+Avant tout travail sur un écran ou un composant, lire en plus :
+
+- `docs/decisions/0010` (React), `0011` (composants et style) et `0025` (cadre des écrans) ;
+- `docs/lots/lot-1/README.md` : ce que la maquette impose, les correspondances de libellés, les
+  « Décisions sur les écrans » ;
+- `docs/lots/lot-1/maquette.html`, la seule maquette, qui ne se modifie pas ;
+- `packages/ui/README.md` : les composants existants et les contrôles qui font respecter ces règles.
+
 La spécification est la source unique de vérité du métier. Une règle porte un identifiant stable
 `RG-XXX-nnn` : la citer par son identifiant plutôt que la reformuler.
 

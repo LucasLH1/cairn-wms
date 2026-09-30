@@ -41,7 +41,7 @@ export function Select({
 }: SelectProps) {
   return (
     <AriaSelect
-      className="grid gap-1-5"
+      className="grid min-w-0 gap-1-5"
       placeholder={placeholder}
       value={value}
       onChange={(key: Key | null) => {

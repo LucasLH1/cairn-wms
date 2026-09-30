@@ -356,7 +356,7 @@ function PackagingPanel({ item }: { item: ItemDetail }) {
       <RefusalBanner refusal={gesture.refusal} onDismiss={gesture.dismiss} />
       <Panel title={t('item.packaging')} meta={t('item.topLevelUnits', { count: top })}>
         {levels.map((level, rank) => (
-          <div key={rank} className="grid grid-cols-7 items-end gap-3">
+          <div key={rank} className="grid grid-cols-4 items-end gap-3">
             <TextField
               label={rank === 0 ? t('item.baseLevel') : t('item.levelName')}
               value={level.name}
@@ -384,6 +384,11 @@ function PackagingPanel({ item }: { item: ItemDetail }) {
                 update(rank, { grossWeightGrams });
               }}
             />
+            <div className="flex items-center pb-2-5">
+              <StatusBadge tone={isCompletePackagingLevel(level) ? 'ok' : 'warn'}>
+                {isCompletePackagingLevel(level) ? t('item.complete') : t('item.incomplete')}
+              </StatusBadge>
+            </div>
             <NumberField
               label={t('item.length')}
               value={level.lengthMm}
@@ -408,9 +413,6 @@ function PackagingPanel({ item }: { item: ItemDetail }) {
                 update(rank, { heightMm });
               }}
             />
-            <StatusBadge tone={isCompletePackagingLevel(level) ? 'ok' : 'warn'}>
-              {isCompletePackagingLevel(level) ? t('item.complete') : t('item.incomplete')}
-            </StatusBadge>
           </div>
         ))}
         <div className="flex justify-end gap-2">

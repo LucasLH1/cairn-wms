@@ -16,7 +16,7 @@ export interface NumberFieldProps {
 export function NumberField({ label, value, onChange, minValue = 0, hideLabel = false }: NumberFieldProps) {
   return (
     <AriaNumberField
-      className="grid gap-1-5"
+      className="grid min-w-0 gap-1-5"
       value={value ?? Number.NaN}
       onChange={(next) => {
         onChange(Number.isNaN(next) ? null : next);
@@ -29,7 +29,7 @@ export function NumberField({ label, value, onChange, minValue = 0, hideLabel = 
         <Label className="text-small font-semibold tracking-label text-text-3 uppercase">{label}</Label>
       )}
       <Input
-        className={`${focusRing} rounded-control border border-border-strong bg-well px-3 py-2-5 text-right font-mono text-body text-text`}
+        className={`${focusRing} w-full min-w-0 rounded-control border border-border-strong bg-well px-3 py-2-5 text-right font-mono text-body text-text`}
         // Un entier saisi compte dès la frappe : le bouton qui l'attend s'active sans quitter le champ.
         onInput={(event) => {
           const text = event.currentTarget.value.trim();

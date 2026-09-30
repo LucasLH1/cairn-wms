@@ -13,7 +13,7 @@ export interface DateFieldProps {
 export function DateField({ label, value, onChange }: DateFieldProps) {
   return (
     <AriaDateField
-      className="grid gap-1-5"
+      className="grid min-w-0 gap-1-5"
       value={value === null ? null : parseDate(value)}
       onChange={(next) => {
         onChange(next === null ? null : next.toString());

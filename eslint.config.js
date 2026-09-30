@@ -62,6 +62,59 @@ export default tseslint.config(
     rules: { ...reactHooks.configs.recommended.rules },
   },
   {
+    // Les écrans assemblent des composants de packages/ui et tirent tout texte de packages/libelles
+    // (fiches 0011 et 0025, règle 4) : ce que stylelint et les scripts de style ne voient pas.
+    files: ['apps/ecrans/src/**/*.tsx'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          paths: [
+            {
+              name: '@tanstack/react-router',
+              importNames: ['Link'],
+              message:
+                'Un lien des écrans passe par RouteLink, rendu par le lien de packages/ui (fiche 0011).',
+            },
+          ],
+        },
+      ],
+      'no-restricted-syntax': [
+        'error',
+        {
+          selector: 'Literal[raw=/^[0-9]+\\.[0-9]+$/]',
+          message:
+            'Aucun nombre à virgule pour une valeur de gestion : entiers dans l’unité de base (fiche 0017, règle 5).',
+        },
+        {
+          selector: "JSXAttribute[name.name='style']",
+          message:
+            'Aucun style en ligne dans un écran : le style appartient aux composants de packages/ui (fiche 0011).',
+        },
+        {
+          selector: 'JSXOpeningElement[name.name=/^(a|button|input|label|select|table|textarea)$/]',
+          message:
+            'Un élément interactif ou un tableau vient de packages/ui, construit sur React Aria (fiche 0011).',
+        },
+        {
+          selector: 'JSXText[value=/[A-Za-zÀ-ÿ]/]',
+          message: 'Aucun libellé écrit en dur : le texte vient de packages/libelles (fiche 0025, règle 4).',
+        },
+        {
+          selector:
+            "JSXAttribute[name.name=/^(alt|aria-label|dismissLabel|empty|header|label|meta|placeholder|title)$/][value.type='Literal']",
+          message: 'Aucun libellé écrit en dur : le texte vient de packages/libelles (fiche 0025, règle 4).',
+        },
+        {
+          selector:
+            "JSXAttribute[name.name='className'] > JSXExpressionContainer > :not(Literal, TemplateLiteral)",
+          message:
+            'Les classes d’un écran s’écrivent en toutes lettres dans className, pour que le contrôle des classes les voie.',
+        },
+      ],
+    },
+  },
+  {
     files: ['**/*.js', '**/*.mjs', '**/*.cjs'],
     ...tseslint.configs.disableTypeChecked,
   },

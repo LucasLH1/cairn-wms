@@ -26,4 +26,46 @@ describe('libellés', () => {
       }
     }
   });
+
+  // Termes proscrits du glossaire (docs/glossaire.md, « Termes proscrits ») qui n'admettent aucune
+  // exception à l'écran. Les autres (« article », « statut », « entrepôt »…) ont un sens admis et se
+  // relisent à la main.
+  it('n’emploient aucun terme proscrit', () => {
+    const proscribed = {
+      fr: [
+        /\bclients?\b(?! fina(?:l|ux)\b)/iu,
+        /\bSKU\b/iu,
+        /\bworkflow/iu,
+        /\bpalettes?\b/iu,
+        /\bdouchettes?\b/iu,
+        /\bterminal\b/iu,
+        /\bnotifications?\b/iu,
+        /\bmapping\b/iu,
+        /\bASN\b/u,
+        /\bbon de réception\b/iu,
+        /\baffectation\b/iu,
+        /\bverrou/iu,
+        /\brequalification\b/iu,
+        /\bcode article\b/iu,
+      ],
+      en: [
+        /(?<!end )\bcustomers?\b/iu,
+        /\bproducts?\b/iu,
+        /\bSKU\b/iu,
+        /\bworkflow/iu,
+        /\bpallets?\b/iu,
+        /\bterminal\b/iu,
+        /\bnotifications?\b/iu,
+        /\bmapping\b/iu,
+        /\bASN\b/u,
+      ],
+    } as const;
+    for (const [language, patterns] of Object.entries(proscribed)) {
+      const catalog: unknown = language === 'fr' ? catalogs.fr : catalogs.en;
+      const offenders = entriesOf(catalog).filter(
+        ([, text]) => typeof text === 'string' && patterns.some((pattern) => pattern.test(text)),
+      );
+      expect(offenders).toEqual([]);
+    }
+  });
 });

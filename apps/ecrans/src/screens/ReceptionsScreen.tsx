@@ -1,13 +1,14 @@
 import { listOpenExpectedReceipts, type ExpectedReceiptSummary } from '@cairn/contrat';
 import { Button, DataTable, Panel, StatusBadge } from '@cairn/ui';
 import { useQuery } from '@tanstack/react-query';
-import { Link, useNavigate } from '@tanstack/react-router';
+import { useNavigate } from '@tanstack/react-router';
 import { useTranslation } from 'react-i18next';
 import { contractQuery } from '../contract/query.js';
 import { useHasPermission, useWorkingSite } from '../shell/site.js';
 import { useChangeSignal } from '../signals/useChangeSignal.js';
 import { DockCards } from './DockCards.js';
 import { formatDate } from './format.js';
+import { RouteLink } from '../shell/RouteLink.js';
 
 /** Réceptions du site : les quais et leurs arrivages, puis les attendus ouverts (1.1). */
 export function ReceptionsScreen() {
@@ -46,9 +47,9 @@ export function ReceptionsScreen() {
               size: 'code',
               code: true,
               cell: (row) => (
-                <Link to="/expected-receipts/$expectedReceiptId" params={{ expectedReceiptId: row.id }}>
+                <RouteLink to="/expected-receipts/$expectedReceiptId" params={{ expectedReceiptId: row.id }}>
                   {row.number}
-                </Link>
+                </RouteLink>
               ),
             },
             {

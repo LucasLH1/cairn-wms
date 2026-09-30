@@ -17,7 +17,7 @@ import {
 } from '@cairn/contrat';
 import { Banner, Button, ChipGroup, DataTable, Panel, Select, Tabs, TextField } from '@cairn/ui';
 import { useQuery } from '@tanstack/react-query';
-import { Link, useNavigate } from '@tanstack/react-router';
+import { useNavigate } from '@tanstack/react-router';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { contractQuery } from '../../contract/query.js';
@@ -27,6 +27,7 @@ import { useHasPermission } from '../../shell/site.js';
 import { useChangeSignal } from '../../signals/useChangeSignal.js';
 import { formatDate } from '../format.js';
 import { StateBadge } from './StateBadge.js';
+import { RouteLink } from '../../shell/RouteLink.js';
 
 /**
  * Référentiel produit d'un donneur d'ordre (0.2) : ses références, filtrées, et la bascule des
@@ -198,9 +199,9 @@ function ItemListPanel({ principalId, canManage }: { principalId: string; canMan
               size: 'code',
               code: true,
               cell: (row) => (
-                <Link to="/items/$itemId" params={{ itemId: row.id }}>
+                <RouteLink to="/items/$itemId" params={{ itemId: row.id }}>
                   {row.code}
-                </Link>
+                </RouteLink>
               ),
             },
             { id: 'label', header: t('item.shortLabel'), size: 'text', cell: (row) => row.shortLabel },

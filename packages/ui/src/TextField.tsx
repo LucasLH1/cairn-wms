@@ -19,10 +19,10 @@ export interface TextFieldProps extends Omit<AriaTextFieldProps, 'className' | '
  */
 export function TextField({ label, code = false, ...props }: TextFieldProps) {
   return (
-    <AriaTextField {...props} className="grid gap-1-5">
+    <AriaTextField {...props} className="grid min-w-0 gap-1-5">
       <Label className="text-small font-semibold tracking-label text-text-3 uppercase">{label}</Label>
       <Input
-        className={`${focusRing} ${code ? 'font-mono' : ''} rounded-control border border-border-strong bg-well px-3 py-2-5 text-body text-text`}
+        className={`${focusRing} ${code ? 'font-mono' : ''} w-full min-w-0 rounded-control border border-border-strong bg-well px-3 py-2-5 text-body text-text`}
       />
     </AriaTextField>
   );

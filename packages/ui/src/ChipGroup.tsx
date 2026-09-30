@@ -21,7 +21,12 @@ export interface ChipGroupProps {
  */
 export function ChipGroup({ label, options, value, onChange, isDisabled = false }: ChipGroupProps) {
   return (
-    <CheckboxGroup className="grid gap-1-5" value={[...value]} onChange={onChange} isDisabled={isDisabled}>
+    <CheckboxGroup
+      className="grid min-w-0 gap-1-5"
+      value={[...value]}
+      onChange={onChange}
+      isDisabled={isDisabled}
+    >
       <Label className="text-small font-semibold tracking-label text-text-3 uppercase">{label}</Label>
       <div className="flex flex-wrap gap-1-75">
         {options.map((option) => (

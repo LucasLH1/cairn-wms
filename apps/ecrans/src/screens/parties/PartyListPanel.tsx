@@ -1,13 +1,14 @@
 import { listParties, saveParty, type PartyFamily, type PartyRow } from '@cairn/contrat';
 import { Button, DataTable, Panel, Select, StatusBadge, TextField } from '@cairn/ui';
 import { useQuery } from '@tanstack/react-query';
-import { Link, useNavigate } from '@tanstack/react-router';
+import { useNavigate } from '@tanstack/react-router';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { contractQuery } from '../../contract/query.js';
 import { RefusalBanner } from '../../contract/RefusalBanner.js';
 import { useGesture } from '../../contract/useGesture.js';
 import { useChangeSignal } from '../../signals/useChangeSignal.js';
+import { RouteLink } from '../../shell/RouteLink.js';
 
 const natures = ['repair', 'destruction', 'recycling', 'refurbishment', 'other'] as const;
 
@@ -84,9 +85,9 @@ export function PartyListPanel({
               size: 'text',
               code: true,
               cell: (row) => (
-                <Link to="/parties/$partyId" params={{ partyId: row.id }}>
+                <RouteLink to="/parties/$partyId" params={{ partyId: row.id }}>
                   {row.code}
-                </Link>
+                </RouteLink>
               ),
             },
             {

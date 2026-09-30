@@ -1,11 +1,12 @@
 import { listRoles, listTeams, listUsers, type RoleRow } from '@cairn/contrat';
 import { Button, DataTable, Panel, StatusBadge, Tabs } from '@cairn/ui';
 import { useQuery } from '@tanstack/react-query';
-import { Link, useNavigate } from '@tanstack/react-router';
+import { useNavigate } from '@tanstack/react-router';
 import { useTranslation } from 'react-i18next';
 import type { z } from 'zod';
 import { contractQuery } from '../../contract/query.js';
 import { useHasPermission } from '../../shell/site.js';
+import { RouteLink } from '../../shell/RouteLink.js';
 
 type UserRow = z.infer<typeof listUsers.output>['users'][number];
 type TeamRow = z.infer<typeof listTeams.output>['teams'][number];
@@ -63,9 +64,9 @@ function UsersTab() {
             header: t('user.displayName'),
             size: 'text',
             cell: (row) => (
-              <Link to="/administration/users/$userId" params={{ userId: row.id }}>
+              <RouteLink to="/administration/users/$userId" params={{ userId: row.id }}>
                 {row.displayName}
-              </Link>
+              </RouteLink>
             ),
           },
           {
@@ -112,9 +113,9 @@ function RolesTab() {
             header: t('role.name'),
             size: 'text',
             cell: (row) => (
-              <Link to="/administration/roles/$roleId" params={{ roleId: row.id }}>
+              <RouteLink to="/administration/roles/$roleId" params={{ roleId: row.id }}>
                 {row.name}
-              </Link>
+              </RouteLink>
             ),
           },
           {
@@ -176,9 +177,9 @@ function TeamsTab() {
             header: t('team.name'),
             size: 'text',
             cell: (row) => (
-              <Link to="/administration/teams/$teamId" params={{ teamId: row.id }}>
+              <RouteLink to="/administration/teams/$teamId" params={{ teamId: row.id }}>
                 {row.name}
-              </Link>
+              </RouteLink>
             ),
           },
           { id: 'site', header: t('team.site'), size: 'text', cell: (row) => row.siteName },

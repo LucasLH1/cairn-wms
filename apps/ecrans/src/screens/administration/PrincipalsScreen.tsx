@@ -8,13 +8,14 @@ import {
 } from '@cairn/contrat';
 import { Button, DataTable, NumberField, Panel, StatusBadge, TextField } from '@cairn/ui';
 import { useQuery } from '@tanstack/react-query';
-import { Link, useNavigate, useParams } from '@tanstack/react-router';
+import { useNavigate, useParams } from '@tanstack/react-router';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { z } from 'zod';
 import { contractQuery } from '../../contract/query.js';
 import { RefusalBanner } from '../../contract/RefusalBanner.js';
 import { useGesture } from '../../contract/useGesture.js';
+import { RouteLink } from '../../shell/RouteLink.js';
 
 const NEW = 'new';
 type PrincipalRow = z.infer<typeof listPrincipalsForAdministration.output>['principals'][number];
@@ -51,9 +52,9 @@ export function PrincipalsScreen() {
             size: 'code',
             code: true,
             cell: (row) => (
-              <Link to="/administration/principals/$principalId" params={{ principalId: row.id }}>
+              <RouteLink to="/administration/principals/$principalId" params={{ principalId: row.id }}>
                 {row.code}
-              </Link>
+              </RouteLink>
             ),
           },
           { id: 'name', header: t('principalAdmin.name'), size: 'text', cell: (row) => row.name },

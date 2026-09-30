@@ -18,4 +18,5 @@ export { Select, type SelectOption, type SelectProps } from './Select.js';
 export { StatusBadge, type StatusBadgeProps, type StatusTone } from './StatusBadge.js';
 export { Tabs, type TabsProps } from './Tabs.js';
 export { TextField, type TextFieldProps } from './TextField.js';
+export { TextLink, type TextLinkProps } from './TextLink.js';
 export { TimeField, type TimeFieldProps } from './TimeField.js';

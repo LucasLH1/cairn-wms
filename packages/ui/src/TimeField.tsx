@@ -14,7 +14,7 @@ export interface TimeFieldProps {
 export function TimeField({ label, value, onChange, hideLabel = false }: TimeFieldProps) {
   return (
     <AriaTimeField
-      className="grid gap-1-5"
+      className="grid min-w-0 gap-1-5"
       value={value === null ? null : parseTime(value)}
       hourCycle={24}
       shouldForceLeadingZeros
