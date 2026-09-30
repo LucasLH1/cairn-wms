@@ -73,3 +73,27 @@ disait déjà le composant.
   refus pour périmètre, choix d'ergonomie).
 - Le module 0.3 commencé la veille reste en cours, hors de ces commits (migration 0009 et contrat
   locaux, non poussés).
+
+## Suite — les décisions de #76
+
+Lucas : « vas-y fais ce que tu proposes ». Les treize points de #76 sont tranchés sur les propositions
+de Claude et consignés dans le README du lot 1 (« Décisions sur les écrans du 2026-09-30 ») ; le format
+d'export, choix engageant, fait l'objet de la fiche **0033**, actée sur cette validation.
+
+Réalisé (`02a9d8b`, `pnpm check` vert : 127 tests serveur ; 29 de bout en bout), en partie par deux
+agents sur des fichiers disjoints :
+
+- donneur d'ordre en contexte permanent dans la barre du haut, heure locale du site ;
+- navigation : icônes au trait de la maquette, compteur des arrivages en cours ; pied : rôles et
+  choix de la langue, conservée sur le compte (migration **0009-user-language** ; celle du module 0.3,
+  encore locale, passe en 0010) ; accueil conduit à Réceptions ;
+- export CSV de toute liste, tracé avec le site et le donneur d'ordre de travail ; consultation
+  refusée pour périmètre et objet hors périmètre de la recherche tracés ;
+- champ montant, onglets « Toutes / À compléter », code de zone en texte, bouton désactivé en tirets.
+
+Le contrôle de mise en page a trouvé un défaut de la réalisation : le conteneur ajouté autour des
+tableaux pour le bouton d'export ne rétrécissait pas, et poussait le bouton hors du panneau sur les
+tableaux larges. Corrigé avant commit.
+
+**Reste ouvert** : la file de décisions, qui naît avec le premier flux qui en produit une (1.1) ; le
+module 0.3 reprend.

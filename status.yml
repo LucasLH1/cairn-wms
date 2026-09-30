@@ -60,6 +60,7 @@ pile:
     - { fiche: "0028", objet: "Traitements différés", doc: docs/decisions/0028-traitements-differes.md }
     - { fiche: "0029", objet: "Environnements et déploiement : le staging", doc: docs/decisions/0029-environnements-et-deploiement.md }
     - { fiche: "0030", objet: "Sauvegarde et restauration", doc: docs/decisions/0030-sauvegarde-et-restauration.md }
+    - { fiche: "0033", objet: "Export des listes : CSV produit par l'écran, tracé par un geste", doc: docs/decisions/0033-export-des-listes.md }
   proposees:
     - { fiche: "0031", objet: "Langage et protocole des imprimantes d'étiquettes", doc: docs/decisions/0031-langage-et-protocole-des-imprimantes.md }
 
