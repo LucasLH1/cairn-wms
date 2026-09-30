@@ -1,8 +1,8 @@
 ---
 date: 2026-09-30 19:00
 objectif: Vérifier que les règles de design sont consignées, trouvables et respectées, et corriger les écarts qui contredisent une fiche.
-modules: ["0.8"]
-issues: [25, 76]
+modules: ["0.3", "0.8"]
+issues: [3, 25, 76]
 ---
 
 # Session du 2026-09-30 — point design des écrans
@@ -97,3 +97,31 @@ tableaux larges. Corrigé avant commit.
 
 **Reste ouvert** : la file de décisions, qui naît avec le premier flux qui en produit une (1.1) ; le
 module 0.3 reprend.
+
+## Suite — module 0.3 (Emplacements et plan d'entrepôt)
+
+Lucas : « ok vas-y » sur le plan du module et ses quatre propositions, consignées en 0.3 § 7 :
+identifiant scannable `EMP-`site`-`adresse ; segment alphanumérique admis ; volume en cm³ ; un
+emplacement virtuel par sous-traitant et par site.
+
+**Réalisé sur `dev`** (`eb8e830`, `pnpm check` vert : 135 tests serveur ; 36 de bout en bout) : masque
+d'adressage, sens de circulation, mode de prélèvement et ordre de visite des zones ; générateur avec
+décompte permanent, aperçu, exclusions, collisions jamais écrasées, séquences en serpentin ;
+renumérotation, doublon refusé en nommant l'emplacement en conflit ; quais ; emplacements virtuels et
+leur tiers ; prélèvement dédié ; identifiant scannable lu par la recherche, qui ouvre la fiche de la
+zone. Écrans réalisés en partie par un agent, sur une consigne écrite ; serveur, décompte permanent,
+recherche et vérifications par Claude.
+
+**Défauts trouvés en vérifiant** : la recherche ouvrait un emplacement comme un attendu (un ternaire
+qui retombait sur « attendu » pour tout type inconnu) — remplacé par un `switch` exhaustif que
+l'analyse de code oblige à compléter ; le tableau des emplacements rejetait états et actions hors de
+vue à 1440 px — allégé, l'identifiant passant au panneau de modification. Deux tests se trompaient
+aussi (un choix d'option par fragment, des adresses déjà prises par le jeu de données).
+
+**Reste de 0.3, attaché à d'autres modules** : refus au dépôt par capacité et par état qualité, refus
+de désactivation ou de changement de type sous du stock (0.4) ; demandes de réapprovisionnement,
+séjours en virtuel, écran des anomalies (0.4, 2.1) ; emplacement virtuel créé d'office pour chaque
+sous-traitant (RG-TRS-033), avec le premier flux qui confie du stock à un sous-traitant ; étiquette
+imprimable (fiche 0031, proposée) ; rangement guidé (1.4) ; listes de prélèvement triées (3.2).
+
+**Module suivant** : 0.4 Modèle de stock.
