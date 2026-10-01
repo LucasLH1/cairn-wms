@@ -63,6 +63,7 @@ pile:
     - { fiche: "0033", objet: "Export des listes : CSV produit par l'écran, tracé par un geste", doc: docs/decisions/0033-export-des-listes.md }
   proposees:
     - { fiche: "0031", objet: "Langage et protocole des imprimantes d'étiquettes", doc: docs/decisions/0031-langage-et-protocole-des-imprimantes.md }
+    - { fiche: "0034", objet: "Rendu du plan du site en 2D et en 3D", doc: docs/decisions/0034-rendu-du-plan-du-site.md }
 
 # Ordre de réalisation (fiche 0032) : chaque module en entier ; les fonctions de 0.8
 # naissent avec le premier module qui les exige.

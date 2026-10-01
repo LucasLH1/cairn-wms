@@ -74,6 +74,9 @@ Règles d'usage :
 | Famille d'emplacement virtuel | `VirtualFamily` | Ce qu'un emplacement virtuel représente : transit inter-sites, chez le transporteur, chez le client final, chez le sous-traitant, en attente de retour. Liste fournie par le produit (0.3 § 2, `RG-EMP-042`). |
 | Exclusion | `Exclusion` | Adresse, ou motif d'adresses, que le générateur de plan ne crée pas : passage, pilier, trémie (`RG-EMP-021`). |
 | Capacité d'emplacement | `LocationCapacity` | Poids maximum, volume maximum et nombre maximum de supports d'un emplacement, chacun facultatif (`RG-EMP-023`). |
+| Plan du site | `SiteLayout` | Représentation d'un site, à l'échelle, en 2D vue de dessus ou en 3D : son emprise au sol, ses allées de racks et ses surfaces. Se construit en décrivant, ne se dessine pas (`RG-EMP-047` à `054`). |
+| Allée de racks | `LayoutAisle` | Rangée de racks posée sur le plan du site : origine, orientation, travées, niveaux, alvéoles et leurs dimensions. Rattachée à une zone, dont elle porte les emplacements (`RG-EMP-048`, `049`). Le segment d'adresse « allée » en est le nom. |
+| Surface | `LayoutArea` | Rectangle du plan du site qui représente une zone sans racks — quai, quarantaine au sol, atelier (`RG-EMP-051`). |
 
 ## Stock
 

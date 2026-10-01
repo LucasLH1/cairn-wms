@@ -40,6 +40,7 @@ défaire à bon compte, et dont quelqu'un — dans six mois, ou six ans — voud
 | 0031 | [Langage et protocole des imprimantes d'étiquettes](0031-langage-et-protocole-des-imprimantes.md) | proposée |
 | 0032 | [Réalisation module par module, dans leur version complète](0032-realisation-module-par-module.md) | actée |
 | 0033 | [Export des listes : CSV produit par l'écran, tracé par un geste](0033-export-des-listes.md) | actée |
+| 0034 | [Rendu du plan du site en 2D et en 3D](0034-rendu-du-plan-du-site.md) | proposée |
 
 **La pile est reprise de zéro depuis le 2026-09-24 et actée.** Les fiches 0002 et 0004 à 0008 sont
 abandonnées et restent ici pour l'histoire ; leurs numéros ne seront jamais réutilisés.
