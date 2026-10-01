@@ -9,7 +9,15 @@ export { DataTable, type ColumnSize, type DataColumn, type DataTableProps } from
 export { DataTableExportContext, type DataTableExport, type ExportedList } from './DataTableExport.js';
 export { DateField, type DateFieldProps } from './DateField.js';
 export { Disclosure, type DisclosureProps } from './Disclosure.js';
-export { ItemIcon, PartyIcon, PrincipalIcon, ReceiptIcon, SettingsIcon, UserIcon } from './icons.js';
+export {
+  ItemIcon,
+  PartyIcon,
+  PrincipalIcon,
+  ReceiptIcon,
+  SettingsIcon,
+  StockIcon,
+  UserIcon,
+} from './icons.js';
 export {
   NavigationGroup,
   NavigationItem,

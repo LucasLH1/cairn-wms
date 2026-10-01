@@ -52,6 +52,7 @@ import { useGesture } from '../../contract/useGesture.js';
 import { useHasPermission } from '../../shell/site.js';
 import { useChangeSignal } from '../../signals/useChangeSignal.js';
 import { formatDate } from '../format.js';
+import { ItemPickingRulePanel } from '../stock/StockSettings.js';
 import { StateBadge } from './StateBadge.js';
 
 const NONE = 'none';
@@ -99,6 +100,12 @@ export function ItemScreen() {
       <BarcodesPanel item={item} />
       <CustomValuesPanel key={JSON.stringify(item.customValues)} item={item} />
       <ValuePanel key={String(item.declaredValueCents)} item={item} />
+      <ItemPickingRulePanel
+        key={item.pickingRule ?? ''}
+        itemId={item.id}
+        current={item.pickingRule}
+        canManage={canManage}
+      />
       {item.isKit ? (
         <CompositionPanel key={`kit${JSON.stringify(item.kitComponents)}`} item={item} kind="kit" />
       ) : (

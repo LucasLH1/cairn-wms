@@ -1,5 +1,6 @@
 import type { Database, DatabaseTransaction } from '../socle/database/index.js';
 import { locationBarcode, permissionSchema } from '@cairn/contrat';
+import { seedQualityStates } from '../logistique/stock/index.js';
 import { hashPassword } from '../socle/user/index.js';
 
 /** Ce qu'un chargement a posé, par objet : le chargeur rend compte de ce qu'il fait. */
@@ -55,6 +56,14 @@ const DATASET_ROLES = [
       // Le référentiel produit est un geste du gestionnaire (RG-SUR-127).
       'manageItems',
       'manageCustomFields',
+      // Le stock : le consulter est ouvert à tous ; ces gestes sont ceux du gestionnaire (0.4 § 6).
+      'moveStock',
+      'changeQualityState',
+      'adjustStockQuantity',
+      'correctStockMovement',
+      'placeStockHold',
+      'liftStockHold',
+      'releaseStockReservation',
       'managePrincipalParties',
       'mergeEndCustomers',
       'anonymizeEndCustomers',
@@ -150,6 +159,32 @@ export async function loadScenarioDataset(
       .values({ code: 'MD', name: 'Maison Démo', currency: 'EUR' })
       .returning('id')
       .executeTakeFirstOrThrow();
+    // Ses états qualité : la liste modèle du produit (RG-STK-009).
+    await seedQualityStates(transaction, principal.id);
+    // Paramétrage du stock (0.4 § 4), libellés fictifs : des motifs pour chaque geste motivé, deux types
+    // de support.
+    await transaction
+      .insertInto('logistics.movementReason')
+      .values([
+        { nature: 'qualityChange', label: 'Constat de défaut', commentRequired: false },
+        { nature: 'quantityAdjustment', label: 'Casse constatée', commentRequired: true },
+        { nature: 'correction', label: 'Erreur de saisie', commentRequired: false },
+      ])
+      .execute();
+    await transaction
+      .insertInto('logistics.handlingUnitType')
+      .values([
+        {
+          code: 'PAL',
+          label: 'Palette',
+          lengthMm: 1200,
+          widthMm: 800,
+          heightMm: 150,
+          tareWeightGrams: 25000,
+        },
+        { code: 'BAC', label: 'Bac', lengthMm: 600, widthMm: 400, heightMm: 300, tareWeightGrams: 2000 },
+      ])
+      .execute();
     await transaction
       .insertInto('logistics.party')
       .values({ family: 'supplier', principalId: principal.id, code: 'FD', name: 'Fournisseur Démo' })

@@ -1,5 +1,6 @@
 import { buildApp } from './app.js';
 import { anonymizeDueEndCustomersJob } from './logistique/party/index.js';
+import { blockExpiredStockJob, takeDailySnapshotsJob } from './logistique/stock/index.js';
 import { readConfig } from './config.js';
 import { createDatabase, readApplicationConnection } from './socle/database/index.js';
 import { databaseHealthCheck } from './socle/health/index.js';
@@ -37,8 +38,14 @@ if (config.role === 'jobs') {
   const runner = await startJobRunner({
     connection,
     db,
-    jobs: [anonymizeDue],
-    recurring: [{ job: anonymizeDue, cron: '17 * * * *' }],
+    jobs: [anonymizeDue, takeDailySnapshotsJob, blockExpiredStockJob],
+    recurring: [
+      { job: anonymizeDue, cron: '17 * * * *' },
+      // La photo de chaque site à son heure, vérifiée tous les quarts d'heure (RG-STK-057, 060).
+      { job: takeDailySnapshotsJob, cron: '*/15 * * * *' },
+      // Le stock périmé est bloqué dans l'heure (RG-STK-039).
+      { job: blockExpiredStockJob, cron: '7 * * * *' },
+    ],
   });
   await runner.promise;
   await db.destroy();

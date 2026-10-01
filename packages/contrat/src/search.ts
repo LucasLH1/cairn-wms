@@ -6,7 +6,14 @@ import { defineQuery } from './query.js';
  * code-barres ou du texte. Chaque module réalisé y apporte ses objets.
  */
 
-export const searchObjectTypeSchema = z.enum(['item', 'party', 'expectedReceipt', 'location']);
+export const searchObjectTypeSchema = z.enum([
+  'item',
+  'party',
+  'expectedReceipt',
+  'location',
+  'handlingUnit',
+  'serializedUnit',
+]);
 export type SearchObjectType = z.infer<typeof searchObjectTypeSchema>;
 
 export const searchResultSchema = z.object({

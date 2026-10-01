@@ -27,6 +27,10 @@ import { OpenArrivalScreen } from './screens/OpenArrivalScreen.js';
 import { ReceptionsScreen } from './screens/ReceptionsScreen.js';
 import { SearchScreen } from './screens/SearchScreen.js';
 import { SessionScreen } from './screens/SessionScreen.js';
+import { HandlingUnitScreen } from './screens/stock/HandlingUnitScreen.js';
+import { SerializedUnitScreen } from './screens/stock/SerializedUnitScreen.js';
+import { StockScreen } from './screens/stock/StockScreen.js';
+import { MoveScreen } from './screens/stock/MoveScreen.js';
 import type { ScreenPlace } from './shell/place.js';
 import { Shell } from './shell/Shell.js';
 
@@ -107,6 +111,44 @@ const openArrivalRoute = createRoute({
   path: '/docks/$dockId/arrival',
   component: OpenArrivalScreen,
   staticData: { place: 'receptions' },
+});
+
+/** Consulter le stock (0.4 § 6, « Tous rôles ») ; `itemId` ouvre la consultation sur une référence. */
+const stockRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/stock',
+  component: StockScreen,
+  staticData: { place: 'stock' },
+  validateSearch: (search: Record<string, unknown>) => ({
+    itemId: typeof search['itemId'] === 'string' ? search['itemId'] : '',
+  }),
+});
+
+/** Déplacer du stock (0.4 § 6, « Magasinier ») ; `handlingUnitId` part d'un support désigné. */
+const stockMoveRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/stock/move',
+  component: MoveScreen,
+  staticData: { place: 'stock' },
+  validateSearch: (search: Record<string, unknown>) => ({
+    handlingUnitId: typeof search['handlingUnitId'] === 'string' ? search['handlingUnitId'] : '',
+  }),
+});
+
+/** Fiche d'un support (0.4 § 6, « Résultat par support »). */
+const handlingUnitRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/stock/supports/$handlingUnitId',
+  component: HandlingUnitScreen,
+  staticData: { place: 'stock' },
+});
+
+/** Fiche d'un objet sérialisé (0.2 § 6 ; 0.4 § 6, « Résultat par objet sérialisé »). */
+const serializedUnitRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/stock/serials/$serializedUnitId',
+  component: SerializedUnitScreen,
+  staticData: { place: 'stock' },
 });
 
 const itemsRoute = createRoute({
@@ -220,6 +262,10 @@ const routeTree = rootRoute.addChildren([
     newExpectedReceiptRoute,
     expectedReceiptRoute,
     openArrivalRoute,
+    stockRoute,
+    stockMoveRoute,
+    handlingUnitRoute,
+    serializedUnitRoute,
     itemsRoute,
     newItemRoute,
     itemRoute,

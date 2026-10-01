@@ -9,6 +9,7 @@ import * as parties from './0007-parties.js';
 import * as itemCatalog from './0008-item-catalog.js';
 import * as userLanguage from './0009-user-language.js';
 import * as warehouseLayout from './0010-warehouse-layout.js';
+import * as stockModel from './0011-stock-model.js';
 
 /**
  * Migrations dans leur ordre d'application (fiche 0021). Une migration publiée ne se modifie plus :
@@ -25,4 +26,5 @@ export const migrations: Readonly<Record<string, Migration>> = {
   '0008-item-catalog': itemCatalog,
   '0009-user-language': userLanguage,
   '0010-warehouse-layout': warehouseLayout,
+  '0011-stock-model': stockModel,
 };

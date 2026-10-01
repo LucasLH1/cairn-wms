@@ -38,6 +38,10 @@ export function SearchScreen() {
       // Un emplacement s'ouvre dans la fiche de sa zone, au paramétrage des sites.
       case 'location':
         return sites && result.ownerId !== null;
+      // Consulter le stock est ouvert à tous les rôles (0.4 § 6) : un support, un objet sérialisé.
+      case 'handlingUnit':
+      case 'serializedUnit':
+        return true;
     }
   };
   const opened = data?.results.filter((result) => result.exact && canOpen(result));
@@ -59,6 +63,16 @@ export function SearchScreen() {
           };
         case 'location':
           return { to: '/administration/zones/$zoneId' as const, params: { zoneId: single.ownerId ?? '' } };
+        case 'handlingUnit':
+          return {
+            to: '/stock/supports/$handlingUnitId' as const,
+            params: { handlingUnitId: single.id },
+          };
+        case 'serializedUnit':
+          return {
+            to: '/stock/serials/$serializedUnitId' as const,
+            params: { serializedUnitId: single.id },
+          };
       }
     })();
     void navigate({ ...target, replace: true });
@@ -89,6 +103,18 @@ export function SearchScreen() {
       case 'location':
         return (
           <RouteLink to="/administration/zones/$zoneId" params={{ zoneId: result.ownerId ?? '' }}>
+            {code}
+          </RouteLink>
+        );
+      case 'handlingUnit':
+        return (
+          <RouteLink to="/stock/supports/$handlingUnitId" params={{ handlingUnitId: result.id }}>
+            {code}
+          </RouteLink>
+        );
+      case 'serializedUnit':
+        return (
+          <RouteLink to="/stock/serials/$serializedUnitId" params={{ serializedUnitId: result.id }}>
             {code}
           </RouteLink>
         );

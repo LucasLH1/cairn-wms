@@ -84,8 +84,10 @@ Règles d'usage :
 | Statut de disponibilité | `AvailabilityStatus` | Ce que le WMS s'autorise à faire d'une unité de stock : libre, réservée, bloquée, en cours de mouvement. Piloté par le moteur, jamais saisi. |
 | Mouvement de stock | `StockMovement` | Enregistrement immuable d'un changement affectant une unité de stock. |
 | Motif de mouvement | `MovementReason` | Justification obligatoire d'un mouvement qui n'est pas la conséquence d'un flux standard. |
+| Nature de mouvement | `MovementNature` | Ce qu'un mouvement de stock change, dans la liste fournie par le produit, non extensible : entrée, sortie, déplacement, changement d'état qualité, ajustement de quantité, changement de support, fusion, montage de kit, démontage de kit, correction (`RG-STK-025`). La nature que la règle nomme « transfert » s'affiche « déplacement » : un changement d'emplacement dans un site n'est jamais un transfert (`#74`). |
 | Support | `HandlingUnit` | Contenant identifié — palette, bac, roll, carton — portant du stock et déplaçable d'un seul geste avec son contenu. |
 | Support consigné | `ReturnableHandlingUnit` | Support appartenant à un tiers, dont la restitution doit être suivie. |
+| Type de support | `HandlingUnitType` | Catégorie de support — palette, bac, roll, carton, autre — déclarée par le prestataire, qui porte les caractéristiques physiques par défaut et le caractère consigné (`RG-STK-046`). |
 | Régime de consigne | `DepositRegime` | Manière dont un type de support consigné est suivi : au solde, ou à l'unité. Déclaré par le type, figé dès le premier mouvement. |
 | Compte de consigne | `DepositAccount` | Solde des supports dus entre le prestataire et un tiers, pour un type de support. Seul solde qui fait foi, ventilé par donneur d'ordre en lecture. |
 | Mouvement de consigne | `DepositMovement` | Enregistrement immuable d'un fait modifiant un compte de consigne. Distinct du mouvement de stock. |
@@ -97,6 +99,7 @@ Règles d'usage :
 | Règle de prélèvement | `PickingRule` | Stratégie de choix du stock à prélever : premier entré premier sorti, premier périmé premier sorti, ou autre. |
 | Photo quotidienne du stock | `DailyStockSnapshot` | État figé du stock détenu à une date donnée, par donneur d'ordre et par site. |
 | Blocage | `StockHold` | Interdiction motivée et datée de mouvementer ou de prélever du stock. |
+| Portée de blocage | `HoldScope` | Ce qu'un blocage désigne : une unité de stock, un lot, un objet sérialisé, un emplacement, ou toutes les unités d'une référence chez un donneur d'ordre (`RG-STK-035`). |
 | Campagne de blocage | `HoldCampaign` | Blocage massif dont le périmètre est désigné par critères, doté d'une prévisualisation, de missions d'isolement et d'une levée d'ensemble. |
 | Mise à disposition | `StockRelease` | Retour automatique d'une unité de stock à la disponibilité, dès que sa dernière cause d'indisponibilité tombe. Constat, jamais décision. |
 | Requalification | `StockReclassification` | Sortie d'une unité de stock du dossier auquel elle est rattachée, qui la remet dans le stock ordinaire. Ne désigne jamais un changement d'état qualité. |

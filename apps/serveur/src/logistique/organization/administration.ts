@@ -49,6 +49,8 @@ export interface OrganizationActivity {
     zoneId: string,
     principalId: string,
   ) => Promise<RemainingActivity>;
+  /** Ce qu'un donneur d'ordre reçoit en naissant : la liste modèle de ses états qualité (RG-STK-009). */
+  readonly principalCreated: (transaction: DatabaseTransaction, principalId: string) => Promise<void>;
 }
 
 const nothingRemains = (activity: RemainingActivity) => Object.values(activity).every((count) => count === 0);
@@ -509,6 +511,7 @@ export function organizationAdministration(activity: OrganizationActivity) {
             .returning('id')
             .executeTakeFirstOrThrow()
         ).id;
+        await activity.principalCreated(transaction, principalId);
       } else {
         const updated = await transaction
           .updateTable('logistics.principal')

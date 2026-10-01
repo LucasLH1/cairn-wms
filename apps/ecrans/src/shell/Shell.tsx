@@ -12,6 +12,7 @@ import {
   ReceiptIcon,
   SearchField,
   SettingsIcon,
+  StockIcon,
   UserIcon,
 } from '@cairn/ui';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
@@ -32,6 +33,7 @@ const titles = {
   home: 'shell.home',
   search: 'search.title',
   receptions: 'navigation.receptions',
+  stock: 'navigation.stock',
   items: 'navigation.items',
   parties: 'party.menu',
   settings: 'administration.settings',
@@ -44,6 +46,7 @@ const settingsPermissions: readonly Permission[] = [
   'administerSites',
   'administerNumbering',
   'administerProvider',
+  'administerStockSettings',
   'declareWorkstation',
 ];
 const usersPermissions: readonly Permission[] = [
@@ -142,6 +145,10 @@ export function Shell() {
               countLabel={t('navigation.arrivalsInProgress', { count: arrivalsInProgress })}
             >
               {t('navigation.receptions')}
+            </NavigationItem>
+            {/* Consulter le stock est ouvert à tous les rôles (0.4 § 6). */}
+            <NavigationItem href="/stock" isCurrent={place === 'stock'} icon={<StockIcon />}>
+              {t('navigation.stock')}
             </NavigationItem>
             {items ? (
               <NavigationItem href="/items" isCurrent={place === 'items'} icon={<ItemIcon />}>

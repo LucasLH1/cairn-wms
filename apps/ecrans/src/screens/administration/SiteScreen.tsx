@@ -37,6 +37,7 @@ import { RefusalBanner } from '../../contract/RefusalBanner.js';
 import { useGesture } from '../../contract/useGesture.js';
 import { RouteLink } from '../../shell/RouteLink.js';
 import { formatDate } from '../format.js';
+import { SnapshotTimePanel } from '../stock/StockSettings.js';
 
 const NEW = 'new';
 const weekdays = [1, 2, 3, 4, 5, 6, 7] as const;
@@ -100,6 +101,7 @@ export function SiteScreen() {
       <SiteForm site={data.site} />
       <ActivationPanel site={data.site} />
       <CalendarPanel key={JSON.stringify(data.site.openingRanges)} site={data.site} />
+      <SnapshotTimePanel siteId={data.site.id} />
       <ClosuresPanel site={data.site} />
       <ZonesPanel site={data.site} />
     </>

@@ -7,6 +7,15 @@ import { z } from 'zod';
  */
 export const permissionCatalog = {
   catalog: ['manageItems', 'manageCustomFields', 'createDraftItem'],
+  stock: [
+    'moveStock',
+    'changeQualityState',
+    'adjustStockQuantity',
+    'correctStockMovement',
+    'placeStockHold',
+    'liftStockHold',
+    'releaseStockReservation',
+  ],
   reception: ['createExpectedReceipt', 'openInboundArrival'],
   partners: ['managePrincipalParties', 'mergeEndCustomers', 'anonymizeEndCustomers'],
   settings: [
@@ -19,6 +28,7 @@ export const permissionCatalog = {
     'administerTeams',
     'administerNumbering',
     'administerProviderParties',
+    'administerStockSettings',
     'declareWorkstation',
   ],
 } as const;
@@ -28,12 +38,14 @@ export type Permission = (typeof permissionCatalog)[PermissionDomain][number];
 
 export const permissionDomains = [
   'catalog',
+  'stock',
   'reception',
   'partners',
   'settings',
 ] as const satisfies readonly PermissionDomain[];
 const allPermissions = [
   ...permissionCatalog.catalog,
+  ...permissionCatalog.stock,
   ...permissionCatalog.reception,
   ...permissionCatalog.partners,
   ...permissionCatalog.settings,

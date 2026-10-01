@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { defineGesture } from './gesture.js';
 import { defineQuery } from './query.js';
+import { pickingRuleSchema } from './stock.js';
 
 /*
  * Module 0.2 — Référentiel produit (RG-REF-001 à 051). Une référence appartient à un donneur d'ordre et
@@ -171,6 +172,8 @@ export const itemDetailSchema = z.object({
   /** Références déclarées capables de remplacer celle-ci (RG-REF-031, 032). */
   replacements: z.array(substitutionSchema),
   activationMissing: z.array(activationRequirementSchema),
+  /** Surcharge de la règle de prélèvement du donneur d'ordre ; `null` : celle du donneur d'ordre (RG-STK-054). */
+  pickingRule: pickingRuleSchema.nullable(),
   stockQuantity: z.int().nonnegative(),
 });
 export type ItemDetail = z.infer<typeof itemDetailSchema>;

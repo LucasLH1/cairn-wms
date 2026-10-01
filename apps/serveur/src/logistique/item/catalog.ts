@@ -7,6 +7,7 @@ import {
   getItem,
   isCompletePackagingLevel,
   itemStateSchema,
+  pickingRuleSchema,
   saveItem,
   saveItemCustomValues,
   saveItemPackaging,
@@ -448,6 +449,7 @@ export function itemCatalog(activity: ItemActivity) {
           })),
           replacements: replacements.map((replacing) => ({ ...replacing, state: state(replacing.state) })),
           activationMissing: missing,
+          pickingRule: pickingRuleSchema.nullable().parse(item.pickingRule),
           stockQuantity: stock.get(item.id)?.quantity ?? 0,
         },
       };

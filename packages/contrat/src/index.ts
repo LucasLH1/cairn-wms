@@ -15,4 +15,5 @@ export * from './refusal.js';
 export * from './search.js';
 export * from './session.js';
 export * from './signal.js';
+export * from './stock.js';
 export * from './workstation.js';

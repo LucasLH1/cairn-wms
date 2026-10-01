@@ -11,6 +11,7 @@ import {
 } from '@cairn/contrat';
 import type { FastifyInstance, LightMyRequestResponse } from 'fastify';
 import { buildApp } from '../app.js';
+import { seedQualityStates } from '../logistique/stock/index.js';
 import type { Database } from '../socle/database/index.js';
 import { SignalRelay } from '../socle/signal/index.js';
 import { hashPassword, workstationCookieValue, WORKSTATION_COOKIE } from '../socle/user/index.js';
@@ -142,6 +143,7 @@ export async function createCatalog(db: Database) {
       .values({ code: `P-${suffix}`, name: `Donneur ${suffix}` })
       .returning('id')
       .executeTakeFirstOrThrow();
+    await seedQualityStates(db, principal.id);
     const supplier = await db
       .insertInto('logistics.party')
       .values({ family: 'supplier', principalId: principal.id, code: 'F', name: 'Fournisseur' })

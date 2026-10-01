@@ -17,6 +17,7 @@ import { contractQuery } from '../../contract/query.js';
 import { RefusalBanner } from '../../contract/RefusalBanner.js';
 import { useGesture } from '../../contract/useGesture.js';
 import { RouteLink } from '../../shell/RouteLink.js';
+import { PickingRulePanel, QualityStatesPanel } from '../stock/StockSettings.js';
 
 const NEW = 'new';
 type PrincipalRow = z.infer<typeof listPrincipalsForAdministration.output>['principals'][number];
@@ -151,6 +152,9 @@ export function PrincipalScreen() {
           current={data.principal.currency}
         />
       )}
+      {/* Paramétrage du stock par donneur d'ordre (0.4 § 4) : états qualité, règle de prélèvement. */}
+      {data === undefined ? null : <QualityStatesPanel principalId={data.principal.id} />}
+      {data === undefined ? null : <PickingRulePanel principalId={data.principal.id} />}
     </>
   );
 }

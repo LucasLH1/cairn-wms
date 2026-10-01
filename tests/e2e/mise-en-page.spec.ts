@@ -1,7 +1,7 @@
 /// <reference lib="dom" />
 import { fr } from '@cairn/libelles';
 import { expect, test, type Page } from '@playwright/test';
-import { OFFICE_WORKSTATION_ID, signIn, useWorkstation } from '../support.js';
+import { choose, OFFICE_WORKSTATION_ID, signIn, useWorkstation } from '../support.js';
 
 // Mise en page de chaque écran réalisé, rendue par un vrai navigateur (fiche 0011) : aucun champ, libellé
 // ou bouton ne chevauche un autre, aucun champ ne tronque la valeur qu'il affiche, rien ne déborde du
@@ -89,6 +89,37 @@ const screens: readonly { readonly name: string; readonly open: (page: Page) => 
       await page.getByRole('button', { name: fr.item.addLevel }).click();
     },
   },
+  {
+    name: 'Stock — consultation',
+    open: async (page) => {
+      await page.goto('/stock');
+      await choose(page, fr.stock.item, /^MD-001 · /u);
+      await page.getByRole('region', { name: fr.stock.crossTable }).waitFor();
+    },
+  },
+  {
+    name: 'Stock — blocages',
+    open: async (page) => {
+      await page.goto('/stock');
+      await page.getByRole('tab', { name: fr.stock.holdsTab }).click();
+      await page.getByRole('region', { name: fr.hold.list }).waitFor();
+    },
+  },
+  {
+    name: 'Stock — photos quotidiennes',
+    open: async (page) => {
+      await page.goto('/stock');
+      await page.getByRole('tab', { name: fr.stock.snapshotsTab }).click();
+      await page.getByRole('region', { name: fr.snapshot.list }).waitFor();
+    },
+  },
+  {
+    name: 'Déplacer du stock',
+    open: async (page) => {
+      await page.goto('/stock/move');
+      await page.getByRole('region', { name: fr.stockMove.originTitle }).waitFor();
+    },
+  },
   { name: 'Tiers', open: (page) => page.goto('/parties').then(() => undefined) },
   {
     name: 'Fiche tiers',
@@ -100,12 +131,32 @@ const screens: readonly { readonly name: string; readonly open: (page: Page) => 
     },
   },
   { name: 'Paramétrage', open: (page) => page.goto('/administration/settings').then(() => undefined) },
+  ...(
+    [
+      ['motifs de mouvement', fr.stockSettings.reasons],
+      ['types de support', fr.stockSettings.handlingUnitTypes],
+    ] as const
+  ).map(([tab, label]) => ({
+    name: `Paramétrage — ${tab}`,
+    open: async (page: Page) => {
+      await page.goto('/administration/settings');
+      await page.getByRole('tab', { name: label }).click();
+      await page.getByRole('region', { name: label }).waitFor();
+      // Le formulaire d'ajout ouvert : la ligne la plus chargée du panneau.
+      await page
+        .getByRole('button', {
+          name: label === fr.stockSettings.reasons ? fr.stockSettings.addReason : fr.stockSettings.addType,
+        })
+        .click();
+    },
+  })),
   {
     name: 'Fiche site',
     open: async (page) => {
       await page.goto('/administration/settings');
       await page.getByRole('link', { name: 'A', exact: true }).click();
       await page.getByRole('region', { name: fr.site.zones }).waitFor();
+      await page.getByRole('region', { name: fr.stockSettings.snapshotTitle }).waitFor();
     },
   },
   ...(
@@ -144,6 +195,9 @@ const screens: readonly { readonly name: string; readonly open: (page: Page) => 
       await page.goto('/administration/principals');
       await page.getByRole('link', { name: 'MD', exact: true }).click();
       await page.getByRole('region', { name: fr.principalAdmin.currencyTitle }).waitFor();
+      await page.getByRole('region', { name: fr.stockSettings.qualityStates }).waitFor();
+      // Le formulaire d'un état qualité ouvert, avec ses trois champs et ses caractères.
+      await page.getByRole('button', { name: fr.stockSettings.addQualityState }).click();
     },
   },
 ];

@@ -28,6 +28,9 @@ export function refusalValues(details: RefusalDetails): {
   dock: string;
   item: string;
   cycle: string;
+  remaining: string;
+  state: string;
+  accepted: string;
 } {
   const text = (key: string) => {
     const value = details?.[key];
@@ -39,5 +42,8 @@ export function refusalValues(details: RefusalDetails): {
     dock: text('dock'),
     item: text('item'),
     cycle: text('cycle'),
+    remaining: text('remaining'),
+    state: text('state'),
+    accepted: text('accepted'),
   };
 }

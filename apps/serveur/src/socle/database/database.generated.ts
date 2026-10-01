@@ -81,6 +81,7 @@ export interface FoundationSite {
   id: Generated<string>;
   name: string;
   postalCode: string | null;
+  snapshotTime: Generated<string>;
   timeZone: string;
 }
 
@@ -161,6 +162,14 @@ export interface FoundationWorkstation {
   siteId: string;
 }
 
+export interface LogisticsBatch {
+  expiryDate: string | null;
+  id: Generated<string>;
+  itemId: string;
+  manufacturingDate: string | null;
+  number: string;
+}
+
 export interface LogisticsCarrierAccount {
   accountNumber: string;
   active: Generated<boolean>;
@@ -199,6 +208,26 @@ export interface LogisticsCustomField {
   required: Generated<boolean>;
 }
 
+export interface LogisticsDailyStockSnapshot {
+  failure: string | null;
+  id: Generated<string>;
+  siteId: string;
+  snapshotDate: string;
+  state: string;
+  takenAt: Generated<Timestamp>;
+}
+
+export interface LogisticsDailyStockSnapshotLine {
+  handlingUnits: number;
+  itemId: string;
+  locationId: string;
+  principalId: string;
+  qualityStateId: string;
+  quantity: number;
+  snapshotId: string;
+  volumeCm3: Int8 | null;
+}
+
 export interface LogisticsDock {
   active: Generated<boolean>;
   code: string;
@@ -233,6 +262,31 @@ export interface LogisticsFixedPickLocation {
   replenishmentThreshold: number;
 }
 
+export interface LogisticsHandlingUnit {
+  active: Generated<boolean>;
+  code: string;
+  createdAt: Generated<Timestamp>;
+  id: Generated<string>;
+  locationId: string | null;
+  ownerPartyId: string | null;
+  parentId: string | null;
+  siteId: string;
+  typeId: string;
+  version: Generated<number>;
+}
+
+export interface LogisticsHandlingUnitType {
+  active: Generated<boolean>;
+  code: string;
+  heightMm: number | null;
+  id: Generated<string>;
+  label: string;
+  lengthMm: number | null;
+  returnable: Generated<boolean>;
+  tareWeightGrams: number | null;
+  widthMm: number | null;
+}
+
 export interface LogisticsInboundArrival {
   arrivedAt: Generated<Timestamp>;
   carrierId: string | null;
@@ -255,6 +309,7 @@ export interface LogisticsItem {
   id: Generated<string>;
   isKit: Generated<boolean>;
   longLabel: string | null;
+  pickingRule: string | null;
   principalId: string;
   serialBatchTracking: Generated<boolean>;
   shortLabel: string;
@@ -309,6 +364,7 @@ export interface LogisticsKitComponent {
 }
 
 export interface LogisticsLocation {
+  acceptedQualityCodes: Generated<string[]>;
   active: Generated<boolean>;
   address: string;
   barcode: string;
@@ -325,6 +381,14 @@ export interface LogisticsLocation {
   type: string;
   virtualFamily: string | null;
   zoneId: string;
+}
+
+export interface LogisticsMovementReason {
+  active: Generated<boolean>;
+  commentRequired: Generated<boolean>;
+  id: Generated<string>;
+  label: string;
+  nature: string;
 }
 
 export interface LogisticsPackagingLevel {
@@ -384,14 +448,120 @@ export interface LogisticsPrincipal {
   internal: Generated<boolean>;
   name: string;
   phone: string | null;
+  pickingRule: Generated<string>;
   postalCode: string | null;
   principalGroup: string | null;
+}
+
+export interface LogisticsQualityState {
+  active: Generated<boolean>;
+  code: string;
+  id: Generated<string>;
+  isDefault: Generated<boolean>;
+  label: string;
+  pickable: Generated<boolean>;
+  principalId: string;
+  rank: Generated<number>;
+  suggestedLocationType: string | null;
 }
 
 export interface LogisticsRepairBomComponent {
   componentItemId: string;
   itemId: string;
   quantity: number;
+}
+
+export interface LogisticsSerializedUnit {
+  createdAt: Generated<Timestamp>;
+  id: Generated<string>;
+  itemId: string;
+  principalId: string;
+  serialNumber: string;
+  warrantyEndDate: string | null;
+}
+
+export interface LogisticsStockHold {
+  allowsMove: Generated<boolean>;
+  batchId: string | null;
+  id: Generated<string>;
+  itemId: string | null;
+  liftedAt: Timestamp | null;
+  liftedBy: string | null;
+  liftReason: string | null;
+  locationId: string | null;
+  origin: Generated<string>;
+  placedAt: Generated<Timestamp>;
+  placedBy: string | null;
+  plannedLiftOn: string | null;
+  reason: string;
+  scope: string;
+  serializedUnitId: string | null;
+  stockUnitId: string | null;
+}
+
+export interface LogisticsStockMove {
+  completedAt: Timestamp | null;
+  fromLocationId: string;
+  handlingUnitId: string | null;
+  id: Generated<string>;
+  siteId: string;
+  startedAt: Generated<Timestamp>;
+  startedBy: string;
+}
+
+export interface LogisticsStockMovement {
+  authorUserId: string | null;
+  comment: string | null;
+  correctsMovementId: string | null;
+  direction: Generated<number>;
+  flowId: string | null;
+  flowType: string | null;
+  fromHandlingUnitId: string | null;
+  fromLocationId: string | null;
+  fromQualityStateId: string | null;
+  groupId: string | null;
+  id: Generated<string>;
+  itemId: string;
+  nature: string;
+  occurredAt: Generated<Timestamp>;
+  principalId: string;
+  quantity: number;
+  reasonId: string | null;
+  serializedUnitId: string | null;
+  siteId: string;
+  stockUnitId: string;
+  toHandlingUnitId: string | null;
+  toLocationId: string | null;
+  toQualityStateId: string | null;
+  workstationId: string | null;
+}
+
+export interface LogisticsStockReservation {
+  demandId: string;
+  demandType: string;
+  reservedAt: Generated<Timestamp>;
+  stockUnitId: string;
+}
+
+export interface LogisticsStockUnit {
+  batchId: string | null;
+  enteredAt: Generated<Timestamp>;
+  entryValueCents: Int8 | null;
+  expiryDate: string | null;
+  handlingUnitId: string | null;
+  id: Generated<string>;
+  itemId: string;
+  locationId: string;
+  manufacturingDate: string | null;
+  moveId: string | null;
+  originFlowId: string | null;
+  originFlowType: string | null;
+  principalId: string;
+  qualityStateId: string;
+  quantity: number;
+  serializedUnitId: string | null;
+  siteId: string;
+  version: Generated<number>;
 }
 
 export interface LogisticsUserPrincipalRestriction {
@@ -435,13 +605,18 @@ export interface DB {
   "foundation.userRole": FoundationUserRole;
   "foundation.userSite": FoundationUserSite;
   "foundation.workstation": FoundationWorkstation;
+  "logistics.batch": LogisticsBatch;
   "logistics.carrierAccount": LogisticsCarrierAccount;
   "logistics.carrierService": LogisticsCarrierService;
   "logistics.customField": LogisticsCustomField;
+  "logistics.dailyStockSnapshot": LogisticsDailyStockSnapshot;
+  "logistics.dailyStockSnapshotLine": LogisticsDailyStockSnapshotLine;
   "logistics.dock": LogisticsDock;
   "logistics.expectedReceipt": LogisticsExpectedReceipt;
   "logistics.expectedReceiptLine": LogisticsExpectedReceiptLine;
   "logistics.fixedPickLocation": LogisticsFixedPickLocation;
+  "logistics.handlingUnit": LogisticsHandlingUnit;
+  "logistics.handlingUnitType": LogisticsHandlingUnitType;
   "logistics.inboundArrival": LogisticsInboundArrival;
   "logistics.item": LogisticsItem;
   "logistics.itemBarcode": LogisticsItemBarcode;
@@ -451,11 +626,19 @@ export interface DB {
   "logistics.itemSubstitution": LogisticsItemSubstitution;
   "logistics.kitComponent": LogisticsKitComponent;
   "logistics.location": LogisticsLocation;
+  "logistics.movementReason": LogisticsMovementReason;
   "logistics.packagingLevel": LogisticsPackagingLevel;
   "logistics.party": LogisticsParty;
   "logistics.partyAddress": LogisticsPartyAddress;
   "logistics.principal": LogisticsPrincipal;
+  "logistics.qualityState": LogisticsQualityState;
   "logistics.repairBomComponent": LogisticsRepairBomComponent;
+  "logistics.serializedUnit": LogisticsSerializedUnit;
+  "logistics.stockHold": LogisticsStockHold;
+  "logistics.stockMove": LogisticsStockMove;
+  "logistics.stockMovement": LogisticsStockMovement;
+  "logistics.stockReservation": LogisticsStockReservation;
+  "logistics.stockUnit": LogisticsStockUnit;
   "logistics.userPrincipalRestriction": LogisticsUserPrincipalRestriction;
   "logistics.zone": LogisticsZone;
 }

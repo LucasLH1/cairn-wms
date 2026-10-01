@@ -20,6 +20,8 @@ const traceObjectTypes: Readonly<Record<SearchObjectType, string>> = {
   party: 'Party',
   expectedReceipt: 'ExpectedReceipt',
   location: 'Location',
+  handlingUnit: 'HandlingUnit',
+  serializedUnit: 'SerializedUnit',
 };
 
 /**

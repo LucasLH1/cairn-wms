@@ -49,7 +49,7 @@ Elles viennent des fiches citées ; ce document les rassemble, il n'en ajoute au
 |---|---|
 | `AppShell`, `Brand`, `BrandMark` | Ossature de l'application : navigation latérale, barre du haut (fil d'Ariane, titre, outils), contenu. Un seul, dans `apps/ecrans/src/shell/Shell.tsx`. |
 | `NavigationGroup`, `NavigationItem` | Groupes et entrées de la navigation latérale. Une entrée porte une icône (`icon`) et, quand elle mène à du travail en attente, un compteur (`count`, avec `countLabel` pour les technologies d'assistance), montré seulement s'il est positif. |
-| `ReceiptIcon`, `ItemIcon`, `PartyIcon`, `SettingsIcon`, `UserIcon`, `PrincipalIcon` | Icônes au trait de la navigation (`src/icons.tsx`), tirées de la maquette ; celles des entrées qu'elle ne montre pas sont dessinées dans son style. |
+| `ReceiptIcon`, `StockIcon`, `ItemIcon`, `PartyIcon`, `SettingsIcon`, `UserIcon`, `PrincipalIcon` | Icônes au trait de la navigation (`src/icons.tsx`), tirées de la maquette ; celles des entrées qu'elle ne montre pas sont dessinées dans son style. Le carton est celui de « Stock » ; « Références » porte une étiquette. |
 | `ContextSelect` | Sélecteur du contexte de travail de la barre du haut (donneur d'ordre, site) : code en pastille à chasse fixe, puis nom. |
 | `Clock` | Heure locale du site de travail, à droite de la barre du haut. |
 | `Panel` | Conteneur de tout contenu d'écran : titre, précision, actions, corps. Région nommée par son titre. |

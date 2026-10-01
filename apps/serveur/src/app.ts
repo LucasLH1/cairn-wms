@@ -28,6 +28,36 @@ import {
   openReceptionFlowsOnSite,
   receptionHistoryOnSite,
 } from './logistique/reception/index.js';
+import {
+  foreignStockInZone,
+  getHandlingUnitHandler,
+  getSerializedUnitHandler,
+  getSnapshotHandler,
+  handlingUnitSearchSource,
+  hasStockMovement,
+  itemStockHandler,
+  listHandlingUnitTypesHandler,
+  listMovementReasonsHandler,
+  listQualityStatesHandler,
+  listSnapshotsHandler,
+  listStockHoldsHandler,
+  saveHandlingUnitTypeHandler,
+  saveMovementReasonHandler,
+  saveQualityStateHandler,
+  seedQualityStates,
+  serializedUnitSearchSource,
+  setItemPickingRuleHandler,
+  setPickingRuleHandler,
+  setSnapshotTimeHandler,
+  stockAtHandler,
+  stockAtSubcontractor,
+  stockInLocation,
+  stockInZone,
+  stockOfItems,
+  stockOfPrincipal,
+  stockOnSite,
+  stockOperations,
+} from './logistique/stock/index.js';
 import type { Database } from './socle/database/index.js';
 import { recordListExportHandler } from './socle/export/index.js';
 import { registerGestures } from './socle/gesture/index.js';
@@ -94,27 +124,27 @@ export function buildApp(options: AppOptions): FastifyInstance {
     const organization = organizationAdministration({
       openOnSite: async (transaction, siteId) => ({
         ...(await openReceptionFlowsOnSite(transaction, siteId)),
+        ...(await stockOnSite(transaction, siteId)),
       }),
       siteHasHistory: receptionHistoryOnSite,
       openForPrincipal: async (transaction, principalId) => ({
         ...(await openReceptionFlowsForPrincipal(transaction, principalId)),
+        ...(await stockOfPrincipal(transaction, principalId)),
       }),
-      stockInZone: () => Promise.resolve({}),
-      foreignStockInZone: () => Promise.resolve({}),
+      stockInZone,
+      foreignStockInZone,
+      principalCreated: seedQualityStates,
     });
-    // Flux en cours des clients finaux (commandes, 3.1) et stock chez les sous-traitants (0.4) : à venir.
+    // Les flux en cours des clients finaux viendront avec les commandes (3.1) ; le stock chez un
+    // sous-traitant est celui de ses emplacements virtuels (0.4).
     const parties = partyAdministration({
       openFlowsOfEndCustomer: () => Promise.resolve(0),
-      stockAtSubcontractor: () => Promise.resolve({}),
+      stockAtSubcontractor,
     });
-    // Le stock des références et leurs mouvements viendront avec leur module (0.4) : d'ici là, aucune
-    // référence n'immobilise de stock ni n'a bougé.
-    const items = itemCatalog({
-      stockOfItems: () => Promise.resolve(new Map()),
-      hasStockMovement: () => Promise.resolve(false),
-    });
-    // Le stock des emplacements viendra avec son module (0.4) : d'ici là, aucun n'en porte.
-    const layout = warehouseLayout({ stockInLocation: () => Promise.resolve({}) });
+    // Le stock dit au référentiel ce que ses références immobilisent et si elles ont bougé (0.4).
+    const items = itemCatalog({ stockOfItems, hasStockMovement });
+    const layout = warehouseLayout({ stockInLocation });
+    const stock = stockOperations();
     registerSessionRoutes(app, { db, config: access });
     registerSignalRoute(app, { relay, authenticate: hasSession({ db, config: access }) });
     registerGestures(app, {
@@ -144,6 +174,13 @@ export function buildApp(options: AppOptions): FastifyInstance {
         ...parties.gestures,
         ...items.gestures,
         ...layout.gestures,
+        ...stock.gestures,
+        saveQualityStateHandler,
+        setPickingRuleHandler,
+        setItemPickingRuleHandler,
+        saveMovementReasonHandler,
+        saveHandlingUnitTypeHandler,
+        setSnapshotTimeHandler,
         saveItemFamilyHandler,
         saveCustomFieldHandler,
         removeCustomFieldHandler,
@@ -177,6 +214,17 @@ export function buildApp(options: AppOptions): FastifyInstance {
         ...parties.queries,
         ...items.queries,
         ...layout.queries,
+        ...stock.queries,
+        listQualityStatesHandler,
+        listMovementReasonsHandler,
+        listHandlingUnitTypesHandler,
+        itemStockHandler,
+        stockAtHandler,
+        getHandlingUnitHandler,
+        getSerializedUnitHandler,
+        listStockHoldsHandler,
+        listSnapshotsHandler,
+        getSnapshotHandler,
         listItemFamiliesHandler,
         listCustomFieldsHandler,
         // Chaque module réalisé apporte ses objets à l'entrée de recherche unique (RG-SUR-059).
@@ -185,6 +233,8 @@ export function buildApp(options: AppOptions): FastifyInstance {
           partySearchSource,
           expectedReceiptSearchSource,
           locationSearchSource,
+          handlingUnitSearchSource,
+          serializedUnitSearchSource,
         ]),
       ],
     });

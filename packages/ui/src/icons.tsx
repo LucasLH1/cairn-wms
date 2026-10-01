@@ -25,10 +25,20 @@ export function ReceiptIcon() {
   return <LineIcon path="M10 3v8m0 0 3.2-3.2M10 11 6.8 7.8M3.5 12.5v3a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-3" />;
 }
 
-/** Références : le carton, repris de l'entrée « Stock » de la maquette. */
-export function ItemIcon() {
+/** Stock : le carton de l'entrée « Stock » de la maquette. */
+export function StockIcon() {
   return (
     <LineIcon path="M3.5 6.6 10 3.3l6.5 3.3v6.8L10 16.7l-6.5-3.3V6.6ZM3.5 6.6 10 10m0 0 6.5-3.4M10 10v6.7" />
+  );
+}
+
+/**
+ * Références : l'étiquette, dessinée dans le style de la maquette — le carton revient à l'entrée
+ * « Stock », qui le porte dans la maquette.
+ */
+export function ItemIcon() {
+  return (
+    <LineIcon path="M3.5 4.5v4.6a1 1 0 0 0 .3.7l6.4 6.4a1 1 0 0 0 1.4 0l4.6-4.6a1 1 0 0 0 0-1.4L9.8 3.8a1 1 0 0 0-.7-.3H4.5a1 1 0 0 0-1 1ZM7 7.6a.6.6 0 1 0 0-1.2.6.6 0 0 0 0 1.2Z" />
   );
 }
 
